@@ -53,7 +53,7 @@ import {
   setTransparentNavbar,
   setMiniSidenav,
   setOpenConfigurator,
-} from "context";
+} from "contexts/soft-ui";
 
 // Images
 import team2 from "assets/images/team-2.jpg";

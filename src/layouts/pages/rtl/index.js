@@ -52,7 +52,7 @@ import incomeChartData from "layouts/pages/rtl/data/incomeChartData";
 import caloriesChartData from "layouts/pages/rtl/data/caloriesChartData";
 
 // Soft UI Dashboard PRO React contexts
-import { useSoftUIController, setDirection } from "context";
+import { useSoftUIController, setDirection } from "contexts/soft-ui";
 
 function RTL() {
   const [, dispatch] = useSoftUIController();

@@ -27,7 +27,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import SoftEditorRoot from "components/SoftEditor/SoftEditorRoot";
 
 // Material Dashboard 2 PRO React context
-import { useSoftUIController } from "context";
+import { useSoftUIController } from "contexts/soft-ui";
 
 function MDEditor({ value }) {
   const [controller] = useSoftUIController();

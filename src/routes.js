@@ -104,7 +104,7 @@ import CreditCard from "examples/Icons/CreditCard";
 const routes = [
   {
     type: "collapse",
-    name: "Dashboards",
+    name: "داشبوردها",
     key: "dashboards",
     icon: <Shop size="12px" />,
     collapse: [

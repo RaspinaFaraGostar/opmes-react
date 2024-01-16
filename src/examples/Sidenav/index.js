@@ -42,7 +42,7 @@ import SidenavRoot from "examples/Sidenav/SidenavRoot";
 import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
 
 // Soft UI Dashboard PRO React context
-import { useSoftUIController, setMiniSidenav } from "context";
+import { useSoftUIController, setMiniSidenav } from "contexts/soft-ui";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [openCollapse, setOpenCollapse] = useState(false);

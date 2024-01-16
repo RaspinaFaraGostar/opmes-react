@@ -19,7 +19,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "App";
 
 // Soft UI Context Provider
-import { SoftUIControllerProvider } from "context";
+import { SoftUIControllerProvider } from "contexts/soft-ui";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

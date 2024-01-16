@@ -31,7 +31,7 @@ import Footer from "examples/Footer";
 import Sidenav from "examples/Sidenav";
 
 // Soft UI Dashboard PRO React context
-import { useSoftUIController, setMiniSidenav, setLayout, setTransparentSidenav } from "context";
+import { useSoftUIController, setMiniSidenav, setLayout, setTransparentSidenav } from "contexts/soft-ui";
 
 // Soft UI Dashboard PRO React routes
 import routes from "routes";

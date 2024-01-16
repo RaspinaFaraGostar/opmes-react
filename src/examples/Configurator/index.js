@@ -45,7 +45,7 @@ import {
   setMiniSidenav,
   setFixedNavbar,
   setSidenavColor,
-} from "context";
+} from "contexts/soft-ui";
 
 function Configurator() {
   const [controller, dispatch] = useSoftUIController();

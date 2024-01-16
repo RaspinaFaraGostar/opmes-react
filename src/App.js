@@ -43,7 +43,7 @@ import createCache from "@emotion/cache";
 import routes from "routes";
 
 // Soft UI Dashboard PRO React contexts
-import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "context";
+import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "contexts/soft-ui";
 
 // Images
 import brand from "assets/images/logo-ct.png";

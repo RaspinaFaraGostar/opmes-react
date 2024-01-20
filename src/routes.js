@@ -73,9 +73,7 @@ import ProductsList from "layouts/ecommerce/products/products-list";
 import OrderList from "layouts/ecommerce/orders/order-list";
 import OrderDetails from "layouts/ecommerce/orders/order-details";
 import Referral from "layouts/ecommerce/referral";
-import SignInBasic from "pages/auth/sign-in/basic";
-import SignInCover from "pages/auth/sign-in/cover";
-import SignInIllustration from "pages/auth/sign-in/illustration";
+import Login from "pages/auth/login";
 import SignUpBasic from "layouts/authentication/sign-up/basic";
 import SignUpCover from "layouts/authentication/sign-up/cover";
 import SignUpIllustration from "layouts/authentication/sign-up/illustration";
@@ -388,24 +386,24 @@ const routes = [
     collapse: [
       // {
       //   name: "Sign In",
-      //   key: "sign-in",
+      //   key: "login",
       //   collapse: [
       //     {
       //       name: "Basic",
       //       key: "basic",
-      //       route: "/auth/sign-in/basic",
+      //       route: "/auth/login/basic",
       //       component: <SignInBasic />,
       //     },
       //     {
       //       name: "Cover",
       //       key: "cover",
-      //       route: "/auth/sign-in/cover",
+      //       route: "/auth/login/cover",
       //       component: <SignInCover />,
       //     },
       //     {
       //       name: "Illustration",
       //       key: "illustration",
-      //       route: "/auth/sign-in/illustration",
+      //       route: "/auth/login/illustration",
       //       component: <SignInIllustration />,
       //     },
       //   ],
@@ -706,9 +704,9 @@ const routes = [
   },
   {
     name: "Change Log",
-    key: "sign-in",
-    route: "/auth/sign-in",
-    component: <SignInBasic />,
+    key: "login",
+    route: "/login",
+    component: <Login />,
   },
 ];
 

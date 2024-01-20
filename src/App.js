@@ -50,6 +50,10 @@ import { AuthProvider } from "contexts/auth";
 // Images
 import brand from "assets/images/logo-ct.png";
 
+// I18n
+import "i18n/i18n";
+
+
 export default function App() {
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, direction, layout, openConfigurator, sidenavColor } = controller;

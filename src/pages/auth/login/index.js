@@ -35,15 +35,19 @@ import Separator from "layouts/authentication/components/Separator";
 
 // Images
 import curved9 from "assets/images/curved-images/curved9.jpg";
+import { useTranslation } from "react-i18next";
 
-function Basic() {
+function Login() {
+
+  const { t } = useTranslation();
+
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
   return (
     <BasicLayout
-      title="Welcome!"
+      title={t("Welcome")}
       description="Use these awesome forms to login or create new account in your project for free."
       image={curved9}
     >
@@ -99,4 +103,4 @@ function Basic() {
   );
 }
 
-export default Basic;
+export default Login;

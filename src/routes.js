@@ -73,9 +73,9 @@ import ProductsList from "layouts/ecommerce/products/products-list";
 import OrderList from "layouts/ecommerce/orders/order-list";
 import OrderDetails from "layouts/ecommerce/orders/order-details";
 import Referral from "layouts/ecommerce/referral";
-import SignInBasic from "layouts/authentication/sign-in/basic";
-import SignInCover from "layouts/authentication/sign-in/cover";
-import SignInIllustration from "layouts/authentication/sign-in/illustration";
+import SignInBasic from "pages/auth/sign-in/basic";
+import SignInCover from "pages/auth/sign-in/cover";
+import SignInIllustration from "pages/auth/sign-in/illustration";
 import SignUpBasic from "layouts/authentication/sign-up/basic";
 import SignUpCover from "layouts/authentication/sign-up/cover";
 import SignUpIllustration from "layouts/authentication/sign-up/illustration";
@@ -88,8 +88,8 @@ import LockIllustration from "layouts/authentication/lock/illustration";
 import VerificationBasic from "layouts/authentication/2-step-verification/basic";
 import VerificationCover from "layouts/authentication/2-step-verification/cover";
 import VerificationIllustration from "layouts/authentication/2-step-verification/illustration";
-import Error404 from "layouts/authentication/error/404";
-import Error500 from "layouts/authentication/error/500";
+import Error404 from "pages/error/404";
+import Error500 from "pages/error/500";
 
 // Soft UI Dashboard PRO React icons
 import Shop from "examples/Icons/Shop";
@@ -111,6 +111,7 @@ const routes = [
       {
         name: "Default",
         key: "default",
+        protected: true,
         route: "/dashboards/default",
         component: <Default />,
       },
@@ -385,30 +386,30 @@ const routes = [
     key: "authentication",
     icon: <Document size="12px" />,
     collapse: [
-      {
-        name: "Sign In",
-        key: "sign-in",
-        collapse: [
-          {
-            name: "Basic",
-            key: "basic",
-            route: "/authentication/sign-in/basic",
-            component: <SignInBasic />,
-          },
-          {
-            name: "Cover",
-            key: "cover",
-            route: "/authentication/sign-in/cover",
-            component: <SignInCover />,
-          },
-          {
-            name: "Illustration",
-            key: "illustration",
-            route: "/authentication/sign-in/illustration",
-            component: <SignInIllustration />,
-          },
-        ],
-      },
+      // {
+      //   name: "Sign In",
+      //   key: "sign-in",
+      //   collapse: [
+      //     {
+      //       name: "Basic",
+      //       key: "basic",
+      //       route: "/auth/sign-in/basic",
+      //       component: <SignInBasic />,
+      //     },
+      //     {
+      //       name: "Cover",
+      //       key: "cover",
+      //       route: "/auth/sign-in/cover",
+      //       component: <SignInCover />,
+      //     },
+      //     {
+      //       name: "Illustration",
+      //       key: "illustration",
+      //       route: "/auth/sign-in/illustration",
+      //       component: <SignInIllustration />,
+      //     },
+      //   ],
+      // },
       {
         name: "Sign Up",
         key: "sign-up",
@@ -512,13 +513,13 @@ const routes = [
           {
             name: "Error 404",
             key: "error-404",
-            route: "/authentication/error/404",
+            route: "/404",
             component: <Error404 />,
           },
           {
             name: "Error 500",
             key: "error-500",
-            route: "/authentication/error/500",
+            route: "/500",
             component: <Error500 />,
           },
         ],
@@ -702,6 +703,12 @@ const routes = [
     href: "https://github.com/creativetimofficial/ct-soft-ui-dashboard-pro-react/blob/main/CHANGELOG.md",
     icon: <CreditCard size="12px" />,
     noCollapse: true,
+  },
+  {
+    name: "Change Log",
+    key: "sign-in",
+    route: "/auth/sign-in",
+    component: <SignInBasic />,
   },
 ];
 

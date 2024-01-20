@@ -1,6 +1,6 @@
 /**
 =========================================================
-* Soft UI Dashboard PRO React - v4.0.2
+* React - v4.0.2
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-pro-react
@@ -23,14 +23,15 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Icon from "@mui/material/Icon";
 
-// Soft UI Dashboard PRO React components
+// React components
 import SoftBox from "components/SoftBox";
+import ProtectedRoute from "components/ProtectedRoute";
 
-// Soft UI Dashboard PRO React example components
+// React example components
 import Sidenav from "examples/Sidenav";
 import Configurator from "examples/Configurator";
 
-// Soft UI Dashboard PRO React themes
+// React themes
 import theme from "assets/theme";
 import themeRTL from "assets/theme/theme-rtl";
 
@@ -39,11 +40,12 @@ import rtlPlugin from "stylis-plugin-rtl";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
-// Soft UI Dashboard PRO React routes
+// React routes
 import routes from "routes";
 
-// Soft UI Dashboard PRO React contexts
+// React contexts
 import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "contexts/soft-ui";
+import { AuthProvider } from "contexts/auth";
 
 // Images
 import brand from "assets/images/logo-ct.png";
@@ -82,7 +84,7 @@ export default function App() {
   };
 
   // Change the openConfigurator state
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
+  // const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
 
   // Setting the dir attribute for the body element
   useEffect(() => {
@@ -102,83 +104,92 @@ export default function App() {
       }
 
       if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
+        return <Route
+          exact
+          path={route.route}
+          element={route.protected ? <ProtectedRoute>{route.component}</ProtectedRoute> : route.component}
+          key={route.key}
+        />;
       }
 
       return null;
     });
 
-  const configsButton = (
-    <SoftBox
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      width="3.5rem"
-      height="3.5rem"
-      bgColor="white"
-      shadow="sm"
-      borderRadius="50%"
-      position="fixed"
-      right="2rem"
-      bottom="2rem"
-      zIndex={99}
-      color="dark"
-      sx={{ cursor: "pointer" }}
-      onClick={handleConfiguratorOpen}
-    >
-      <Icon fontSize="default" color="inherit">
-        settings
-      </Icon>
-    </SoftBox>
-  );
+  // const configsButton = (
+  //   <SoftBox
+  //     display="flex"
+  //     justifyContent="center"
+  //     alignItems="center"
+  //     width="3.5rem"
+  //     height="3.5rem"
+  //     bgColor="white"
+  //     shadow="sm"
+  //     borderRadius="50%"
+  //     position="fixed"
+  //     right="2rem"
+  //     bottom="2rem"
+  //     zIndex={99}
+  //     color="dark"
+  //     sx={{ cursor: "pointer" }}
+  //     onClick={handleConfiguratorOpen}
+  //   >
+  //     <Icon fontSize="default" color="inherit">
+  //       settings
+  //     </Icon>
+  //   </SoftBox>
+  // );
 
   return direction === "rtl" ? (
-    <CacheProvider value={rtlCache}>
-      <ThemeProvider theme={themeRTL}>
+    <AuthProvider>
+      <CacheProvider value={rtlCache}>
+        <ThemeProvider theme={themeRTL}>
+          <CssBaseline />
+          {layout === "dashboard" && (
+            <>
+              <Sidenav
+                color={sidenavColor}
+                brand={brand}
+                brandName="Raspina Faragostar"
+                routes={routes}
+                onMouseEnter={handleOnMouseEnter}
+                onMouseLeave={handleOnMouseLeave}
+              />
+              {/* <Configurator /> */}
+              {/* {configsButton} */}
+            </>
+          )}
+          {/* {layout === "vr" && <Configurator />} */}
+          <Routes>
+            {getRoutes(routes)}
+            <Route path="*" element={<Navigate to="/dashboards/default" />} />
+          </Routes>
+        </ThemeProvider>
+      </CacheProvider>
+    </AuthProvider>
+  ) : (
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         {layout === "dashboard" && (
           <>
             <Sidenav
               color={sidenavColor}
               brand={brand}
-              brandName="Soft UI Dashboard PRO"
+              brandName="Raspina Faragostar"
               routes={routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
             />
-            <Configurator />
-            {configsButton}
+            {/* <Configurator /> */}
+            {/* {configsButton} */}
           </>
         )}
-        {layout === "vr" && <Configurator />}
+        {/* {layout === "vr" && <Configurator />} */}
         <Routes>
           {getRoutes(routes)}
           <Route path="*" element={<Navigate to="/dashboards/default" />} />
         </Routes>
       </ThemeProvider>
-    </CacheProvider>
-  ) : (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {layout === "dashboard" && (
-        <>
-          <Sidenav
-            color={sidenavColor}
-            brand={brand}
-            brandName="Soft UI Dashboard PRO"
-            routes={routes}
-            onMouseEnter={handleOnMouseEnter}
-            onMouseLeave={handleOnMouseLeave}
-          />
-          <Configurator />
-          {configsButton}
-        </>
-      )}
-      {layout === "vr" && <Configurator />}
-      <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboards/default" />} />
-      </Routes>
-    </ThemeProvider>
+    </AuthProvider>
   );
 }

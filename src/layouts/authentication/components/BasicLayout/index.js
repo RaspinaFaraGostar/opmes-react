@@ -31,12 +31,12 @@ import PageLayout from "examples/LayoutContainers/PageLayout";
 import Footer from "layouts/authentication/components/Footer";
 
 // Soft UI Dashboard PRO React page layout routes
-import pageRoutes from "page.routes";
+// import pageRoutes from "page.routes";
 
 function BasicLayout({ title, description, image, children }) {
   return (
     <PageLayout>
-      <DefaultNavbar
+      {/* <DefaultNavbar
         routes={pageRoutes}
         action={{
           type: "external",
@@ -45,7 +45,7 @@ function BasicLayout({ title, description, image, children }) {
         }}
         transparent
         light
-      />
+      /> */}
       <SoftBox
         width="calc(100% - 2rem)"
         minHeight="50vh"
@@ -58,8 +58,8 @@ function BasicLayout({ title, description, image, children }) {
           backgroundImage: ({ functions: { linearGradient, rgba }, palette: { gradients } }) =>
             image &&
             `${linearGradient(
-              rgba(gradients.dark.main, 0.6),
-              rgba(gradients.dark.state, 0.6)
+              rgba(gradients.dark.main, 0.4),
+              rgba(gradients.dark.state, 0.4)
             )}, url(${image})`,
           backgroundSize: "cover",
           backgroundPosition: "center",

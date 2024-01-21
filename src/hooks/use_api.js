@@ -3,5 +3,7 @@
 const useApi = () => {
 
 
-    return 
+    return
 }
+
+export default useApi;

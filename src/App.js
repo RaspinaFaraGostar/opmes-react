@@ -13,42 +13,39 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 // react-router components
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 // @mui material components
-import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Icon from "@mui/material/Icon";
+import { ThemeProvider } from "@mui/material/styles";
 
 // React components
-import SoftBox from "components/SoftBox";
 import ProtectedRoute from "components/ProtectedRoute";
 
 // React example components
 import Sidenav from "examples/Sidenav";
-import Configurator from "examples/Configurator";
 
 // React themes
 import theme from "assets/theme";
 import themeRTL from "assets/theme/theme-rtl";
 
 // RTL plugins
-import rtlPlugin from "stylis-plugin-rtl";
-import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
+import { CacheProvider } from "@emotion/react";
+import rtlPlugin from "stylis-plugin-rtl";
 
 // React routes
-import routes from "routes";
+import dynamicRoutes from "dynamic.routes";
+import staticRoutes from "static.routes";
 
 // React contexts
-import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "contexts/soft-ui";
-import { AuthProvider } from "contexts/auth";
+import { setMiniSidenav, useSoftUIController } from "contexts/soft-ui";
 
 // Images
-import brand from "assets/images/logo-ct.png";
+import brand from "assets/images/logo.png";
 
 // Helmet
 import { Helmet } from "react-helmet";
@@ -58,7 +55,16 @@ import "i18n/i18n";
 import { useTranslation } from "react-i18next";
 
 // Lodash methods
+import filter from "lodash/filter";
+import find from "lodash/find";
 import join from "lodash/join";
+import map from "lodash/map";
+
+// Axios
+import axios from "axios";
+
+// Auth
+import { useAuth } from "contexts/auth";
 
 
 export default function App() {
@@ -97,9 +103,6 @@ export default function App() {
     }
   };
 
-  // Change the openConfigurator state
-  // const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
-
   // Setting the dir attribute for the body element
   useEffect(() => {
     document.body.setAttribute("dir", direction);
@@ -111,8 +114,44 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes) =>
-    allRoutes.map((route) => {
+  // Handle routes
+  const [auth] = useAuth();
+  const [allRoutes, setAllRoutes] = useState(staticRoutes);
+  const mapResponseRouteRecursively = (route, allRoutes) => {
+    const children = filter(allRoutes, subRoute => subRoute.ParentId == route.MenuId);
+
+    console.log({
+      'url': route.Url,
+      'dynamic': find(dynamicRoutes, item => item.path == route.Url)?.component,
+      dynamicRoutes,
+    })
+    return ({
+      name: route.Title,
+      key: route.MenuId,
+      // icon: route.IconName,
+      icon: 'radio_button_checked',
+      protected: true,
+      ...(route.Url && {
+        route: route.Url,
+        ...find(dynamicRoutes, item => item.route == route.Url)
+      }),
+      ...(children.length > 0 && {
+        type: "collapse",
+        collapse: map(children, subRoute => mapResponseRouteRecursively(subRoute, allRoutes))
+      })
+    });
+  };
+
+  const mapResponseRoutes = (routes) => {
+    return map(filter(routes, r => !r.ParentId), subRoute => mapResponseRouteRecursively(subRoute, routes));
+  }
+  const fetchDynamicRoutesAsync = async () => {
+    const response = await axios('api/Permissions/AccessMenu');
+
+    setAllRoutes([...staticRoutes, ...mapResponseRoutes(response.data)]);
+  }
+  const getRoutes = (routes) => {
+    return routes.map((route) => {
       if (route.collapse) {
         return getRoutes(route.collapse);
       }
@@ -127,31 +166,12 @@ export default function App() {
       }
 
       return null;
-    });
-
-  // const configsButton = (
-  //   <SoftBox
-  //     display="flex"
-  //     justifyContent="center"
-  //     alignItems="center"
-  //     width="3.5rem"
-  //     height="3.5rem"
-  //     bgColor="white"
-  //     shadow="sm"
-  //     borderRadius="50%"
-  //     position="fixed"
-  //     right="2rem"
-  //     bottom="2rem"
-  //     zIndex={99}
-  //     color="dark"
-  //     sx={{ cursor: "pointer" }}
-  //     onClick={handleConfiguratorOpen}
-  //   >
-  //     <Icon fontSize="default" color="inherit">
-  //       settings
-  //     </Icon>
-  //   </SoftBox>
-  // );
+    })
+  }
+  useMemo(() => {
+    if (auth.user && auth.user.RoleCode)
+      fetchDynamicRoutesAsync();
+  }, [auth]);
 
   const content = (
     <ThemeProvider theme={direction == "rtl" ? themeRTL : theme}>
@@ -162,18 +182,15 @@ export default function App() {
             color={sidenavColor}
             brand={brand}
             brandName={t("Raspina Faragostar")}
-            routes={routes}
+            routes={allRoutes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
-          {/* <Configurator /> */}
-          {/* {configsButton} */}
         </>
       )}
-      {/* {layout === "vr" && <Configurator />} */}
       <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboards/default" />} />
+        {getRoutes(allRoutes)}
+        <Route path="*" element={<Navigate to="/-" />} />
       </Routes>
     </ThemeProvider>
   );
@@ -182,13 +199,11 @@ export default function App() {
     <>
       <Helmet titleTemplate={join(["%s", t("Raspina Faragostar")], " | ")} />
 
-      <AuthProvider>
-        {direction == "rtl" ? (
-          <CacheProvider value={rtlCache}>
-            {content}
-          </CacheProvider>
-        ) : content}
-      </AuthProvider>
+      {direction == "rtl" ? (
+        <CacheProvider value={rtlCache}>
+          {content}
+        </CacheProvider>
+      ) : content}
     </>
   );
 }

@@ -26,8 +26,10 @@ import SoftTypography from "components/SoftTypography";
 
 // Soft UI Dashboard PRO React base styles
 import typography from "assets/theme/base/typography";
+import { useTranslation } from "react-i18next";
 
 function Footer({ company, links }) {
+  const { t } = useTranslation();
   const { href, name } = company;
   const { size } = typography;
 
@@ -36,7 +38,7 @@ function Footer({ company, links }) {
       <SoftBox key={link.name} component="li" px={2} lineHeight={1}>
         <Link href={link.href} target="_blank">
           <SoftTypography variant="button" fontWeight="regular" color="text">
-            {link.name}
+            {t(link.name)}
           </SoftTypography>
         </Link>
       </SoftBox>
@@ -60,19 +62,7 @@ function Footer({ company, links }) {
         fontSize={size.sm}
         px={1.5}
       >
-        &copy; {new Date().getFullYear()}, made with
-        <SoftBox fontSize={size.md} color="text" mb={-0.5} mx={0.25}>
-          <Icon color="inherit" fontSize="inherit">
-            favorite
-          </Icon>
-        </SoftBox>
-        by
-        <Link href={href} target="_blank">
-          <SoftTypography variant="button" fontWeight="medium">
-            &nbsp;{name}&nbsp;
-          </SoftTypography>
-        </Link>
-        for a better web.
+        &copy; {new Date().getFullYear()} {t("Alrights reserved", { owner: t(company.name) })}
       </SoftBox>
       <SoftBox
         component="ul"
@@ -99,12 +89,11 @@ function Footer({ company, links }) {
 
 // Setting default values for the props of Footer
 Footer.defaultProps = {
-  company: { href: "https://www.creative-tim.com/", name: "Creative Tim" },
+  company: { href: "https://raspina.co.ir/", name: "Raspina Faragostar" },
   links: [
-    { href: "https://www.creative-tim.com/", name: "Creative Tim" },
-    { href: "https://www.creative-tim.com/presentation", name: "About Us" },
-    { href: "https://www.creative-tim.com/blog", name: "Blog" },
-    { href: "https://www.creative-tim.com/license", name: "License" },
+    { href: "#", name: "Privacy" },
+    { href: "#", name: "FAQs" },
+    { href: "#", name: "Terms of Services" }
   ],
 };
 

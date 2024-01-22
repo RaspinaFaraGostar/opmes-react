@@ -21,6 +21,9 @@ const faJSON = {
 
   // Footer 
   "Alrights reserved": "کلیه حقوق این سایت متعلق به شرکت {{owner}} می باشد",
+  "Privacy": "حریم خصوصی",
+  "FAQs": "پرسش های متداول",
+  "Terms of Services": "قوانین و مقررات",
 };
 
 export default faJSON;

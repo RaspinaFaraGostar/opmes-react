@@ -17,12 +17,14 @@ Coded by www.creative-tim.com
 import "bootstrap";
 
 // React and ReactDOM 
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 // App component
 import App from "App";
+
+// Application Authentication Provide
+import { AuthProvider } from "contexts/auth";
 
 // Soft UI Context Provider
 import { SoftUIControllerProvider } from "contexts/soft-ui";
@@ -31,8 +33,10 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
-    <SoftUIControllerProvider>
-      <App />
-    </SoftUIControllerProvider>
+    <AuthProvider>
+      <SoftUIControllerProvider>
+        <App />
+      </SoftUIControllerProvider>
+    </AuthProvider>
   </BrowserRouter>
 );

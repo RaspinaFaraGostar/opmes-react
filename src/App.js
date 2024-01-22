@@ -50,8 +50,15 @@ import { AuthProvider } from "contexts/auth";
 // Images
 import brand from "assets/images/logo-ct.png";
 
+// Helmet
+import { Helmet } from "react-helmet";
+
 // I18n
 import "i18n/i18n";
+import { useTranslation } from "react-i18next";
+
+// Lodash methods
+import join from "lodash/join";
 
 
 export default function App() {
@@ -60,6 +67,9 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
+
+  // i18n
+  const { t } = useTranslation();
 
   // Cache for the rtl
   useMemo(() => {
@@ -143,57 +153,42 @@ export default function App() {
   //   </SoftBox>
   // );
 
-  return direction === "rtl" ? (
-    <AuthProvider>
-      <CacheProvider value={rtlCache}>
-        <ThemeProvider theme={themeRTL}>
-          <CssBaseline />
-          {layout === "dashboard" && (
-            <>
-              <Sidenav
-                color={sidenavColor}
-                brand={brand}
-                brandName="Raspina Faragostar"
-                routes={routes}
-                onMouseEnter={handleOnMouseEnter}
-                onMouseLeave={handleOnMouseLeave}
-              />
-              {/* <Configurator /> */}
-              {/* {configsButton} */}
-            </>
-          )}
-          {/* {layout === "vr" && <Configurator />} */}
-          <Routes>
-            {getRoutes(routes)}
-            <Route path="*" element={<Navigate to="/dashboards/default" />} />
-          </Routes>
-        </ThemeProvider>
-      </CacheProvider>
-    </AuthProvider>
-  ) : (
-    <AuthProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {layout === "dashboard" && (
-          <>
-            <Sidenav
-              color={sidenavColor}
-              brand={brand}
-              brandName="Raspina Faragostar"
-              routes={routes}
-              onMouseEnter={handleOnMouseEnter}
-              onMouseLeave={handleOnMouseLeave}
-            />
-            {/* <Configurator /> */}
-            {/* {configsButton} */}
-          </>
-        )}
-        {/* {layout === "vr" && <Configurator />} */}
-        <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboards/default" />} />
-        </Routes>
-      </ThemeProvider>
-    </AuthProvider>
+  const content = (
+    <ThemeProvider theme={direction == "rtl" ? themeRTL : theme}>
+      <CssBaseline />
+      {layout === "dashboard" && (
+        <>
+          <Sidenav
+            color={sidenavColor}
+            brand={brand}
+            brandName={t("Raspina Faragostar")}
+            routes={routes}
+            onMouseEnter={handleOnMouseEnter}
+            onMouseLeave={handleOnMouseLeave}
+          />
+          {/* <Configurator /> */}
+          {/* {configsButton} */}
+        </>
+      )}
+      {/* {layout === "vr" && <Configurator />} */}
+      <Routes>
+        {getRoutes(routes)}
+        <Route path="*" element={<Navigate to="/dashboards/default" />} />
+      </Routes>
+    </ThemeProvider>
+  );
+
+  return (
+    <>
+      <Helmet titleTemplate={join(["%s", t("Raspina Faragostar")], " | ")} />
+
+      <AuthProvider>
+        {direction == "rtl" ? (
+          <CacheProvider value={rtlCache}>
+            {content}
+          </CacheProvider>
+        ) : content}
+      </AuthProvider>
+    </>
   );
 }

@@ -37,8 +37,6 @@ import SoftAlert from "components/SoftAlert";
 
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
-// import Socials from "layouts/authentication/components/Socials";
-// import Separator from "layouts/authentication/components/Separator";
 
 // I18next
 import { useTranslation } from "react-i18next";
@@ -59,6 +57,9 @@ import pick from "lodash/pick";
 // Images and icons
 import backgroundImage from "assets/images/login-bg.jpg";
 import { ReactComponent as RefetchCaptchaIcon } from "assets/icons/SolarRestartSquareLineDuotone.svg";
+
+// Helmet
+import { Helmet } from "react-helmet";
 
 
 const CaptchaImage = styled('img')(({ theme }) => ({
@@ -146,114 +147,106 @@ function Login() {
   }
 
   return (
-    <BasicLayout
-      title={t("Welcome")}
-      description={t("Sign in via your credentials")}
-      image={backgroundImage}
-    >
-      <Card>
-        <SoftBox p={3} mb={1} textAlign="center">
-          <SoftTypography variant="h5" fontWeight="medium">
-            {t("Sign in")}
-          </SoftTypography>
-        </SoftBox>
-        {/* <SoftBox mb={2}>
+    <>
+      <Helmet title={t("Sign in")} />
+
+      <BasicLayout
+        title={t("Welcome")}
+        description={t("Sign in via your credentials")}
+        image={backgroundImage}
+      >
+        <Card>
+          <SoftBox p={3} mb={1} textAlign="center">
+            <SoftTypography variant="h5" fontWeight="medium">
+              {t("Sign in")}
+            </SoftTypography>
+          </SoftBox>
+          {/* <SoftBox mb={2}>
           <Socials />
         </SoftBox> */}
-        <SoftBox p={3}>
-          <Collapse in={Boolean(error)}>
-            <SoftAlert color="error">
-              <Typography variant="body2">{error}</Typography>
-            </SoftAlert>
-          </Collapse>
-          <SoftBox component="form" role="form" onSubmit={handleLogin}>
-            <SoftBox mb={2}>
-              <SoftInput
-                name="username"
-                type="text"
-                placeholder={t("Username")}
-                value={formData.username}
-                onChange={handleChangeInput}
-              />
-            </SoftBox>
-            <SoftBox mb={2}>
-              <SoftInput
-                name="password"
-                type="password"
-                placeholder={t("Password")}
-                value={formData.password}
-                onChange={handleChangeInput}
-              />
-            </SoftBox>
-            <SoftBox mb={2}>
-              <Grid container spacing={1} alignItems="center">
-                <Grid item xs={12} md={5}>
-                  <SoftInput
-                    name="captcha"
-                    type="text"
-                    placeholder={t("Captcha")}
-                    value={formData.captcha}
-                    onChange={handleChangeInput}
-                  />
-                </Grid>
-                <Grid item xs={12} md={7}>
-                  {captcha.imagePath && (
-                    <Grid container alignItems="center">
-                      <Grid item xs={10}>
-                        <CaptchaImage src={captcha.imagePath} />
+          <SoftBox p={3}>
+            <Collapse in={Boolean(error)}>
+              <SoftAlert color="error">
+                <Typography variant="body2">{error}</Typography>
+              </SoftAlert>
+            </Collapse>
+            <SoftBox component="form" role="form" onSubmit={handleLogin}>
+              <SoftBox mb={2}>
+                <SoftInput
+                  name="username"
+                  type="text"
+                  placeholder={t("Username")}
+                  value={formData.username}
+                  onChange={handleChangeInput}
+                />
+              </SoftBox>
+              <SoftBox mb={2}>
+                <SoftInput
+                  name="password"
+                  type="password"
+                  placeholder={t("Password")}
+                  value={formData.password}
+                  onChange={handleChangeInput}
+                />
+              </SoftBox>
+              <SoftBox mb={2}>
+                <Grid container spacing={1} alignItems="center">
+                  <Grid item xs={12} md={5}>
+                    <SoftInput
+                      name="captcha"
+                      type="text"
+                      placeholder={t("Captcha")}
+                      value={formData.captcha}
+                      onChange={handleChangeInput}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={7}>
+                    {captcha.imagePath && (
+                      <Grid container alignItems="center">
+                        <Grid item xs={10}>
+                          <CaptchaImage src={captcha.imagePath} />
+                        </Grid>
+                        <Grid item xs={2}>
+                          <IconButton type="button" onClick={fetchCaptchaAsync}>
+                            <RefetchCaptchaIcon />
+                          </IconButton>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={2}>
-                        <IconButton type="button" onClick={fetchCaptchaAsync}>
-                          <RefetchCaptchaIcon />
-                        </IconButton>
-                      </Grid>
-                    </Grid>
-                  )}
+                    )}
+                  </Grid>
                 </Grid>
-              </Grid>
+              </SoftBox>
+              <SoftBox display="flex" alignItems="center">
+                <Switch
+                  name="rememberMe"
+                  checked={formData.rememberMe}
+                  onChange={handleChangeCheckbox}
+                />
+                <SoftTypography
+                  variant="button"
+                  fontWeight="regular"
+                  onClick={() => setFormData({ ...formData, rememberMe: !formData.rememberMe })}
+                  sx={{ cursor: "pointer", userSelect: "none", ml: 1 }}
+                >
+                  {t("Remember me")}
+                </SoftTypography>
+              </SoftBox>
+              <SoftBox mt={4} mb={1}>
+                <SoftButton
+                  disabled={isLoggingIn}
+                  type="submit"
+                  variant="gradient"
+                  color="info"
+                  fullWidth
+                >
+                  {t("Sign in")}
+                </SoftButton>
+              </SoftBox>
             </SoftBox>
-            <SoftBox display="flex" alignItems="center">
-              <Switch
-                name="rememberMe"
-                checked={formData.rememberMe}
-                onChange={handleChangeCheckbox}
-              />
-              <SoftTypography
-                variant="button"
-                fontWeight="regular"
-                onClick={() => setFormData({ ...formData, rememberMe: !formData.rememberMe })}
-                sx={{ cursor: "pointer", userSelect: "none", ml: 1 }}
-              >
-                {t("Remember me")}
-              </SoftTypography>
-            </SoftBox>
-            <SoftBox mt={4} mb={1}>
-              <SoftButton
-                disabled={isLoggingIn}
-                type="submit"
-                variant="gradient"
-                color="info"
-                fullWidth
-              >
-                {t("Sign in")}
-              </SoftButton>
-            </SoftBox>
-            {/* <Separator /> */}
-            {/* <SoftBox mt={1} mb={3}>
-              <SoftButton
-                component={Link}
-                to="/authentication/sign-up/basic"
-                variant="gradient"
-                color="dark"
-                fullWidth
-              >
-                sign up
-              </SoftButton>
-            </SoftBox> */}
           </SoftBox>
-        </SoftBox>
-      </Card>
-    </BasicLayout>
+        </Card>
+      </BasicLayout>
+    </>
   );
 }
 

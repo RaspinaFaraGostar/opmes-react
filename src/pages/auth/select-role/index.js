@@ -16,29 +16,19 @@ Coded by www.creative-tim.com
 import { useEffect, useState } from "react";
 
 // react-router-dom components
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
-import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
-import IconButton from "@mui/material/IconButton";
-import styled from "@mui/material/styles/styled";
-import Collapse from "@mui/material/Collapse";
-import Typography from "@mui/material/Typography";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";
-import SoftTypography from "components/SoftTypography";
-import SoftInput from "components/SoftInput";
 import SoftButton from "components/SoftButton";
-import SoftAlert from "components/SoftAlert";
+import SoftTypography from "components/SoftTypography";
 
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
-// import Socials from "layouts/authentication/components/Socials";
-// import Separator from "layouts/authentication/components/Separator";
 
 // I18next
 import { useTranslation } from "react-i18next";
@@ -50,14 +40,14 @@ import { useAuth } from "contexts/auth";
 import axios, { AxiosError } from "axios";
 
 // lodash methods
-import mapKeys from "lodash/mapKeys";
-import lowerFirst from "lodash/lowerFirst";
-import mapValues from "lodash/mapValues";
-import join from "lodash/join";
 import pick from "lodash/pick";
 
 // Images and icons
 import backgroundImage from "assets/images/login-bg.jpg";
+
+// Helmet
+import { Helmet } from "react-helmet";
+
 
 function SelectRole() {
 
@@ -115,47 +105,51 @@ function SelectRole() {
 
 
   return (
-    <BasicLayout
-      title={t("Welcome")}
-      description={t("Choose your role")}
-      image={backgroundImage}
-      containerGridItemProps={{
-        xs: 12,
-        sm: 10,
-        md: 8,
-        lg: 6,
-        xl: 5
-      }}
-    >
-      <Grid container spacing={2}>
-        {roles.map((role, index) => (
-          <Grid item xs={12} md={6} lg={4} key={index}>
-            <Card>
-              <SoftBox p={3} textAlign="center">
-                <SoftTypography variant="h6" fontWeight="medium">
-                  {t(role.UnitName)}
-                </SoftTypography>
-                <SoftTypography variant="caption" fontWeight="medium">
-                  {t(role.RoleTitle)}
-                </SoftTypography>
-                <SoftBox mt={4} mb={1}>
-                  <SoftButton
-                    type="submit"
-                    variant="gradient"
-                    color="info"
-                    fullWidth
-                    disabled={isLoading}
-                    onClick={() => handleSelectRole(role.UserRoleId)}
-                  >
-                    {t("Select role")}
-                  </SoftButton>
+    <>
+      <Helmet title={t("Select role")} />
+
+      <BasicLayout
+        title={t("Welcome")}
+        description={t("Choose your role")}
+        image={backgroundImage}
+        containerGridItemProps={{
+          xs: 12,
+          sm: 10,
+          md: 8,
+          lg: 6,
+          xl: 5
+        }}
+      >
+        <Grid container spacing={2}>
+          {roles.map((role, index) => (
+            <Grid item xs={12} md={6} lg={4} key={index}>
+              <Card>
+                <SoftBox p={3} textAlign="center">
+                  <SoftTypography variant="h6" fontWeight="medium">
+                    {t(role.UnitName)}
+                  </SoftTypography>
+                  <SoftTypography variant="caption" fontWeight="medium">
+                    {t(role.RoleTitle)}
+                  </SoftTypography>
+                  <SoftBox mt={4} mb={1}>
+                    <SoftButton
+                      type="submit"
+                      variant="gradient"
+                      color="info"
+                      fullWidth
+                      disabled={isLoading}
+                      onClick={() => handleSelectRole(role.UserRoleId)}
+                    >
+                      {t("Select role")}
+                    </SoftButton>
+                  </SoftBox>
                 </SoftBox>
-              </SoftBox>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </BasicLayout>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </BasicLayout>
+    </>
   );
 }
 

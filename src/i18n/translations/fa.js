@@ -1,5 +1,8 @@
 const faJSON = {
 
+  // Global
+  "Raspina Faragostar": "راسپینا فراگستر",
+
   // Login page 
   "Welcome": "خوش آمدید",
   "Sign in via your credentials": "جهت ورود به حساب کاربری، مشخصات کاربری خود را وارد نمایید.",

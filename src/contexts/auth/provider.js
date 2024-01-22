@@ -1,9 +1,20 @@
+// React components and methods
+import { useEffect, useMemo, useReducer, useState } from "react";
+
+// React prop types
 import PropTypes from "prop-types";
 
+// Auth
 import AuthContext from "./context";
-import { useEffect, useMemo, useReducer, useState } from "react";
+
+// session storage hook
 import { useSessionStorage } from "@uidotdev/usehooks";
-import axios from "axios";
+
+// Axios 
+import axios, { AxiosError } from "axios";
+
+// Lodash methods
+import map from "lodash/map";
 
 
 function reducer(state, action) {
@@ -39,10 +50,26 @@ const AuthProvider = ({ children }) => {
     const value = useMemo(() => [{ ...controller, user }, dispatch], [user, controller, dispatch]);
 
 
-    const fetchAccountInfo = async () => {
-        const response = await axios('api/MyAccount/GetMyAccountInfo');
-        console.log('fethching...', response);
-        setUser(response.data);
+    // Fetch auth info
+    const fetchUserDetailsAsync = async () => {
+        let responses = [];
+        const onReject = (error) => error.status == 401 ? Promise.reject(error) : null;
+        try {
+            responses = await axios.all([
+                axios('api/MyAccount/GetMyAccountInfo').catch(onReject),
+                axios('api/Permissions/PermissionWithRole').catch(onReject)
+            ]);
+        } catch (error) {
+            if (error instanceof AxiosError) {
+
+                // Authentication expired so reset local state
+                if (error.status == 401) {
+                    setStorageState(initialState);
+                }
+            }
+        } finally {
+            setUser(Object.assign({}, ...map(responses, response => response ? response.data : {})));
+        }
     }
 
     useEffect(() => {
@@ -52,9 +79,12 @@ const AuthProvider = ({ children }) => {
 
         if (controller.access_token) {
             axios.defaults.headers.common['Authorization'] = 'bearer '.concat(controller.access_token);
-            fetchAccountInfo();
+            fetchUserDetailsAsync();
         }
     }, [controller, dispatch])
+
+    // Return null while proccecing the provider
+    if (controller.access_token && !user) return null;
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useEffect, useState } from "react";
 
 // react-router-dom components
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -55,7 +55,6 @@ function SelectRole() {
   const { t } = useTranslation();
 
   // Router navigation & location 
-  const navigate = useNavigate();
   const location = useLocation();
 
   // Roles fetch & local state
@@ -94,7 +93,6 @@ function SelectRole() {
         value: pick(response.data, ['access_token', 'expires_in', 'refresh_token'])
       });
 
-      navigate(location.state?.from ?? '/', { replace: true });
     } catch (error) {
       if (error instanceof AxiosError)
         setError(error.response.data.error_description)
@@ -103,6 +101,12 @@ function SelectRole() {
     }
   }
 
+
+  if (auth.user.RoleCode) {
+    return (
+      <Navigate to={location.state?.from ?? '/'} replace />
+    )
+  }
 
   return (
     <>

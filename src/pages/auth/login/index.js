@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useEffect, useState } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -25,28 +25,41 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import styled from "@mui/material/styles/styled";
+import Collapse from "@mui/material/Collapse";
+import Typography from "@mui/material/Typography";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftInput from "components/SoftInput";
 import SoftButton from "components/SoftButton";
+import SoftAlert from "components/SoftAlert";
 
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 // import Socials from "layouts/authentication/components/Socials";
 // import Separator from "layouts/authentication/components/Separator";
 
+// I18next
+import { useTranslation } from "react-i18next";
+
+// Auth
+import { useAuth } from "contexts/auth";
+
+// axios
+import axios, { AxiosError } from "axios";
+
 // lodash methods
 import mapKeys from "lodash/mapKeys";
 import lowerFirst from "lodash/lowerFirst";
 import mapValues from "lodash/mapValues";
+import join from "lodash/join";
+import pick from "lodash/pick";
 
-// Images and vectors
-import curved9 from "assets/images/login-bg.jpg";
+// Images and icons
+import backgroundImage from "assets/images/login-bg.jpg";
 import { ReactComponent as RefetchCaptchaIcon } from "assets/icons/SolarRestartSquareLineDuotone.svg";
-import { useTranslation } from "react-i18next";
-import axios from "axios";
+
 
 const CaptchaImage = styled('img')(({ theme }) => ({
   width: '100%',
@@ -60,7 +73,11 @@ function Login() {
   // Translations
   const { t } = useTranslation();
 
-  // Form data
+  // Router location
+  const location = useLocation();
+
+  // Form data and errors
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -79,10 +96,7 @@ function Login() {
     (value, key) => key == "imagePath" ? 'data:image/png;base64,'.concat(value) : value
   );
   const fetchCaptchaAsync = async () => {
-    const response = await axios({
-      baseURL: window._shared.endpoint,
-      url: '/MyAccount/GetCaptcha'
-    });
+    const response = await axios('/api/MyAccount/GetCaptcha');
 
     setCaptcha(getCaptchaFromResponse(response));
   }
@@ -91,11 +105,51 @@ function Login() {
     fetchCaptchaAsync();
   }, [])
 
+
+  // Login status, tranformations & handlers
+  const [auth, dispatch] = useAuth();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const getPostCaptcha = () => join([formData.captcha, captcha.token], ':');
+  const getPostFormData = () => `grant_type=password&username=${formData.username}&password=${formData.password}&captcha=${getPostCaptcha()}`;
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    try {
+
+      setIsLoggingIn(true);
+
+      const response = await axios({
+        method: 'POST',
+        url: '/token',
+        data: getPostFormData(),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+
+      dispatch({
+        type: 'REVOKE_TOKEN',
+        value: pick(response.data, ['access_token', 'refresh_token', 'expires_in'])
+      });
+    } catch (error) {
+      if (error instanceof AxiosError)
+        setError(error.response.data.error_description)
+    } finally {
+      setIsLoggingIn(false);
+    }
+  }
+
+  if (auth.user) {
+    return (
+      <Navigate to={location.state?.from ?? '/'} replace />
+    )
+  }
+
   return (
     <BasicLayout
       title={t("Welcome")}
-      description="Use these awesome forms to login or create new account in your project for free."
-      image={curved9}
+      description={t("Sign in via your credentials")}
+      image={backgroundImage}
     >
       <Card>
         <SoftBox p={3} mb={1} textAlign="center">
@@ -107,7 +161,12 @@ function Login() {
           <Socials />
         </SoftBox> */}
         <SoftBox p={3}>
-          <SoftBox component="form" role="form">
+          <Collapse in={Boolean(error)}>
+            <SoftAlert color="error">
+              <Typography variant="body2">{error}</Typography>
+            </SoftAlert>
+          </Collapse>
+          <SoftBox component="form" role="form" onSubmit={handleLogin}>
             <SoftBox mb={2}>
               <SoftInput
                 name="username"
@@ -169,7 +228,13 @@ function Login() {
               </SoftTypography>
             </SoftBox>
             <SoftBox mt={4} mb={1}>
-              <SoftButton variant="gradient" color="info" fullWidth>
+              <SoftButton
+                disabled={isLoggingIn}
+                type="submit"
+                variant="gradient"
+                color="info"
+                fullWidth
+              >
                 {t("Sign in")}
               </SoftButton>
             </SoftBox>

@@ -73,7 +73,7 @@ import ProductsList from "layouts/ecommerce/products/products-list";
 import OrderList from "layouts/ecommerce/orders/order-list";
 import OrderDetails from "layouts/ecommerce/orders/order-details";
 import Referral from "layouts/ecommerce/referral";
-import Login from "pages/auth/login";
+// import Login from "pages/auth/login";
 import SignUpBasic from "layouts/authentication/sign-up/basic";
 import SignUpCover from "layouts/authentication/sign-up/cover";
 import SignUpIllustration from "layouts/authentication/sign-up/illustration";
@@ -98,6 +98,11 @@ import Document from "examples/Icons/Document";
 import SpaceShip from "examples/Icons/SpaceShip";
 import CustomerSupport from "examples/Icons/CustomerSupport";
 import CreditCard from "examples/Icons/CreditCard";
+
+
+// Authentication Routes
+import Login from "pages/auth/login";
+import SelectRole from "pages/auth/select-role";
 
 const routes = [
   {
@@ -703,10 +708,16 @@ const routes = [
     noCollapse: true,
   },
   {
-    name: "Change Log",
+    name: "Login",
     key: "login",
     route: "/login",
     component: <Login />,
+  },
+  {
+    name: "Select Role",
+    key: "select-role",
+    route: "/select-role",
+    component: <SelectRole />,
   },
 ];
 

@@ -33,7 +33,7 @@ import Footer from "layouts/authentication/components/Footer";
 // Soft UI Dashboard PRO React page layout routes
 // import pageRoutes from "page.routes";
 
-function BasicLayout({ title, description, image, children }) {
+function BasicLayout({ title, description, image, children, containerGridItemProps = {} }) {
   return (
     <PageLayout>
       {/* <DefaultNavbar
@@ -83,7 +83,7 @@ function BasicLayout({ title, description, image, children }) {
       </SoftBox>
       <SoftBox mt={{ xs: -26, lg: -24 }} px={1} width="calc(100% - 2rem)" mx="auto">
         <Grid container spacing={1} justifyContent="center">
-          <Grid item xs={11} sm={9} md={5} lg={4} xl={3}>
+          <Grid item xs={11} sm={9} md={5} lg={4} xl={3} {...containerGridItemProps}>
             {children}
           </Grid>
         </Grid>
@@ -105,6 +105,7 @@ BasicLayout.propTypes = {
   description: PropTypes.string,
   image: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  containerGridItemProps: PropTypes.object,
 };
 
 export default BasicLayout;

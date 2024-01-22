@@ -13,9 +13,15 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
+// Global application bootstrap
+import "bootstrap";
+
+// React and ReactDOM 
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+
+// App component
 import App from "App";
 
 // Soft UI Context Provider

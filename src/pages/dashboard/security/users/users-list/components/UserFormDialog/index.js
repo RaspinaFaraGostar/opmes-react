@@ -25,6 +25,7 @@ import axios from "axios";
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useIsFirstRender } from "@uidotdev/usehooks";
+import RolesSelect from "./components/RolesSelect";
 
 
 function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
@@ -32,26 +33,8 @@ function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
     // I18n
     const { t } = useTranslation();
 
-    // get is frist render
+    // Check if is frist render
     const isFirstRender = useIsFirstRender();
-
-    // Form data
-    // const [data, setData] = useState({
-
-    // });
-    // const handleChangeInput = event => setData({ ...data, [event.target.name]: event.target.value });
-    // const handleChangeCheckbox = event => setData({ ...data, [event.target.name]: event.target.checked });
-
-    // const handleSubmit = async (event) => {
-    //     event.preventDefault();
-
-    //     const response = await axios({
-    //         method: 'POST',
-    //         url: '/api/UserPanel/Create'
-    //     })
-
-    //     console.log(response);
-    // }
 
     return (
         <Formik
@@ -68,6 +51,7 @@ function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
                 IsActive: true,
                 ...initialValues
             }}
+            enableReinitialize
             validationSchema={Yup.object().shape({
                 PersonalName: Yup.string()
                     .required(t('The email field is required')),
@@ -178,7 +162,8 @@ function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
                                 {errors.NationalCode && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.NationalCode}</Typography>}
                             </Grid>
                             <Grid item xs={4}>
-                                <SoftInput placeholder={t("Roles")} />
+                                {/* <SoftInput placeholder={t("Roles")} /> */}
+                                <RolesSelect />
                                 {errors.PostIds && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.PostIds}</Typography>}
                             </Grid>
                             <Grid item xs={4}>

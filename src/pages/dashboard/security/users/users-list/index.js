@@ -54,7 +54,18 @@ function UsersList() {
 
   // Data
   const [data, setData] = useState({ Data: [], Total: 0 });
-  const dataTableData = useDataTableData(data.Data);
+  const dataTableData = useDataTableData({
+    data: data.Data,
+    getActionCellProps: row => ({
+      onClick: (event, action) => {
+        switch (action) {
+          case 'edit':
+            setFormDialogProps({ open: true, initialValues: row });
+            return;
+        }
+      }
+    })
+  });
 
   // Data fetching handlers
   const fetchDataAsync = async () => {

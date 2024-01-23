@@ -3,7 +3,6 @@
 * Soft UI Dashboard PRO React - v4.0.2
 =========================================================
 
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-pro-react
 * Copyright 2023 Creative Tim (https://www.creative-tim.com)
 
 Coded by www.creative-tim.com
@@ -17,8 +16,7 @@ Coded by www.creative-tim.com
 // Soft UI Dashboard PRO React components
 import SoftBadge from "components/SoftBadge";
 
-// ProductsList page components
-import ProductCell from "../components/ProductCell";
+// Page components
 import ActionCell from "../components/ActionCell";
 
 // Lodash methods
@@ -28,7 +26,7 @@ import map from "lodash/map";
 import { useTranslation } from "react-i18next";
 
 
-const useDataTableData = data => {
+const useDataTableData = ({ data, getActionCellProps = () => ({}) }) => {
 
   const { t } = useTranslation();
 
@@ -62,7 +60,7 @@ const useDataTableData = data => {
 
     rows: map(data, item => ({
       ...item,
-      action: <ActionCell />
+      action: <ActionCell {...getActionCellProps(item)} />
     }))
   })
 };

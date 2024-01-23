@@ -1,7 +1,9 @@
+import UsersList from "pages/dashboard/security/users/users-list";
+
 const dynamicRoutes = [
     {
         route: "/panel/security/user",
-        component: (props) => <h1>Hello World</h1>
+        component: <UsersList />
     }
 
 ]

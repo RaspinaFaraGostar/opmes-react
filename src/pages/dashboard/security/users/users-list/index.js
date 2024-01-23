@@ -86,7 +86,7 @@ function UsersList() {
   const [formDialogProps, setFormDialogProps] = useState({ open: false });
 
   // Snackbar content
-  const [snackbarContent, setSnackbarContent] = useState();
+  const [snackbarContent, setSnackbarContent] = useState('asdasd');
 
   return (
     <>
@@ -139,12 +139,13 @@ function UsersList() {
 
       <SoftSnackbar
         color="info"
+        // autoHideDuration={1000}
         // icon="notifications"
         // title="Soft UI Dashboard"
         content={snackbarContent}
         // dateTime="11 mins ago"
         open={Boolean(snackbarContent)}
-        close={() => setSnackbarContent()}
+        onClose={() => setSnackbarContent()}
       />
     </>
   );

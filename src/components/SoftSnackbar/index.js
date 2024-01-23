@@ -62,11 +62,11 @@ function SoftSnackbar({ color, icon, title, dateTime, content, close, bgWhite, .
         horizontal: "right",
       }}
       {...rest}
-      action={
+      action={close && (
         <IconButton size="small" aria-label="close" color="inherit" onClick={close}>
           <Icon fontSize="small">close</Icon>
         </IconButton>
-      }
+      )}
     >
       <SoftBox
         variant={bgWhite ? "contained" : "gradient"}
@@ -77,46 +77,48 @@ function SoftSnackbar({ color, icon, title, dateTime, content, close, bgWhite, .
         borderRadius="md"
         p={1}
       >
-        <SoftBox
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          color="dark"
-          p={1.5}
-        >
-          <SoftBox display="flex" alignItems="center" lineHeight={0}>
-            <SoftSnackbarIconRoot fontSize="small" ownerState={{ color, bgWhite }}>
-              {icon}
-            </SoftSnackbarIconRoot>
-            <SoftTypography
-              variant="button"
-              fontWeight="medium"
-              color={titleColor}
-              textGradient={bgWhite}
-            >
-              {title}
-            </SoftTypography>
+        {(title || dateTime || close) && (
+          <SoftBox
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            color="dark"
+            p={1.5}
+          >
+            <SoftBox display="flex" alignItems="center" lineHeight={0}>
+              <SoftSnackbarIconRoot fontSize="small" ownerState={{ color, bgWhite }}>
+                {icon}
+              </SoftSnackbarIconRoot>
+              <SoftTypography
+                variant="button"
+                fontWeight="medium"
+                color={titleColor}
+                textGradient={bgWhite}
+              >
+                {title}
+              </SoftTypography>
+            </SoftBox>
+            <SoftBox display="flex" alignItems="center" lineHeight={0}>
+              <SoftTypography variant="caption" color={dateTimeColor}>
+                {dateTime}
+              </SoftTypography>
+              <Icon
+                sx={{
+                  color: ({ palette: { dark, white } }) =>
+                    bgWhite || color === "light" ? dark.main : white.main,
+                  fontWeight: ({ typography: { fontWeightBold } }) => fontWeightBold,
+                  cursor: "pointer",
+                  marginLeft: 2,
+                  transform: "translateY(-1px)",
+                }}
+                onClick={close}
+              >
+                close
+              </Icon>
+            </SoftBox>
           </SoftBox>
-          <SoftBox display="flex" alignItems="center" lineHeight={0}>
-            <SoftTypography variant="caption" color={dateTimeColor}>
-              {dateTime}
-            </SoftTypography>
-            <Icon
-              sx={{
-                color: ({ palette: { dark, white } }) =>
-                  bgWhite || color === "light" ? dark.main : white.main,
-                fontWeight: ({ typography: { fontWeightBold } }) => fontWeightBold,
-                cursor: "pointer",
-                marginLeft: 2,
-                transform: "translateY(-1px)",
-              }}
-              onClick={close}
-            >
-              close
-            </Icon>
-          </SoftBox>
-        </SoftBox>
-        <Divider sx={{ margin: 0 }} light={dividerColor} />
+        )}
+        {(title || dateTime || close) && <Divider sx={{ margin: 0 }} light={dividerColor} />}
         <SoftBox p={1.5} color={bgWhite || color === "light" ? "text" : "white"} fontSize={size.sm}>
           {content}
         </SoftBox>

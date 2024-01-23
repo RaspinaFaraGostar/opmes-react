@@ -10,6 +10,8 @@ const faJSON = {
   "Inactive": "غیرفعال",
   "Save": "ذخیره",
   "Cancel": "انصراف",
+  "Loading": "در حال بارگذاری",
+  "No options": "موردی وجود ندارد",
 
   // Login page 
   "Welcome": "خوش آمدید",

@@ -20,7 +20,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-function RolesSelect() {
+function RolesSelect({ textFieldProps = {}, ...props }) {
     return (
         <AsyncSelect
             url="api/EnumPanel/getByEnumType?EnumType=Post"
@@ -43,7 +43,7 @@ function RolesSelect() {
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    placeholder="Favorites"
+                    {...textFieldProps}
                 // InputProps={{
                 //     ...params.InputProps,
                 //     endAdornment: (
@@ -55,12 +55,13 @@ function RolesSelect() {
                 // }}
                 />
             )}
+            {...props}
         />
     );
 }
 
 RolesSelect.propTypes = {
-
+    textFieldProps: PropTypes.object,
 }
 
 export default RolesSelect;

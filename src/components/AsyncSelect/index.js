@@ -9,8 +9,15 @@ import PropTypes from "prop-types";
 
 // Axios
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 function AsyncSelect({ url, ...props }) {
+
+    // I18n
+    const { t } = useTranslation();
+
+
+    // Component state
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
     const loading = open && options.length === 0;
@@ -48,6 +55,8 @@ function AsyncSelect({ url, ...props }) {
             onClose={() => setOpen(false)}
             options={options}
             loading={loading}
+            loadingText={t("Loading")}
+            noOptionsText={t("No options")}
             {...props}
         // isOptionEqualToValue={(option, value) => option.title === value.title}
         // getOptionLabel={(option) => option.title}

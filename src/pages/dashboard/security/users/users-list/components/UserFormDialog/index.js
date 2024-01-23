@@ -161,9 +161,13 @@ function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
                                 />
                                 {errors.NationalCode && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.NationalCode}</Typography>}
                             </Grid>
-                            <Grid item xs={4}>
-                                {/* <SoftInput placeholder={t("Roles")} /> */}
-                                <RolesSelect />
+                            <Grid item xs={12}>
+                                {/* <SoftInput placeholder={} /> */}
+                                <RolesSelect 
+                                    value={values.PostIds}
+                                    onChange={handleChange}
+                                    textFieldProps={{ placeholder: t("Roles") }} 
+                                />
                                 {errors.PostIds && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.PostIds}</Typography>}
                             </Grid>
                             <Grid item xs={4}>

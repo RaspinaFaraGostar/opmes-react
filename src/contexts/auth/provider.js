@@ -52,24 +52,11 @@ const AuthProvider = ({ children }) => {
 
     // Fetch auth info
     const fetchUserDetailsAsync = async () => {
-        let responses = [];
-        const onReject = (error) => error.status == 401 ? Promise.reject(error) : null;
-        try {
-            responses = await axios.all([
-                axios('api/MyAccount/GetMyAccountInfo').catch(onReject),
-                axios('api/Permissions/PermissionWithRole').catch(onReject)
-            ]);
-        } catch (error) {
-            if (error instanceof AxiosError) {
-
-                // Authentication expired so reset local state
-                if (error.status == 401) {
-                    setStorageState(initialState);
-                }
-            }
-        } finally {
-            setUser(Object.assign({}, ...map(responses, response => response ? response.data : {})));
-        }
+        const responses = await axios.all([
+            axios('api/MyAccount/GetMyAccountInfo').catch(() => null),
+            axios('api/Permissions/PermissionWithRole').catch(() => null)
+        ]);
+        setUser(Object.assign({}, ...map(responses, response => response ? response.data : {})));
     }
 
     useEffect(() => {
@@ -79,6 +66,12 @@ const AuthProvider = ({ children }) => {
 
         if (controller.access_token) {
             axios.defaults.headers.common['Authorization'] = 'bearer '.concat(controller.access_token);
+            axios.interceptors.response.use(response => response, error => {
+                if (error.response.status === 401)
+                    setStorageState(initialState);
+
+                return error;
+            });
             fetchUserDetailsAsync();
         }
     }, [controller, dispatch])
@@ -91,6 +84,6 @@ const AuthProvider = ({ children }) => {
 
 AuthProvider.propTypes = {
     children: PropTypes.node.isRequired,
-};
+}
 
 export default AuthProvider;

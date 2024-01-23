@@ -116,15 +116,10 @@ export default function App() {
 
   // Handle routes
   const [auth] = useAuth();
-  const [allRoutes, setAllRoutes] = useState(staticRoutes);
+  const [allRoutes, setAllRoutes] = useState([]);
   const mapResponseRouteRecursively = (route, allRoutes) => {
     const children = filter(allRoutes, subRoute => subRoute.ParentId == route.MenuId);
 
-    console.log({
-      'url': route.Url,
-      'dynamic': find(dynamicRoutes, item => item.path == route.Url)?.component,
-      dynamicRoutes,
-    })
     return ({
       name: route.Title,
       key: route.MenuId,
@@ -194,6 +189,9 @@ export default function App() {
       </Routes>
     </ThemeProvider>
   );
+
+  // Return null when proccessing
+  if (allRoutes.length < 1) return null;
 
   return (
     <>

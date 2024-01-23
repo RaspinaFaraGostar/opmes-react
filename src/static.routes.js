@@ -54,16 +54,16 @@ const routes = [
     component: <Default />
   },
   {
-    name: "Login",
-    key: "login",
-    route: "/login",
-    component: <Login />,
-  },
-  {
     name: "Select Role",
     key: "select-role",
     route: "/select-role",
     component: <SelectRole />,
+  },
+  {
+    name: "Login",
+    key: "login",
+    route: "/login",
+    component: <Login />,
   },
   {
     name: "404",

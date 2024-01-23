@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // React componenets and hooks
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 // react-router-dom components
 import { Link } from "react-router-dom";
@@ -34,8 +34,9 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
-// Data
+// Component dependencies
 import useDataTableData from "./data/useDataTableData";
+import UserFormDialog from "./components/UserFormDialog";
 
 // I18n 
 import { useTranslation } from "react-i18next";
@@ -45,7 +46,10 @@ import axios from "axios";
 
 // React helmet
 import { Helmet } from "react-helmet";
-import UserFormDialog from "./components/UserFormDialog";
+
+// 
+import { useSnackbar } from "notistack";
+import SoftSnackbar from "components/SoftSnackbar";
 
 function UsersList() {
 
@@ -80,6 +84,9 @@ function UsersList() {
 
   // Form dialog props and handlers
   const [formDialogProps, setFormDialogProps] = useState({ open: false });
+
+  // Snackbar content
+  const [snackbarContent, setSnackbarContent] = useState();
 
   return (
     <>
@@ -121,7 +128,24 @@ function UsersList() {
         <Footer />
       </DashboardLayout>
 
-      <UserFormDialog {...formDialogProps} onClose={() => setFormDialogProps({ open: false })} />
+      <UserFormDialog
+        {...formDialogProps}
+        onClose={() => setFormDialogProps({ open: false })}
+        onSubmitSuccess={response => {
+          setSnackbarContent(response);
+          setFormDialogProps({ open: false })
+        }}
+      />
+
+      <SoftSnackbar
+        color="info"
+        // icon="notifications"
+        // title="Soft UI Dashboard"
+        content={snackbarContent}
+        // dateTime="11 mins ago"
+        open={Boolean(snackbarContent)}
+        close={() => setSnackbarContent()}
+      />
     </>
   );
 }

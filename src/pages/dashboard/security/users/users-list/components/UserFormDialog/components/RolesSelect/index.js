@@ -25,12 +25,18 @@ function RolesSelect({ textFieldProps = {}, ...props }) {
         <AsyncSelect
             url="api/EnumPanel/getByEnumType?EnumType=Post"
             multiple
-            // options={top100Films}
-            // disableCloseOnSelect
+            disableCloseOnSelect
             getOptionLabel={(option) => option.EnumName}
-            isOptionEqualToValue={(option, value) => value && option.EnumId === value.EnumId}
+            isOptionEqualToValue={(option, value) => {
+                if (!value) return false;
+
+                if (typeof value === "string")
+                    return option.EnumId == value;
+
+                return option.EnumId == value.EnumId;
+            }}
             renderOption={(props, option, { selected }) => (
-                <li {...props}>
+                <li {...props} key={option.EnumId}>
                     <Checkbox
                         icon={icon}
                         checkedIcon={checkedIcon}

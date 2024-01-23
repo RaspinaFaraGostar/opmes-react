@@ -1,90 +1,106 @@
 // React components
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 // PropTypes
 import PropTypes from "prop-types";
 
 // MUI components
-import { Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, Typography } from "@mui/material";
+import { Checkbox, Collapse, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, Typography } from "@mui/material";
 
 // SoftUI components
 import SoftButton from "components/SoftButton";
 import SoftInput from "components/SoftInput";
-import SoftTypography from "components/SoftTypography";
+import SoftAlert from "components/SoftAlert";
 
 // I18n
 import { useTranslation } from "react-i18next";
 
 // App components
 import DialogCloseButton from "components/DialogCloseButton";
-
-// Axios
-import axios from "axios";
-
-// Formik and Yup
-import * as Yup from 'yup';
-import { Formik } from 'formik';
-import { useIsFirstRender } from "@uidotdev/usehooks";
 import RolesSelect from "./components/RolesSelect";
 
+// Axios
+import axios, { AxiosError } from "axios";
 
-function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
+// Helper hooks
+import { useIsFirstRender } from "@uidotdev/usehooks";
+
+// Formik
+import { Formik } from 'formik';
+
+// Component dependencies
+import useValidationSchema from "./validation/useValidationSchema";
+
+
+function UserFormDialog({ open, onClose, onSubmitSuccess, initialValues = {}, ...props }) {
 
     // I18n
     const { t } = useTranslation();
 
+    // Form initial values
+    const getInitialData = () => ({
+        PersonalName: '',
+        PersonalLastName: '',
+        MedicalNo: '',
+        NationalCode: '',
+        UserName: '',
+        Password: '',
+        RePassword: '',
+        PostIds: [],
+        Lock: false,
+        IsActive: true,
+        ...initialValues
+    });
+    const [data, setData] = useState(getInitialData());
+
+    const fetchInitialDataAsync = async (userId) => {
+        const response = await axios('/api/UserPanel/'.concat(userId));
+        setData(response.data);
+    }
+
+    useMemo(() => {
+        if (open && initialValues.UserId)
+            fetchInitialDataAsync(initialValues.UserId);
+
+        if (!open) setData(getInitialData());
+    }, [open])
+
     // Check if is frist render
     const isFirstRender = useIsFirstRender();
 
+    // Validation schema
+    const validationSchema = useValidationSchema();
+
     return (
         <Formik
-            initialValues={{
-                PersonalName: '',
-                PersonalLastName: '',
-                MedicalNo: '',
-                NationalCode: '',
-                UserName: '',
-                Password: '',
-                RePassword: '',
-                PostIds: [],
-                Lock: false,
-                IsActive: true,
-                ...initialValues
-            }}
+            initialValues={data}
             enableReinitialize
-            validationSchema={Yup.object().shape({
-                PersonalName: Yup.string()
-                    .required(t('The email field is required')),
-                PersonalLastName: Yup.string()
-                    .required(t('The password field is required')),
-                MedicalNo: Yup.number().required(t('The password field is required'))
-            })}
+            validationSchema={validationSchema}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
                     const response = await axios({
                         method: 'POST',
-                        url: '/api/UserPanel/Create'
+                        url: values.UserId ? '/api/UserPanel/Edit' : '/api/UserPanel/Create',
+                        data: values
                     })
 
-                    console.log(response);
+                    setStatus({ success: true });
+                    onSubmitSuccess && onSubmitSuccess(response.data);
+                } catch (error) {
 
-                    if (!isFirstRender) {
-                        setStatus({ success: true });
-                        setSubmitting(false);
-                    }
-                } catch (err) {
-                    console.error(err);
+                    if (error instanceof AxiosError && error.response.status === 409)
+                        setErrors({ submit: error.response.data.Message ?? error.message });
 
-                    if (!isFirstRender) {
-                        setStatus({ success: false });
-                        setErrors({ submit: err.message });
-                        setSubmitting(false);
-                    }
+                    setStatus({ success: false });
+
+                } finally {
+                    setSubmitting(false);
                 }
             }}
         >
             {({
                 errors,
+                setFieldValue,
                 handleBlur,
                 handleChange,
                 handleSubmit,
@@ -105,8 +121,13 @@ function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
                     <DialogTitle>{t("Add user")}</DialogTitle>
                     <DialogCloseButton onClick={onClose} />
                     <DialogContent>
+                        <Collapse in={Boolean(errors.submit)}>
+                            <SoftAlert color="error">
+                                <Typography fontSize="small">{errors.submit}</Typography>
+                            </SoftAlert>
+                        </Collapse>
                         <Grid container spacing={2}>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <SoftInput
                                     name="PersonalName"
                                     type="text"
@@ -117,7 +138,7 @@ function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
                                 />
                                 {errors.PersonalName && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.PersonalName}</Typography>}
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <SoftInput
                                     name="PersonalLastName"
                                     type="text"
@@ -128,7 +149,8 @@ function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
                                 />
                                 {errors.PersonalLastName && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.PersonalLastName}</Typography>}
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4} />
+                            <Grid item xs={12} md={4}>
                                 <SoftInput
                                     name="MedicalNo"
                                     type="number"
@@ -139,18 +161,7 @@ function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
                                 />
                                 {errors.MedicalNo && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.MedicalNo}</Typography>}
                             </Grid>
-                            <Grid item xs={4}>
-                                <SoftInput
-                                    name="UserName"
-                                    type="text"
-                                    placeholder={t("Username")}
-                                    value={values.UserName}
-                                    onChange={handleChange}
-                                    error={Boolean(errors.UserName)}
-                                />
-                                {errors.UserName && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.UserName}</Typography>}
-                            </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <SoftInput
                                     name="NationalCode"
                                     type="text"
@@ -161,12 +172,49 @@ function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
                                 />
                                 {errors.NationalCode && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.NationalCode}</Typography>}
                             </Grid>
-                            <Grid item xs={12}>
-                                {/* <SoftInput placeholder={} /> */}
-                                <RolesSelect 
-                                    value={values.PostIds}
+                            <Grid item xs={12} md={4} />
+                            <Grid item xs={12} md={4}>
+                                <SoftInput
+                                    name="UserName"
+                                    type="text"
+                                    placeholder={t("Username")}
+                                    value={values.UserName}
                                     onChange={handleChange}
-                                    textFieldProps={{ placeholder: t("Roles") }} 
+                                    error={Boolean(errors.UserName)}
+                                />
+                                {errors.UserName && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.UserName}</Typography>}
+                            </Grid>
+                            {!data.UserId && (
+                                <>
+                                    <Grid item xs={12} md={4}>
+                                        <SoftInput
+                                            name="Password"
+                                            type="password"
+                                            placeholder={t("Password")}
+                                            value={values.Password}
+                                            onChange={handleChange}
+                                            error={Boolean(errors.Password)}
+                                        />
+                                        {errors.Password && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.Password}</Typography>}
+                                    </Grid>
+                                    <Grid item xs={12} md={4}>
+                                        <SoftInput
+                                            name="RePassword"
+                                            type="password"
+                                            placeholder={t("Repeat Password")}
+                                            value={values.RePassword}
+                                            onChange={handleChange}
+                                            error={Boolean(errors.RePassword)}
+                                        />
+                                        {errors.RePassword && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.RePassword}</Typography>}
+                                    </Grid>
+                                </>
+                            )}
+                            <Grid item xs={12}>
+                                <RolesSelect
+                                    value={values.PostIds}
+                                    onChange={(event, value) => setFieldValue("PostIds", value)}
+                                    textFieldProps={{ placeholder: t("Roles") }}
                                 />
                                 {errors.PostIds && <Typography color="error" variant="caption" sx={{ ml: 1 }}>{errors.PostIds}</Typography>}
                             </Grid>
@@ -200,7 +248,7 @@ function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
                     </DialogContent>
                     <DialogActions>
                         <SoftButton type="button" variant="text" color="dark" onClick={onClose}>{t("Cancel")}</SoftButton>
-                        <SoftButton type="submit" variant="gradient" color="info">{t("Save")}</SoftButton>
+                        <SoftButton type="submit" variant="gradient" color="info" disabled={isSubmitting}>{t("Save")}</SoftButton>
                     </DialogActions>
                 </Dialog>
             )}
@@ -212,6 +260,7 @@ function UserFormDialog({ open, onClose, initialValues = {}, ...props }) {
 UserFormDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func,
+    onSubmitSuccess: PropTypes.func,
     initialValues: PropTypes.object,
 };
 

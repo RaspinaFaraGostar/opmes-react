@@ -166,6 +166,8 @@ export default function App() {
   useMemo(() => {
     if (auth.user && auth.user.RoleCode)
       fetchDynamicRoutesAsync();
+    else
+      setAllRoutes(staticRoutes);
   }, [auth]);
 
   const content = (

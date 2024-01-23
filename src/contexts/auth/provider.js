@@ -67,10 +67,12 @@ const AuthProvider = ({ children }) => {
         if (controller.access_token) {
             axios.defaults.headers.common['Authorization'] = 'bearer '.concat(controller.access_token);
             axios.interceptors.response.use(response => response, error => {
-                if (error.response.status === 401)
+                if (error.response.status === 401) {
                     setStorageState(initialState);
+                    return;
+                }
 
-                return error;
+                throw error;
             });
             fetchUserDetailsAsync();
         }

@@ -234,7 +234,7 @@ function DataTable({
           >
             {canPreviousPage && (
               <SoftPagination item onClick={() => previousPage()}>
-                <Icon sx={{ fontWeight: "bold" }}>chevron_left</Icon>
+                <Icon sx={{ fontWeight: "bold" }}>chevron_right</Icon>
               </SoftPagination>
             )}
             {renderPagination.length > 6 ? (
@@ -250,7 +250,7 @@ function DataTable({
             )}
             {canNextPage && (
               <SoftPagination item onClick={() => nextPage()}>
-                <Icon sx={{ fontWeight: "bold" }}>chevron_right</Icon>
+                <Icon sx={{ fontWeight: "bold" }}>chevron_left</Icon>
               </SoftPagination>
             )}
           </SoftPagination>

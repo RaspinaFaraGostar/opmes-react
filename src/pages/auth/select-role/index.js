@@ -54,6 +54,9 @@ function SelectRole() {
   // Translations
   const { t } = useTranslation();
 
+  // Authetnication hook and handler
+  const [auth, dispatch] = useAuth();
+
   // Router navigation & location 
   const location = useLocation();
 
@@ -65,12 +68,12 @@ function SelectRole() {
   }
 
   useEffect(() => {
-    fetchRolesAsync();
+    if (auth.user)
+      fetchRolesAsync();
   }, []);
 
 
   // Select role handlers
-  const [auth, dispatch] = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const getPostFormData = (roleId) => `grant_type=refresh_token&refresh_token=${auth.refresh_token}&Id=${roleId}`;
   const handleSelectRole = async (roleId) => {
@@ -101,6 +104,12 @@ function SelectRole() {
     }
   }
 
+
+  if (!auth.user) {
+    return (
+      <Navigate to='/login' state={location.state} replace />
+    )
+  }
 
   if (auth.user.RoleCode) {
     return (

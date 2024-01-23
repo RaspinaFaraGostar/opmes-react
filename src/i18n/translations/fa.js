@@ -13,6 +13,11 @@ const faJSON = {
   "Loading": "در حال بارگذاری",
   "No options": "موردی وجود ندارد",
 
+
+  // Form validation rules
+  "The field is required": "ورود {{field}} اجباری است",
+  "The field must be number": "مقدار {{field}} باید عددی باشد",
+
   // Login page 
   "Welcome": "خوش آمدید",
   "Sign in via your credentials": "جهت ورود به حساب کاربری، مشخصات کاربری خود را وارد نمایید.",
@@ -44,6 +49,7 @@ const faJSON = {
   "Username": "نام کاربری",
   "Medical Number": "شماره نظام پزشکی",
   "National Code": "کد ملی",
+  "Repeat Password": "تکرار رمز عبور",
   "Roles": "سمت‌ها",
   "Status": "وضعیت",
   "Lock Status": "وضعیت قفل",

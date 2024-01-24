@@ -12,7 +12,11 @@ const faJSON = {
   "Cancel": "انصراف",
   "Loading": "در حال بارگذاری",
   "No options": "موردی وجود ندارد",
+  "Confirm delete": "تایید و حذف",
 
+  // General delete confirm message
+  "Are you sure?": "آیا مطمئن هستید؟",
+  "You won't be able to revert this!": "امکان بازگشت وجود نخواهد داشت!",
 
   // Form validation rules
   "The field is required": "ورود {{field}} اجباری است",

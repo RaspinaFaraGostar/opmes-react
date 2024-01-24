@@ -48,14 +48,14 @@ const useDataTableData = ({ data, getActionCellProps = () => ({}) }) => {
       {
         Header: t("Status"),
         accessor: "IsActive",
-        Cell: ({ value }) => (value ? success : failed),
+        cell: ({ value }) => (value ? success : failed),
       },
       {
         Header: t("Lock Status"),
         accessor: "Lock",
-        Cell: ({ value }) => (value ? success : failed),
+        cell: ({ value }) => (value ? success : failed),
       },
-      { Header: t("Action"), accessor: "action" },
+      { Header: t("Action"), accessor: "action", enableSorting: false },
     ],
 
     rows: map(data, item => ({

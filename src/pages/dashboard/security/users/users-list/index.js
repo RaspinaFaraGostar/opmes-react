@@ -14,10 +14,9 @@ Coded by www.creative-tim.com
 */
 
 // React componenets and hooks
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -25,46 +24,90 @@ import Stack from "@mui/material/Stack";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";
-import SoftTypography from "components/SoftTypography";
 import SoftButton from "components/SoftButton";
+import SoftTypography from "components/SoftTypography";
 
 // Soft UI Dashboard PRO React example components
+import Footer from "examples/Footer";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
 // Component dependencies
-import useDataTableData from "./data/useDataTableData";
 import UserFormDialog from "./components/UserFormDialog";
+import useDataTableData from "./data/useDataTableData";
 
 // I18n 
 import { useTranslation } from "react-i18next";
 
 // Axios
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 // React helmet
 import { Helmet } from "react-helmet";
 
-// 
+// Notistack
 import { useSnackbar } from "notistack";
-import SoftSnackbar from "components/SoftSnackbar";
+
+// Sweetalert2 components
+import Swal from "sweetalert2";
 
 function UsersList() {
 
+  // I18n
   const { t } = useTranslation();
 
+  // Snackbar handlers
+  const { enqueueSnackbar } = useSnackbar();
 
-  // Data
+  // DataTable
   const [data, setData] = useState({ Data: [], Total: 0 });
   const dataTableData = useDataTableData({
     data: data.Data,
     getActionCellProps: row => ({
-      onClick: (event, action) => {
+      onClick: async (event, action) => {
         switch (action) {
           case 'edit':
             setFormDialogProps({ open: true, initialValues: row });
+            return;
+          case 'delete':
+            const newSwal = Swal.mixin({
+              customClass: {
+                confirmButton: "button button-error",
+                cancelButton: "button button-text",
+              },
+              buttonsStyling: false,
+            });
+
+            const result = await newSwal.fire({
+              title: t("Are you sure?"),
+              text: t("You won't be able to revert this!"),
+              showCancelButton: true,
+              confirmButtonText: t("Confirm delete"),
+              cancelButtonText: t("Cancel"),
+              reverseButtons: true,
+            });
+
+            if (result.value) {
+              try {
+                const response = await axios({
+                  method: 'DELETE',
+                  url: '/api/UserPanel/'.concat(row.UserId),
+                  data: row
+                })
+
+                enqueueSnackbar(response.data, { variant: 'soft', icon: 'check', color: 'success' });
+                fetchDataAsync();
+              } catch (error) {
+                if (error instanceof AxiosError) {
+                  if (error.response.status == 409) {
+                    enqueueSnackbar(error.response.data.Message, { variant: 'soft', icon: 'close', color: 'error' });
+                  }
+                }
+              }
+
+            }
+
             return;
         }
       }
@@ -81,12 +124,8 @@ function UsersList() {
     fetchDataAsync();
   }, [])
 
-
   // Form dialog props and handlers
   const [formDialogProps, setFormDialogProps] = useState({ open: false });
-
-  // Snackbar content
-  const [snackbarContent, setSnackbarContent] = useState('asdasd');
 
   return (
     <>
@@ -132,20 +171,10 @@ function UsersList() {
         {...formDialogProps}
         onClose={() => setFormDialogProps({ open: false })}
         onSubmitSuccess={response => {
-          setSnackbarContent(response);
+          enqueueSnackbar(response, { variant: 'soft', icon: 'check', color: 'success' });
           setFormDialogProps({ open: false })
+          fetchDataAsync();
         }}
-      />
-
-      <SoftSnackbar
-        color="info"
-        // autoHideDuration={1000}
-        // icon="notifications"
-        // title="Soft UI Dashboard"
-        content={snackbarContent}
-        // dateTime="11 mins ago"
-        open={Boolean(snackbarContent)}
-        onClose={() => setSnackbarContent()}
       />
     </>
   );

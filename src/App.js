@@ -65,6 +65,7 @@ import axios from "axios";
 
 // Auth
 import { useAuth } from "contexts/auth";
+import SnackbarProvider from "contexts/snackbar";
 
 
 export default function App() {
@@ -173,22 +174,24 @@ export default function App() {
   const content = (
     <ThemeProvider theme={direction == "rtl" ? themeRTL : theme}>
       <CssBaseline />
-      {layout === "dashboard" && (
-        <>
-          <Sidenav
-            color={sidenavColor}
-            brand={brand}
-            brandName={t("Raspina Faragostar")}
-            routes={allRoutes}
-            onMouseEnter={handleOnMouseEnter}
-            onMouseLeave={handleOnMouseLeave}
-          />
-        </>
-      )}
-      <Routes>
-        {getRoutes(allRoutes)}
-        <Route path="*" element={<Navigate to="/-" />} />
-      </Routes>
+      <SnackbarProvider>
+        {layout === "dashboard" && (
+          <>
+            <Sidenav
+              color={sidenavColor}
+              brand={brand}
+              brandName={t("Raspina Faragostar")}
+              routes={allRoutes}
+              onMouseEnter={handleOnMouseEnter}
+              onMouseLeave={handleOnMouseLeave}
+            />
+          </>
+        )}
+        <Routes>
+          {getRoutes(allRoutes)}
+          <Route path="*" element={<Navigate to="/-" />} />
+        </Routes>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 

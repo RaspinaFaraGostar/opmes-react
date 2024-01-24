@@ -22,9 +22,6 @@ import RolesSelect from "./components/RolesSelect";
 // Axios
 import axios, { AxiosError } from "axios";
 
-// Helper hooks
-import { useIsFirstRender } from "@uidotdev/usehooks";
-
 // Formik
 import { Formik } from 'formik';
 
@@ -64,9 +61,6 @@ function UserFormDialog({ open, onClose, onSubmitSuccess, initialValues = {}, ..
 
         if (!open) setData(getInitialData());
     }, [open])
-
-    // Check if is frist render
-    const isFirstRender = useIsFirstRender();
 
     // Validation schema
     const validationSchema = useValidationSchema();

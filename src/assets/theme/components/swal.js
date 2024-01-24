@@ -24,7 +24,7 @@ import linearGradient from "assets/theme/functions/linearGradient";
 import pxToRem from "assets/theme/functions/pxToRem";
 
 const { borderRadius } = borders;
-const { fontWeightMedium, fontWeightBold, size } = typography;
+const { fontFamily, fontWeightMedium, fontWeightBold, size } = typography;
 const { gradients, transparent, white } = colors;
 const { buttonBoxShadow } = boxShadows;
 
@@ -35,6 +35,10 @@ const swal = {
 
   ".swal2-popup": {
     borderRadius: `${borderRadius.xl} !important`,
+
+    "& .button": {
+      fontFamily
+    },
 
     "& .button, & .swal2-confirm": {
       fontSize: `${size.xs} !important`,
@@ -91,6 +95,12 @@ const swal = {
           gradients.error.state
         )} !important`,
       },
+    },
+
+    "& .button.button-text": {
+      color: 'inherit',
+      backgroundImage: `none !important`,
+      boxShadow: 'none !important'
     },
 
     "& .button-flex": {

@@ -146,11 +146,11 @@ SoftSnackbarContent.propTypes = {
         "dark",
         "light",
     ]),
-    icon: PropTypes.node.isRequired,
+    icon: PropTypes.node,
     title: PropTypes.string.isRequired,
-    dateTime: PropTypes.string.isRequired,
-    content: PropTypes.node.isRequired,
-    close: PropTypes.func.isRequired,
+    dateTime: PropTypes.string,
+    content: PropTypes.node,
+    close: PropTypes.func,
     bgWhite: PropTypes.bool,
 };
 

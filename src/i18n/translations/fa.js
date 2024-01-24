@@ -14,6 +14,7 @@ const faJSON = {
   "No options": "موردی وجود ندارد",
   "Confirm delete": "تایید و حذف",
   "No result": "موردی یافت نشد",
+  "An error occurred": "مشکلی پیش آمده است",
 
   // General delete confirm message
   "Are you sure?": "آیا مطمئن هستید؟",

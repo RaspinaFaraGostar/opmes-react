@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // React componenets and hooks
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 // react-router-dom components
 
@@ -31,11 +31,15 @@ import SoftTypography from "components/SoftTypography";
 import Footer from "examples/Footer";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import DataTable from "examples/Tables/DataTable";
+// import DataTable from "examples/Tables/DataTable";
+
+// App components
+import DataTable from "components/DataTable";
 
 // Component dependencies
 import UserFormDialog from "./components/UserFormDialog";
-import useDataTableData from "./data/useDataTableData";
+import useTableData from "./data/useTableData";
+import UserRolesDialog from "./components/UserRolesDialog";
 
 // I18n 
 import { useTranslation } from "react-i18next";
@@ -51,7 +55,7 @@ import { useSnackbar } from "notistack";
 
 // Sweetalert2 components
 import Swal from "sweetalert2";
-import UserRolesDialog from "./components/UserRolesDialog";
+
 
 function UsersList() {
 
@@ -62,14 +66,17 @@ function UsersList() {
   const { enqueueSnackbar } = useSnackbar();
 
   // DataTable
-  const [data, setData] = useState({ Data: [], Total: 0 });
-  const dataTableData = useDataTableData({
-    data: data.Data,
-    getActionCellProps: row => ({
+  const { data, refetch } = useTableData({
+    getRowActionCellProps: row => ({
       onClick: async (event, action) => {
         switch (action) {
           case 'edit':
-            setFormDialogProps({ open: true, initialValues: row });
+            try {
+              const response = await axios('/api/UserPanel/'.concat(row.UserId));
+              setFormDialogProps({ open: true, initialValues: response.data });
+            } catch (error) {
+              enqueueSnackbar(t("An error occurred"), { variant: 'soft', color: 'error' })
+            }
             return;
           case 'role':
             setRolesDialogProps({ open: true, user: row });
@@ -101,7 +108,7 @@ function UsersList() {
                 })
 
                 enqueueSnackbar(response.data, { variant: 'soft', icon: 'check', color: 'success' });
-                fetchDataAsync();
+                refetch();
               } catch (error) {
                 if (error instanceof AxiosError) {
                   if (error.response.status == 409) {
@@ -117,16 +124,6 @@ function UsersList() {
       }
     })
   });
-
-  // Data fetching handlers
-  const fetchDataAsync = async () => {
-    const response = await axios('api/UserPanel/List?Page=1&PageSize=25&Filter=&Sort=');
-    setData(response.data);
-  }
-
-  useMemo(() => {
-    fetchDataAsync();
-  }, [])
 
   // Form dialog props and handlers
   const [formDialogProps, setFormDialogProps] = useState({ open: false });
@@ -165,13 +162,7 @@ function UsersList() {
                 </SoftButton>
               </Stack>
             </SoftBox>
-            <DataTable
-              table={dataTableData}
-              entriesPerPage={{
-                defaultValue: 10,
-                entries: false
-              }}
-            />
+            <DataTable table={data} />
           </Card>
         </SoftBox>
         <Footer />
@@ -183,7 +174,7 @@ function UsersList() {
         onSubmitSuccess={response => {
           enqueueSnackbar(response, { variant: 'soft', icon: 'check', color: 'success' });
           setFormDialogProps({ open: false })
-          fetchDataAsync();
+          refetch();
         }}
       />
 

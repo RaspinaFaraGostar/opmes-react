@@ -51,6 +51,7 @@ import { useSnackbar } from "notistack";
 
 // Sweetalert2 components
 import Swal from "sweetalert2";
+import UserRolesDialog from "./components/UserRolesDialog";
 
 function UsersList() {
 
@@ -69,6 +70,9 @@ function UsersList() {
         switch (action) {
           case 'edit':
             setFormDialogProps({ open: true, initialValues: row });
+            return;
+          case 'role':
+            setRolesDialogProps({ open: true, user: row });
             return;
           case 'delete':
             const newSwal = Swal.mixin({
@@ -127,6 +131,9 @@ function UsersList() {
   // Form dialog props and handlers
   const [formDialogProps, setFormDialogProps] = useState({ open: false });
 
+  // Roles dialog props and handlers
+  const [rolesDialogProps, setRolesDialogProps] = useState({ open: false });
+
   return (
     <>
       <Helmet title={t("Users management")} />
@@ -141,7 +148,7 @@ function UsersList() {
                   {t("Users management")}
                 </SoftTypography>
                 <SoftTypography variant="button" fontWeight="regular" color="text">
-                  A lightweight, extendable, dependency-free javascript HTML table plugin.
+                  {t("List of all system users")}
                 </SoftTypography>
               </SoftBox>
               <Stack spacing={1} direction="row">
@@ -160,7 +167,10 @@ function UsersList() {
             </SoftBox>
             <DataTable
               table={dataTableData}
-              entriesPerPage={false}
+              entriesPerPage={{
+                defaultValue: 10,
+                entries: false
+              }}
             />
           </Card>
         </SoftBox>
@@ -175,6 +185,11 @@ function UsersList() {
           setFormDialogProps({ open: false })
           fetchDataAsync();
         }}
+      />
+
+      <UserRolesDialog
+        {...rolesDialogProps}
+        onClose={() => setRolesDialogProps({ open: false })}
       />
     </>
   );

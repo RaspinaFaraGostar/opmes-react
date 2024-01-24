@@ -13,6 +13,7 @@ const faJSON = {
   "Loading": "در حال بارگذاری",
   "No options": "موردی وجود ندارد",
   "Confirm delete": "تایید و حذف",
+  "No result": "موردی یافت نشد",
 
   // General delete confirm message
   "Are you sure?": "آیا مطمئن هستید؟",
@@ -41,6 +42,7 @@ const faJSON = {
 
   // dashboard/security/users/users-list
   "Users management": "مدیریت کاربران",
+  "List of all system users": "لیست همه کاربران در سامانه",
   "Add user": "تعریف کاربر",
   "Edit user": "ویرایش کاربر",
   "Delete user": "حذف کاربر",

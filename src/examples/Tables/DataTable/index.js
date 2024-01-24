@@ -145,9 +145,9 @@ function DataTable({
 
   return (
     <TableContainer sx={{ boxShadow: "none" }}>
-      {entriesPerPage || canSearch ? (
+      {(entriesPerPage?.entries) || canSearch ? (
         <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-          {entriesPerPage && (
+          {entriesPerPage && entriesPerPage.entries && (
             <SoftBox display="flex" alignItems="center">
               <SoftSelect
                 defaultValue={{ value: defaultValue, label: defaultValue }}

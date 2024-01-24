@@ -57,6 +57,7 @@
     "lodash": "^4.17.21",
     "notistack": "^3.0.1",
     "prop-types": "15.8.1",
+    "query-string": "^8.1.0",
     "react": ">=16.8.0",
     "react-chartjs-2": "3.0.5",
     "react-circular-slider-svg": "0.2.0",

@@ -55,7 +55,7 @@ const useDataTableData = ({ data, getActionCellProps = () => ({}) }) => {
         accessor: "Lock",
         cell: ({ value }) => (value ? success : failed),
       },
-      { Header: t("Action"), accessor: "action", enableSorting: false },
+      { Header: t("Action"), accessor: "action", disableSortBy: true },
     ],
 
     rows: map(data, item => ({

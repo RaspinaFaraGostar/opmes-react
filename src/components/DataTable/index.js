@@ -42,13 +42,13 @@ import { useSearchParams } from "react-router-dom";
 import queryString from "query-string";
 
 function DataTable({
-
-  // Table data
   table,
-
-  // // Pagination props
-  // pagination,
-  // showTotalEntries,
+  pageSize,
+  currentPage,
+  totalCount,
+  onPageChange,
+  pagination,
+  showTotalEntries,
 }) {
 
   // Change columns and data on table change
@@ -79,13 +79,12 @@ function DataTable({
     // previousPage,
     // setPageSize,
     // setGlobalFilter,
-    // state: { pageIndex, pageSize, globalFilter },
+    // state: { currentPage, pageSize, globalFilter },
   } = tableInstance;
 
-
-
-  // Pagination methods
-
+  const pageOptions = Array.from({ length: Math.ceil(totalCount / pageSize) }, (_, i) => i + 1);
+  const canNextPage = pageOptions.length > 0 && currentPage != pageOptions[pageOptions.length - 1]
+  const canPreviousPage = pageOptions.length > 0 && currentPage != pageOptions[0];
 
   // Set the default value for the entries per page when component mounts
   // useEffect(() => setPageSize(defaultValue || 10), [defaultValue]);
@@ -93,17 +92,17 @@ function DataTable({
   // Set the entries per page value based on the select value
   // const setEntriesPerPage = ({ value }) => setPageSize(value);
 
-  // // Render the paginations
-  // const renderPagination = pageOptions.map((option) => (
-  //   <SoftPagination
-  //     item
-  //     key={option}
-  //     onClick={() => gotoPage(Number(option))}
-  //     active={pageIndex === option}
-  //   >
-  //     {option + 1}
-  //   </SoftPagination>
-  // ));
+  // Render the paginations
+  const renderPagination = pageOptions.map((option) => (
+    <SoftPagination
+      item
+      key={option}
+      onClick={() => onPageChange(Number(option))}
+      active={currentPage === option}
+    >
+      {option}
+    </SoftPagination>
+  ));
 
   // // Handler for the input to set the pagination index
   // const handleInputPagination = ({ target: { value } }) =>
@@ -138,19 +137,19 @@ function DataTable({
   //   return sortedValue;
   // };
 
-  // // Setting the entries starting point
-  // const entriesStart = pageIndex === 0 ? pageIndex + 1 : pageIndex * pageSize + 1;
+  // Setting the entries starting point
+  const entriesStart = currentPage === 1 ? currentPage : ((currentPage - 1) * pageSize) + 1;
 
-  // // Setting the entries ending point
-  // let entriesEnd;
+  // Setting the entries ending point
+  let entriesEnd;
 
-  // if (pageIndex === 0) {
-  //   entriesEnd = pageSize;
-  // } else if (pageIndex === pageOptions.length - 1) {
-  //   entriesEnd = rows.length;
-  // } else {
-  //   entriesEnd = pageSize * (pageIndex + 1);
-  // }
+  if (currentPage === 1) {
+    entriesEnd = pageSize;
+  } else if (currentPage === pageOptions.length) {
+    entriesEnd = totalCount;
+  } else {
+    entriesEnd = pageSize * currentPage;
+  }
 
   return (
     <TableContainer sx={{ boxShadow: "none" }}>
@@ -193,7 +192,7 @@ function DataTable({
         </TableBody>
       </Table>
 
-      {/* <SoftBox
+      <SoftBox
         display="flex"
         flexDirection={{ xs: "column", sm: "row" }}
         justifyContent="space-between"
@@ -203,7 +202,7 @@ function DataTable({
         {showTotalEntries && (
           <SoftBox mb={{ xs: 3, sm: 0 }}>
             <SoftTypography variant="button" color="secondary" fontWeight="regular">
-              Showing {entriesStart} to {entriesEnd} of {rows.length} entries
+              Showing {entriesStart} to {entriesEnd} of {totalCount} entries
             </SoftTypography>
           </SoftBox>
         )}
@@ -213,29 +212,29 @@ function DataTable({
             color={pagination.color ? pagination.color : "info"}
           >
             {canPreviousPage && (
-              <SoftPagination item onClick={() => previousPage()}>
+              <SoftPagination item onClick={() => onPageChange(currentPage - 1)}>
                 <Icon sx={{ fontWeight: "bold" }}>chevron_right</Icon>
               </SoftPagination>
             )}
             {renderPagination.length > 6 ? (
               <SoftBox width="5rem" mx={1}>
-                <SoftInput
+                {/* <SoftInput
                   inputProps={{ type: "number", min: 1, max: customizedPageOptions.length }}
-                  value={customizedPageOptions[pageIndex]}
+                  value={customizedPageOptions[currentPage]}
                   onChange={(handleInputPagination, handleInputPaginationValue)}
-                />
+                /> */}
               </SoftBox>
             ) : (
               renderPagination
             )}
             {canNextPage && (
-              <SoftPagination item onClick={() => nextPage()}>
+              <SoftPagination item onClick={() => onPageChange(currentPage + 1)}>
                 <Icon sx={{ fontWeight: "bold" }}>chevron_left</Icon>
               </SoftPagination>
             )}
           </SoftPagination>
         )}
-      </SoftBox> */}
+      </SoftBox>
     </TableContainer>
   );
 }
@@ -244,8 +243,9 @@ function DataTable({
 DataTable.defaultProps = {
   // entriesPerPage: { defaultValue: 10, entries: [5, 10, 15, 20, 25] },
   // canSearch: false,
-  // showTotalEntries: true,
-  // pagination: { variant: "gradient", color: "info" },
+  showTotalEntries: true,
+  pagination: { variant: "gradient", color: "info" },
+  onPageChange: (page) => { }
   // isSorted: true,
   // noEndBorder: false,
 };
@@ -261,23 +261,25 @@ DataTable.propTypes = {
   // ]),
   // canSearch: PropTypes.bool,
   table: PropTypes.objectOf(PropTypes.array).isRequired,
+  totalCount: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  pageSize: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func,
 
-  url: PropTypes.string,
-
-  // pagination: PropTypes.shape({
-  //   variant: PropTypes.oneOf(["contained", "gradient"]),
-  //   color: PropTypes.oneOf([
-  //     "primary",
-  //     "secondary",
-  //     "info",
-  //     "success",
-  //     "warning",
-  //     "error",
-  //     "dark",
-  //     "light",
-  //   ]),
-  // }),
-  // showTotalEntries: PropTypes.bool,
+  pagination: PropTypes.shape({
+    variant: PropTypes.oneOf(["contained", "gradient"]),
+    color: PropTypes.oneOf([
+      "primary",
+      "secondary",
+      "info",
+      "success",
+      "warning",
+      "error",
+      "dark",
+      "light",
+    ]),
+  }),
+  showTotalEntries: PropTypes.bool,
   // isSorted: PropTypes.bool,
   // noEndBorder: PropTypes.bool,
 };

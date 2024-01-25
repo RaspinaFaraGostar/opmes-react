@@ -109,7 +109,11 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}) }) => {
         ...row,
         action: <ActionCell {...getRowActionCellProps(row)} />
       }))
-    })
+    }),
+    total: Number(data.Total),
+    currentPage: Number(searchParams.get('Page')),
+    pageSize: Number(searchParams.get('PageSize')),
+    changePage: page => setSearchParams({ ...Object.fromEntries(searchParams), Page: page })
   }
 };
 

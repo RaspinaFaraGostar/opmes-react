@@ -66,7 +66,7 @@ function UsersList() {
   const { enqueueSnackbar } = useSnackbar();
 
   // DataTable
-  const { data, refetch } = useTableData({
+  const { data, total, currentPage, pageSize, refetch, changePage } = useTableData({
     getRowActionCellProps: row => ({
       onClick: async (event, action) => {
         switch (action) {
@@ -162,7 +162,13 @@ function UsersList() {
                 </SoftButton>
               </Stack>
             </SoftBox>
-            <DataTable table={data} />
+            <DataTable
+              table={data}
+              totalCount={total}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={changePage}
+            />
           </Card>
         </SoftBox>
         <Footer />

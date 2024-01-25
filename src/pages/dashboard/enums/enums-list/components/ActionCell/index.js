@@ -35,11 +35,31 @@ function ActionCell({ onClick = () => { } }) {
     <SoftBox display="flex" alignItems="center" gap={2} flexWrap>
       <SoftTypography
         variant="body1"
-        color="error"
+        color="secondary"
+        sx={{ cursor: "pointer", lineHeight: 0 }}
+        onClick={(event) => onClick(event, 'edit')}
+      >
+        <Tooltip title={t("Edit user")}>
+          <Icon>edit</Icon>
+        </Tooltip>
+      </SoftTypography>
+      <SoftTypography
+        variant="body1"
+        color="secondary"
+        sx={{ cursor: "pointer", lineHeight: 0 }}
+        onClick={(event) => onClick(event, 'log')}
+      >
+        <Tooltip title={t("Log reports")}>
+          <Icon>history</Icon>
+        </Tooltip>
+      </SoftTypography>
+      <SoftTypography
+        variant="body1"
+        color="secondary"
         sx={{ cursor: "pointer", lineHeight: 0 }}
         onClick={(event) => onClick(event, 'delete')}
       >
-        <Tooltip title={t("Delete role")}>
+        <Tooltip title={t("Delete user")}>
           <Icon>delete</Icon>
         </Tooltip>
       </SoftTypography>

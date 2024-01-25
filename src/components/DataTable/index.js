@@ -180,16 +180,19 @@ function DataTable({
             prepareRow(row);
             return (
               <TableRow key={key} {...row.getRowProps()}>
-                {row.cells.map((cell, key) => (
-                  <DataTableBodyCell
-                    key={key}
-                    // noBorder={noEndBorder && rows.length - 1 === key}
-                    align={cell.column.align ? cell.column.align : "left"}
-                    {...cell.getCellProps()}
-                  >
-                    {cell.render("Cell")}
-                  </DataTableBodyCell>
-                ))}
+                {row.cells.map((cell, key) => {
+                  console.log(cell.column);
+                  return (
+                    <DataTableBodyCell
+                      key={key}
+                      // noBorder={noEndBorder && rows.length - 1 === key}
+                      // align={cell.column.align ? cell.column.align : "left"}
+                      {...cell.getCellProps()}
+                    >
+                      {cell.render("Cell")}
+                    </DataTableBodyCell>
+                  )
+                })}
               </TableRow>
             );
           })}
@@ -220,17 +223,18 @@ function DataTable({
                 <Icon sx={{ fontWeight: "bold" }}>chevron_right</Icon>
               </SoftPagination>
             )}
-            {renderPagination.length > 6 ? (
+            {renderPagination}
+            {/* {renderPagination.length > 6 ? (
               <SoftBox width="5rem" mx={1}>
-                {/* <SoftInput
+                <SoftInput
                   inputProps={{ type: "number", min: 1, max: customizedPageOptions.length }}
                   value={customizedPageOptions[currentPage]}
                   onChange={(handleInputPagination, handleInputPaginationValue)}
-                /> */}
+                />
               </SoftBox>
             ) : (
               renderPagination
-            )}
+            )} */}
             {canNextPage && (
               <SoftPagination item onClick={() => onPageChange(currentPage + 1)}>
                 <Icon sx={{ fontWeight: "bold" }}>chevron_left</Icon>

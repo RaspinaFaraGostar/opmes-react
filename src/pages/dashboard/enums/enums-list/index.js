@@ -16,6 +16,9 @@ Coded by www.creative-tim.com
 // React componenets and hooks
 import { useState } from "react";
 
+// PropTypes
+import PropTypes from "prop-types";
+
 // @mui material components
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
@@ -35,8 +38,8 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "components/DataTable";
 
 // Component dependencies
-import UserFormDialog from "./components/UserFormDialog";
-import UserRolesDialog from "./components/UserRolesDialog";
+import EnumFormDialog from "./components/EnumFormDialog";
+import EnumLogsDialog from "./components/EnumLogsDialog";
 import useTableData from "./data/useTableData";
 
 // I18n 
@@ -53,9 +56,10 @@ import { useSnackbar } from "notistack";
 
 // Sweetalert2 components
 import Swal from "sweetalert2";
+import queryString from "query-string";
 
 
-function RolesList() {
+function EnumsList({ type }) {
 
   // I18n
   const { t } = useTranslation();
@@ -63,18 +67,30 @@ function RolesList() {
   // Snackbar handlers
   const { enqueueSnackbar } = useSnackbar();
 
+  // Form dialog props and handlers
+  const [formDialogProps, setFormDialogProps] = useState({ open: false });
+
+  // Logs dialog props and handlers
+  const [logsDialogProps, setLogsDialogProps] = useState({ open: false });
+
   // DataTable
   const { data, total, currentPage, pageSize, refetch, changePage } = useTableData({
+    type,
     getRowActionCellProps: row => ({
       onClick: async (event, action) => {
         switch (action) {
           case 'edit':
             try {
-              const response = await axios('/api/RolePanel/'.concat(row.RoleId));
+              const response = await axios('/api/EnumPanel?'.concat(
+                queryString.stringify({ id: row.EnumId, EnumTypeCode: type })
+              ));
               setFormDialogProps({ open: true, initialValues: response.data });
             } catch (error) {
               enqueueSnackbar(t("An error occurred"), { variant: 'soft', color: 'error' })
             }
+            return;
+          case 'log':
+            setLogsDialogProps({ open: true, enumEntity: row, enumType: type });
             return;
           case 'delete':
             const newSwal = Swal.mixin({
@@ -98,7 +114,7 @@ function RolesList() {
               try {
                 const response = await axios({
                   method: 'DELETE',
-                  url: '/api/RolePanel/'.concat(row.RoleId),
+                  url: '/api/EnumPanel/'.concat(row.UserId),
                   data: row
                 })
 
@@ -120,12 +136,9 @@ function RolesList() {
     })
   });
 
-  // Form dialog props and handlers
-  const [formDialogProps, setFormDialogProps] = useState({ open: false });
-
   return (
     <>
-      <Helmet title={t("Roles management")} />
+      <Helmet title={t("Enums management")} />
 
       <DashboardLayout>
         <DashboardNavbar />
@@ -134,10 +147,10 @@ function RolesList() {
             <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
               <SoftBox lineHeight={1}>
                 <SoftTypography variant="h5" fontWeight="medium">
-                  {t("Roles management")}
+                  {t("Enums management")}
                 </SoftTypography>
                 <SoftTypography variant="button" fontWeight="regular" color="text">
-                  {t("List of all system roles")}
+                  {t("List of all system enums")}
                 </SoftTypography>
               </SoftBox>
               <Stack spacing={1} direction="row">
@@ -145,13 +158,10 @@ function RolesList() {
                   variant="gradient"
                   color="info"
                   size="small"
-                  onClick={() => setFormDialogProps({ open: true })}
+                  onClick={() => setFormDialogProps({ open: true, initialValues: { EnumTypeCode: type } })}
                 >
-                  + {t("Add role")}
+                  + {t("Add enum")}
                 </SoftButton>
-                {/* <SoftButton variant="outlined" color="info" size="small">
-                  {t("Export")}
-                </SoftButton> */}
               </Stack>
             </SoftBox>
 
@@ -167,7 +177,7 @@ function RolesList() {
         <Footer />
       </DashboardLayout>
 
-      <UserFormDialog
+      <EnumFormDialog
         {...formDialogProps}
         onClose={() => setFormDialogProps({ open: false })}
         onSubmitSuccess={response => {
@@ -177,12 +187,17 @@ function RolesList() {
         }}
       />
 
-      <UserRolesDialog
-        {...rolesDialogProps}
-        onClose={() => setRolesDialogProps({ open: false })}
+      <EnumLogsDialog
+        {...logsDialogProps}
+        onClose={() => setLogsDialogProps({ open: false })}
       />
+
     </>
   );
 }
 
-export default RolesList;
+EnumsList.propTypes = {
+  type: PropTypes.string.isRequired,
+}
+
+export default EnumsList;

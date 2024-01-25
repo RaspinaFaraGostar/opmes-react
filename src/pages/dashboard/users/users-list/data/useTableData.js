@@ -97,21 +97,24 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
 
 
   const columns = [
-    { Header: t("First Name"), accessor: "PersonalName" },
-    { Header: t("Last Name"), accessor: "PersonalLastName" },
-    { Header: t("Username"), accessor: "UserName" },
-    { Header: t("Medical Number"), accessor: "MedicalNo" },
+    { Header: '#', accessor: "row", width: 10, noFilter: true },
+    { Header: t("First Name"), accessor: "PersonalName", width: 'auto' },
+    { Header: t("Last Name"), accessor: "PersonalLastName", width: 'auto' },
+    { Header: t("Username"), accessor: "UserName", width: 'auto' },
+    { Header: t("Medical Number"), accessor: "MedicalNo", width: 'auto' },
     {
       Header: t("Status"),
       accessor: "IsActive",
+      width: 'auto',
       Cell: ({ value }) => typeof value == "boolean" ? (value ? success : failed) : value,
     },
     {
       Header: t("Lock Status"),
       accessor: "Lock",
+      width: 'auto',
       Cell: ({ value }) => typeof value == "boolean" ? (value ? success : failed) : value,
     },
-    { Header: t("Action"), accessor: "action", noFilter: true },
+    { Header: t("Action"), accessor: "action", width: 'auto', noFilter: true },
   ];
 
   // Get loader
@@ -130,7 +133,8 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
 
         ...(fetching ? loader : []),
 
-        ...(!fetching ? map(data.Data, row => ({
+        ...(!fetching ? map(data.Data, (row, index) => ({
+          row: ((Number(searchParams.get('Page')) - 1) * Number(searchParams.get('PageSize'))) + (index + 1),
           ...row,
           action: <ActionCell {...getRowActionCellProps(row)} />
         })) : [])

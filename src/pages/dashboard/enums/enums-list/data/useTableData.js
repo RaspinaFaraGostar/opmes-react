@@ -18,31 +18,35 @@ Coded by www.creative-tim.com
 import { useEffect, useMemo, useState } from "react";
 
 // React Router DOM componenets
-import { useSearchParams } from "react-router-dom";
-
-// Soft UI Dashboard PRO React components
-import SoftBadge from "components/SoftBadge";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 // Page components
 import ActionCell from "../components/ActionCell";
 
+// App components
+import useDataTableLoader from "components/DataTable/useDataTableLoader";
+
 // Lodash methods
-import map from "lodash/map";
 import every from "lodash/every";
-import keys from "lodash/keys";
 import includes from "lodash/includes";
+import keys from "lodash/keys";
+import map from "lodash/map";
 
 // I18n
 import { useTranslation } from "react-i18next";
 
 // Querystring 
 import queryString from "query-string";
+import useTableFilter from "./useTableFilter";
 
 
-const useTableData = ({ getRowActionCellProps = (row) => ({}) }) => {
+const useTableData = ({ type, getRowActionCellProps = (row) => ({}), loaderRowsCount = 10 }) => {
 
   // I18n
   const { t } = useTranslation();
+
+  // React router location
+  const location = useLocation();
 
   // Data
   const [data, setData] = useState({ Data: [], Total: 0 });
@@ -51,18 +55,26 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}) }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParamsIncludeNeededKeys = every(['Page', 'PageSize', 'Filter', 'Sort'], key => includes(keys(Object.fromEntries(searchParams)), key));
 
+  const [fetching, setFetching] = useState(false);
   const fetchDataAsync = async () => {
-    // const response = await axios('api/UserPanel/List?Page=1&PageSize=25&Filter=&Sort=');
-    const response = await axios('api/RolePanel/List?'.concat(
-      queryString.stringify(Object.fromEntries(searchParams))
+    const response = await axios('api/EnumPanel?'.concat(
+      queryString.stringify({
+        EnumTypeCode: type,
+        ...Object.fromEntries(searchParams)
+      })
     ))
     setData(response.data);
+    setFetching(false);
   }
 
   useMemo(() => {
     if (searchParamsIncludeNeededKeys)
-      fetchDataAsync();
+      !fetching && setFetching(true);
   }, [searchParams]);
+
+  useMemo(() => {
+    fetching && fetchDataAsync();
+  }, [fetching])
 
   useEffect(() => {
     if (!searchParamsIncludeNeededKeys)
@@ -73,21 +85,36 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}) }) => {
         Filter: '',
         Sort: ''
       })
-  }, [])
+  }, [location])
+
+  const columns = [
+    { Header: '#', accessor: "row", width: 10, noFilter: true },
+    { Header: t("Enum Name"), accessor: "EnumName", width: 'auto' },
+    { Header: t("Action"), accessor: "action", width: 'auto', noFilter: true },
+  ];
+
+  // Get loader
+  const loader = useDataTableLoader(columns, { rowsCount: loaderRowsCount });
+
+  // Table filter
+  const filterRow = useTableFilter(columns);
 
   return {
     refetch: fetchDataAsync,
+    fetching,
     data: ({
-      columns: [
-        { Header: t("First Name"), accessor: "RoleName" },
-        { Header: t("Last Name"), accessor: "RoleCode" },
-        { Header: t("Action"), accessor: "action", isSorted: false },
-      ],
+      columns,
+      rows: [
+        filterRow,
 
-      rows: map(data.Data, row => ({
-        ...row,
-        action: <ActionCell {...getRowActionCellProps(row)} />
-      }))
+        ...(fetching ? loader : []),
+
+        ...(!fetching ? map(data.Data, (row, index) => ({
+          row: ((Number(searchParams.get('Page')) - 1) * Number(searchParams.get('PageSize'))) + (index + 1),
+          ...row,
+          action: <ActionCell {...getRowActionCellProps(row)} />
+        })) : [])
+      ]
     }),
     total: Number(data.Total),
     currentPage: Number(searchParams.get('Page')),

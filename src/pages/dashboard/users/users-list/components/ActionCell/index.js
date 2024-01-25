@@ -75,7 +75,7 @@ function ActionCell({ onClick = () => { } }) {
       </SoftTypography>
       <SoftTypography
         variant="body1"
-        color="error"
+        color="secondary"
         sx={{ cursor: "pointer", lineHeight: 0 }}
         onClick={(event) => onClick(event, 'delete')}
       >

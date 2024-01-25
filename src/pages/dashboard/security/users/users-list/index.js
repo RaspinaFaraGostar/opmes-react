@@ -55,6 +55,7 @@ import { useSnackbar } from "notistack";
 
 // Sweetalert2 components
 import Swal from "sweetalert2";
+import HeartRateLoader from "components/HeartRateLoader";
 
 
 function UsersList() {
@@ -162,6 +163,7 @@ function UsersList() {
                 </SoftButton>
               </Stack>
             </SoftBox>
+
             <DataTable
               table={data}
               totalCount={total}

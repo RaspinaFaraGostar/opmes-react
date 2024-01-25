@@ -40,6 +40,7 @@ import DataTableHeadCell from "./DataTableHeadCell";
 import DataTableBodyCell from "./DataTableBodyCell";
 import { useSearchParams } from "react-router-dom";
 import queryString from "query-string";
+import { useTranslation } from "react-i18next";
 
 function DataTable({
   table,
@@ -50,6 +51,9 @@ function DataTable({
   pagination,
   showTotalEntries,
 }) {
+
+  // I18n
+  const { t } = useTranslation();
 
   // Change columns and data on table change
   const columns = useMemo(() => table.columns, [table]);
@@ -202,7 +206,7 @@ function DataTable({
         {showTotalEntries && (
           <SoftBox mb={{ xs: 3, sm: 0 }}>
             <SoftTypography variant="button" color="secondary" fontWeight="regular">
-              Showing {entriesStart} to {entriesEnd} of {totalCount} entries
+              {t("Showing total entries", { from: entriesStart, to: entriesEnd, total: totalCount })}
             </SoftTypography>
           </SoftBox>
         )}

@@ -15,6 +15,8 @@ const faJSON = {
   "Confirm delete": "تایید و حذف",
   "No result": "موردی یافت نشد",
   "An error occurred": "مشکلی پیش آمده است",
+  "Showing total entries": "نمایش ردیف {{from}} تا {{to}} از مجموع {{total}} ردیف",
+  "Loading...": "در حال بارگذاری...",
 
   // General delete confirm message
   "Are you sure?": "آیا مطمئن هستید؟",

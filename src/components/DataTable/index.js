@@ -148,7 +148,7 @@ function DataTable({
   let entriesEnd;
 
   if (currentPage === 1) {
-    entriesEnd = pageSize;
+    entriesEnd = pageSize < totalCount ? pageSize : totalCount;
   } else if (currentPage === pageOptions.length) {
     entriesEnd = totalCount;
   } else {

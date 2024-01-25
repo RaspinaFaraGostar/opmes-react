@@ -37,8 +37,6 @@ import DataTable from "components/DataTable";
 // Component dependencies
 import UserFormDialog from "./components/UserFormDialog";
 import UserRolesDialog from "./components/UserRolesDialog";
-import UserPasswordFormDialog from "./components/UserPasswordFormDialog";
-import UserLogsDialog from "./components/UserLogsDialog";
 import useTableData from "./data/useTableData";
 
 // I18n 
@@ -57,25 +55,13 @@ import { useSnackbar } from "notistack";
 import Swal from "sweetalert2";
 
 
-function UsersList() {
+function RolesList() {
 
   // I18n
   const { t } = useTranslation();
 
   // Snackbar handlers
   const { enqueueSnackbar } = useSnackbar();
-
-  // Form dialog props and handlers
-  const [formDialogProps, setFormDialogProps] = useState({ open: false });
-
-  // Roles dialog props and handlers
-  const [rolesDialogProps, setRolesDialogProps] = useState({ open: false });
-
-  // Logs dialog props and handlers
-  const [logsDialogProps, setLogsDialogProps] = useState({ open: false });
-
-  // Password dialog props and handlers
-  const [passwordDialogProps, setPasswordDialogProps] = useState({ open: false });
 
   // DataTable
   const { data, total, currentPage, pageSize, refetch, changePage } = useTableData({
@@ -84,20 +70,11 @@ function UsersList() {
         switch (action) {
           case 'edit':
             try {
-              const response = await axios('/api/UserPanel/'.concat(row.UserId));
+              const response = await axios('/api/RolePanel/'.concat(row.RoleId));
               setFormDialogProps({ open: true, initialValues: response.data });
             } catch (error) {
               enqueueSnackbar(t("An error occurred"), { variant: 'soft', color: 'error' })
             }
-            return;
-          case 'role':
-            setRolesDialogProps({ open: true, user: row });
-            return;
-          case 'log':
-            setLogsDialogProps({ open: true, user: row });
-            return;
-          case 'password':
-            setPasswordDialogProps({ open: true, initialValues: { UserId: row.UserId } });
             return;
           case 'delete':
             const newSwal = Swal.mixin({
@@ -121,7 +98,7 @@ function UsersList() {
               try {
                 const response = await axios({
                   method: 'DELETE',
-                  url: '/api/UserPanel/'.concat(row.UserId),
+                  url: '/api/RolePanel/'.concat(row.RoleId),
                   data: row
                 })
 
@@ -143,9 +120,12 @@ function UsersList() {
     })
   });
 
+  // Form dialog props and handlers
+  const [formDialogProps, setFormDialogProps] = useState({ open: false });
+
   return (
     <>
-      <Helmet title={t("Users management")} />
+      <Helmet title={t("Roles management")} />
 
       <DashboardLayout>
         <DashboardNavbar />
@@ -154,10 +134,10 @@ function UsersList() {
             <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
               <SoftBox lineHeight={1}>
                 <SoftTypography variant="h5" fontWeight="medium">
-                  {t("Users management")}
+                  {t("Roles management")}
                 </SoftTypography>
                 <SoftTypography variant="button" fontWeight="regular" color="text">
-                  {t("List of all system users")}
+                  {t("List of all system roles")}
                 </SoftTypography>
               </SoftBox>
               <Stack spacing={1} direction="row">
@@ -167,8 +147,11 @@ function UsersList() {
                   size="small"
                   onClick={() => setFormDialogProps({ open: true })}
                 >
-                  + {t("Add user")}
+                  + {t("Add role")}
                 </SoftButton>
+                {/* <SoftButton variant="outlined" color="info" size="small">
+                  {t("Export")}
+                </SoftButton> */}
               </Stack>
             </SoftBox>
 
@@ -198,23 +181,8 @@ function UsersList() {
         {...rolesDialogProps}
         onClose={() => setRolesDialogProps({ open: false })}
       />
-
-      <UserLogsDialog
-        {...logsDialogProps}
-        onClose={() => setLogsDialogProps({ open: false })}
-      />
-
-      <UserPasswordFormDialog
-        {...passwordDialogProps}
-        onClose={() => setPasswordDialogProps({ open: false })}
-        onSubmitSuccess={response => {
-          enqueueSnackbar(response, { variant: 'soft', icon: 'check', color: 'success' });
-          setPasswordDialogProps({ open: false })
-          refetch();
-        }}
-      />
     </>
   );
 }
 
-export default UsersList;
+export default RolesList;

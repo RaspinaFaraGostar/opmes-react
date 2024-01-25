@@ -17,6 +17,8 @@ const faJSON = {
   "An error occurred": "مشکلی پیش آمده است",
   "Showing total entries": "نمایش ردیف {{from}} تا {{to}} از مجموع {{total}} ردیف",
   "Loading...": "در حال بارگذاری...",
+  "Success": "موفق",
+  "Unsuccess": "ناموفق",
 
   // General delete confirm message
   "Are you sure?": "آیا مطمئن هستید؟",
@@ -42,6 +44,10 @@ const faJSON = {
   "Captcha": "عبارت امنیتی",
   "Remember me": "مرا به‌خاطر بسپار",
 
+  // Change password form
+  "Change password": "تغییر رمز عبور",
+  "Old Password": "رمز عبور قبلی",
+
 
   // dashboard/security/users/users-list
   "Users management": "مدیریت کاربران",
@@ -50,9 +56,9 @@ const faJSON = {
   "Edit user": "ویرایش کاربر",
   "Delete user": "حذف کاربر",
   "Assign role": "تخصیص نقش",
-  "Change password": "تغییر گذرواژه",
+  "Change password": "تغییر رمز عبور",
   "Log reports": "گزارشات ورود",
-  
+
   "First Name": "نام",
   "Last Name": "نام خانوادگی",
   "Username": "نام کاربری",
@@ -63,6 +69,14 @@ const faJSON = {
   "Status": "وضعیت",
   "Lock Status": "وضعیت قفل",
   "Action": "عملیات",
+
+  "User roles": "مدیریت نقش کاربر",
+  "Role Title": "نقش",
+  "Unit Name": "سازمان",
+
+  "User login sessions": "گزارشات ورود کاربر",
+  "IP": "آدرس آی پی",
+  "Date and time": "تاریخ و زمان",
 
   // Footer 
   "Alrights reserved": "کلیه حقوق این سایت متعلق به شرکت {{owner}} می باشد",

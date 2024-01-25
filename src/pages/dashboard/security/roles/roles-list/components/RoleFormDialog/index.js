@@ -30,7 +30,7 @@ import InputHelperText from "components/InputHelperText";
 import useValidationSchema from "./validation/useValidationSchema";
 
 
-function UserFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...props }) {
+function RoleFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...props }) {
 
     // I18n
     const { t } = useTranslation();
@@ -52,17 +52,10 @@ function UserFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
     const [data, setData] = useState(getInitialData());
 
     // Set data each time opened base on initial values
-    // Set timeout to 195 (theme transition leaving duration) on close for better and smooth UX 
-    useMemo(() => setTimeout(() => setData(getInitialData()), open ? 0 : 195), [open])
+    useMemo(() => setData(getInitialData()), [open])
 
     // Validation schema
     const validationSchema = useValidationSchema();
-
-    // Transform data to post data
-    const transform = data => ({
-        ...data,
-        PostIds: data.PostIds.map(postId => typeof postId == "string" ? postId : postId?.EnumId)
-    })
 
     return (
         <Formik
@@ -77,7 +70,7 @@ function UserFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
                         const response = await axios({
                             method: values.UserId ? 'PUT' : 'POST',
                             url: values.UserId ? '/api/UserPanel/Edit' : '/api/UserPanel/Create',
-                            data: transform(values)
+                            data: values
                         })
 
                         setStatus({ success: true });
@@ -254,11 +247,11 @@ function UserFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
 }
 
 // Typechecking props
-UserFormDialog.propTypes = {
+RoleFormDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func,
     onSubmitSuccess: PropTypes.func,
     initialValues: PropTypes.object,
 };
 
-export default UserFormDialog;
+export default RoleFormDialog;

@@ -1,8 +1,6 @@
 // React components
-import { useMemo, useState } from "react";
 
 // React Router DOM components
-import { useLocation } from "react-router-dom";
 
 // PropTypes
 import PropTypes from "prop-types";
@@ -14,17 +12,20 @@ import { Box, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 // App components
+import DataTable from "components/DataTable";
 import DialogCloseButton from "components/DialogCloseButton";
-import DataTable from "examples/Tables/DataTable";
 
 // Axios
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
-// Lodash
-import map from "lodash/map";
+// Sweetalert2
+import Swal from "sweetalert2";
 
-// QueryString
-import queryString from "query-string";
+// Component dependencies
+import useTableData from "./data/useTableData";
+
+// Snackbar
+import { useSnackbar } from "notistack";
 
 
 
@@ -33,29 +34,58 @@ function UserRolesDialog({ open, onClose, user, ...props }) {
     // I18n
     const { t } = useTranslation();
 
+    // Snackbar handlers
+    const { enqueueSnackbar } = useSnackbar();
+
     // Form initial values
-    const [data, setData] = useState({ Data: [], Total: 0 });
-    const [dataQueryParams, setDataQueryParams] = useState({
-        Page: 1,
-        PageSize: 25,
-        Filter: "",
-        Sort: ""
+    const { data, total, currentPage, pageSize, refetch, changePage } = useTableData({
+        userId: user?.UserId,
+        getRowActionCellProps: row => ({
+            onClick: async (event, action) => {
+                switch (action) {
+                    case 'delete':
+                        const newSwal = Swal.mixin({
+                            customClass: {
+                                confirmButton: "button button-error",
+                                cancelButton: "button button-text",
+                            },
+                            buttonsStyling: false,
+                        });
+
+                        const result = await newSwal.fire({
+                            title: t("Are you sure?"),
+                            text: t("You won't be able to revert this!"),
+                            showCancelButton: true,
+                            confirmButtonText: t("Confirm delete"),
+                            cancelButtonText: t("Cancel"),
+                            reverseButtons: true,
+                        });
+
+                        if (result.value) {
+                            try {
+                                const response = await axios({
+                                    method: 'DELETE',
+                                    url: '/api/UserRolePanel/'.concat(row.UserRoleId),
+                                    data: row
+                                })
+
+                                enqueueSnackbar(response.data, { variant: 'soft', icon: 'check', color: 'success' });
+                                refetch();
+                            } catch (error) {
+                                if (error instanceof AxiosError) {
+                                    if (error.response.status == 409) {
+                                        enqueueSnackbar(error.response.data.Message, { variant: 'soft', icon: 'close', color: 'error' });
+                                    }
+                                }
+                            }
+
+                        }
+
+                        return;
+                }
+            }
+        })
     });
-
-    // React router location
-    const fetchUserRolesAsync = async () => {
-        const response = await axios('/api/UserRolePanel/GridList?'.concat(
-            queryString.stringify({ ...dataQueryParams, UserId: user.UserId })
-        ));
-        setData(response.data);
-    }
-
-    useMemo(() => {
-        if (open && user)
-            fetchUserRolesAsync();
-
-        if (!open) setData({ Data: [], Total: 0 });
-    }, [open, dataQueryParams])
 
     return (
         <Dialog
@@ -67,23 +97,15 @@ function UserRolesDialog({ open, onClose, user, ...props }) {
             <DialogTitle>{t("User roles")}</DialogTitle>
             <DialogCloseButton onClick={onClose} />
             <DialogContent>
-                {data.Data.length < 1 && <Box textAlign="center" py={5}>{t("No result")}</Box>}
+                {data.rows.length < 1 && <Box textAlign="center" py={5}>{t("No result")}</Box>}
 
-                {data.Data.length > 0 && (
+                {data.rows.length > 0 && (
                     <DataTable
-                        table={{
-                            columns: [
-                                { Header: t("Role Title"), accessor: "RoleTitle" },
-                                { Header: t("Unit Name"), accessor: "UnitName" },
-                                { Header: t("Action"), accessor: "action", disableSortBy: true },
-                            ],
-
-                            rows: map(data.Data, item => ({
-                                ...item,
-                                // action: <ActionCell {...getActionCellProps(item)} />
-                            }))
-                        }}
-                        entriesPerPage={false}
+                        table={data}
+                        totalCount={total}
+                        pageSize={pageSize}
+                        currentPage={currentPage}
+                        onPageChange={changePage}
                     />
                 )}
             </DialogContent>

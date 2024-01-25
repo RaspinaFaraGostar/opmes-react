@@ -86,7 +86,7 @@ function DataTable({
     // state: { currentPage, pageSize, globalFilter },
   } = tableInstance;
 
-  const pageOptions = Array.from({ length: Math.ceil(totalCount / pageSize) }, (_, i) => i + 1);
+  const pageOptions = pageSize > 0 ? Array.from({ length: Math.ceil(totalCount / pageSize) }, (_, i) => i + 1) : [];
   const canNextPage = pageOptions.length > 0 && currentPage != pageOptions[pageOptions.length - 1]
   const canPreviousPage = pageOptions.length > 0 && currentPage != pageOptions[0];
 

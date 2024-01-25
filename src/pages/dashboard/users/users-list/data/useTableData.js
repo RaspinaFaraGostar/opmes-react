@@ -18,7 +18,7 @@ Coded by www.creative-tim.com
 import { useEffect, useMemo, useState } from "react";
 
 // React Router DOM componenets
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 // Soft UI Dashboard PRO React components
 import SoftBadge from "components/SoftBadge";
@@ -26,11 +26,14 @@ import SoftBadge from "components/SoftBadge";
 // Page components
 import ActionCell from "../components/ActionCell";
 
+// App components
+import useDataTableLoader from "components/DataTable/useDataTableLoader";
+
 // Lodash methods
-import map from "lodash/map";
 import every from "lodash/every";
-import keys from "lodash/keys";
 import includes from "lodash/includes";
+import keys from "lodash/keys";
+import map from "lodash/map";
 
 // I18n
 import { useTranslation } from "react-i18next";
@@ -39,10 +42,13 @@ import { useTranslation } from "react-i18next";
 import queryString from "query-string";
 
 
-const useTableData = ({ getRowActionCellProps = (row) => ({}) }) => {
+const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount = 10 }) => {
 
   // I18n
   const { t } = useTranslation();
+
+  // React router location
+  const location = useLocation();
 
   // Data
   const [data, setData] = useState({ Data: [], Total: 0 });
@@ -51,19 +57,23 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}) }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParamsIncludeNeededKeys = every(['Page', 'PageSize', 'Filter', 'Sort'], key => includes(keys(Object.fromEntries(searchParams)), key));
 
-  const [loading, setLoading] = useState(true);
+  const [fetching, setFetching] = useState(false);
   const fetchDataAsync = async () => {
     const response = await axios('api/UserPanel/List?'.concat(
       queryString.stringify(Object.fromEntries(searchParams))
     ))
     setData(response.data);
-    if (loading) setLoading(false);
+    setFetching(false);
   }
 
   useMemo(() => {
     if (searchParamsIncludeNeededKeys)
-      fetchDataAsync();
+      !fetching && setFetching(true);
   }, [searchParams]);
+
+  useMemo(() => {
+    fetching && fetchDataAsync();
+  }, [fetching])
 
   useEffect(() => {
     if (!searchParamsIncludeNeededKeys)
@@ -74,7 +84,7 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}) }) => {
         Filter: '',
         Sort: ''
       })
-  }, [])
+  }, [location])
 
   // Badges
   const failed = (
@@ -85,29 +95,33 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}) }) => {
   );
 
 
+  const columns = [
+    { Header: t("First Name"), accessor: "PersonalName" },
+    { Header: t("Last Name"), accessor: "PersonalLastName" },
+    { Header: t("Username"), accessor: "UserName" },
+    { Header: t("Medical Number"), accessor: "MedicalNo" },
+    {
+      Header: t("Status"),
+      accessor: "IsActive",
+      Cell: ({ value }) => typeof value == "boolean" ? (value ? success : failed) : value,
+    },
+    {
+      Header: t("Lock Status"),
+      accessor: "Lock",
+      Cell: ({ value }) => typeof value == "boolean" ? (value ? success : failed) : value,
+    },
+    { Header: t("Action"), accessor: "action" },
+  ];
+
+  // Get loader
+  const loader = useDataTableLoader(columns, { rowsCount: loaderRowsCount });
+
   return {
     refetch: fetchDataAsync,
-    loading,
+    fetching,
     data: ({
-      columns: [
-        { Header: t("First Name"), accessor: "PersonalName" },
-        { Header: t("Last Name"), accessor: "PersonalLastName" },
-        { Header: t("Username"), accessor: "UserName" },
-        { Header: t("Medical Number"), accessor: "MedicalNo" },
-        {
-          Header: t("Status"),
-          accessor: "IsActive",
-          Cell: ({ value }) => (value ? success : failed),
-        },
-        {
-          Header: t("Lock Status"),
-          accessor: "Lock",
-          Cell: ({ value }) => (value ? success : failed),
-        },
-        { Header: t("Action"), accessor: "action", isSorted: false },
-      ],
-
-      rows: map(data.Data, row => ({
+      columns,
+      rows: fetching ? loader : map(data.Data, row => ({
         ...row,
         action: <ActionCell {...getRowActionCellProps(row)} />
       }))

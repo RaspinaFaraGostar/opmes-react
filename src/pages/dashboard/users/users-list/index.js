@@ -79,7 +79,7 @@ function UsersList() {
   const [passwordDialogProps, setPasswordDialogProps] = useState({ open: false });
 
   // DataTable
-  const { loading, data, total, currentPage, pageSize, refetch, changePage } = useTableData({
+  const { data, total, currentPage, pageSize, refetch, changePage } = useTableData({
     getRowActionCellProps: row => ({
       onClick: async (event, action) => {
         switch (action) {
@@ -173,17 +173,13 @@ function UsersList() {
               </Stack>
             </SoftBox>
 
-            {loading && <HeartRateLoader />}
-
-            {!loading && (
-              <DataTable
-                table={data}
-                totalCount={total}
-                pageSize={pageSize}
-                currentPage={currentPage}
-                onPageChange={changePage}
-              />
-            )}
+            <DataTable
+              table={data}
+              totalCount={total}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={changePage}
+            />
           </Card>
         </SoftBox>
         <Footer />

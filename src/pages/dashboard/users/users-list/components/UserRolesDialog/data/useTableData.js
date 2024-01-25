@@ -17,6 +17,9 @@ Coded by www.creative-tim.com
 // React components
 import { useMemo, useState } from "react";
 
+// App components
+import useDataTableLoader from "components/DataTable/useDataTableLoader";
+
 // Page components
 import ActionCell from "../components/ActionCell";
 
@@ -30,7 +33,11 @@ import { useTranslation } from "react-i18next";
 import queryString from "query-string";
 
 
-const useTableData = ({ userId, getRowActionCellProps = (row) => ({}) }) => {
+const useTableData = ({
+  userId,
+  getRowActionCellProps = (row) => ({}),
+  loaderRowsCount = 3
+}) => {
 
   // I18n
   const { t } = useTranslation();
@@ -45,29 +52,40 @@ const useTableData = ({ userId, getRowActionCellProps = (row) => ({}) }) => {
   })
 
   // Async methods and handlers
+  const [fetching, setFetching] = useState(false);
   const fetchDataAsync = async () => {
     const response = await axios('/api/UserRolePanel/GridList?'.concat(
       queryString.stringify({ ...searchParams, UserId: userId })
     ))
     setData(response.data);
+    setFetching(false);
   }
 
   useMemo(() => {
-    if (userId) fetchDataAsync();
+    if (userId) !fetching && setFetching(true);
     else setData({ Data: [], Total: 0 });
   }, [userId, searchParams]);
 
+  useMemo(() => {
+    fetching && fetchDataAsync();
+  }, [fetching])
+
+  // Table columns definitions
+  const columns = [
+    { Header: t("Role Title"), accessor: "RoleTitle" },
+    { Header: t("Unit Name"), accessor: "UnitName" },
+    { Header: t("Action"), accessor: "action" },
+  ]
+
+  // Table loader
+  const loader = useDataTableLoader(columns, { rowsCount: loaderRowsCount });
 
   return {
     refetch: fetchDataAsync,
+    fetching,
     data: ({
-      columns: [
-        { Header: t("Role Title"), accessor: "RoleTitle" },
-        { Header: t("Unit Name"), accessor: "UnitName" },
-        { Header: t("Action"), accessor: "action" },
-      ],
-
-      rows: map(data.Data, row => ({
+      columns,
+      rows: fetching ? loader : map(data.Data, row => ({
         ...row,
         action: <ActionCell {...getRowActionCellProps(row)} />
       }))

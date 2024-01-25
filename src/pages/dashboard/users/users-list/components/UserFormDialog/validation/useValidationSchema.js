@@ -12,18 +12,18 @@ const useValidationSchema = () => {
 
         // PersonalName
         PersonalName: Yup
-            .string()
+            .string(t('The field format is invalid', { field: t("First Name") }))
             .required(t('The field is required', { field: t("First Name") })),
 
         // Personal Last Name
         PersonalLastName: Yup
-            .string()
+            .string(t('The field format is invalid', { field: t("Last Name") }))
             .required(t('The field is required', { field: t("Last Name") })),
 
 
         // Medical Number
         MedicalNo: Yup
-            .number(t('The field must be number', { field: t("Medical Number") }))
+            .number(t('The field format is invalid', { field: t("Medical Number") }))
             .required(t('The field is required', { field: t("Medical Number") }))
     });
 }

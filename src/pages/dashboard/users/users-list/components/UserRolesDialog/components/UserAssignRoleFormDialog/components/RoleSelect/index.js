@@ -20,30 +20,28 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-function RolesSelect({ textFieldProps = {}, ...props }) {
+function RoleSelect({ textFieldProps = {}, ...props }) {
     return (
         <AsyncSelect
-            url="api/EnumPanel/getByEnumType?EnumType=Post"
-            multiple
-            disableCloseOnSelect
-            getOptionLabel={(option) => option.EnumName}
+            url="/api/RolePanel/RoleList"
+            getOptionLabel={(option) => option.RoleName ?? ''}
             isOptionEqualToValue={(option, value) => {
                 if (!value) return false;
 
                 if (typeof value === "string")
-                    return option.EnumId == value;
+                    return option.RoleId == value;
 
-                return option.EnumId == value.EnumId;
+                return option.RoleId == value.RoleId;
             }}
             renderOption={(props, option, { selected }) => (
-                <li {...props} key={option.EnumId}>
+                <li {...props} key={option.RoleId}>
                     <Checkbox
                         icon={icon}
                         checkedIcon={checkedIcon}
                         style={{ marginRight: 8 }}
                         checked={selected}
                     />
-                    {option.EnumName}
+                    {option.RoleName}
                 </li>
             )}
             renderInput={(params) => (
@@ -66,8 +64,8 @@ function RolesSelect({ textFieldProps = {}, ...props }) {
     );
 }
 
-RolesSelect.propTypes = {
+RoleSelect.propTypes = {
     textFieldProps: PropTypes.object,
 }
 
-export default RolesSelect;
+export default RoleSelect;

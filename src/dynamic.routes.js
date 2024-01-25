@@ -1,4 +1,4 @@
-import UsersList from "pages/dashboard/security/users/users-list";
+import UsersList from "pages/dashboard/users/users-list";
 
 const dynamicRoutes = [
     {

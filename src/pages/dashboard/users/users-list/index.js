@@ -55,6 +55,7 @@ import { useSnackbar } from "notistack";
 
 // Sweetalert2 components
 import Swal from "sweetalert2";
+import HeartRateLoader from "components/HeartRateLoader";
 
 
 function UsersList() {
@@ -78,7 +79,7 @@ function UsersList() {
   const [passwordDialogProps, setPasswordDialogProps] = useState({ open: false });
 
   // DataTable
-  const { data, total, currentPage, pageSize, refetch, changePage } = useTableData({
+  const { loading, data, total, currentPage, pageSize, refetch, changePage } = useTableData({
     getRowActionCellProps: row => ({
       onClick: async (event, action) => {
         switch (action) {
@@ -172,13 +173,17 @@ function UsersList() {
               </Stack>
             </SoftBox>
 
-            <DataTable
-              table={data}
-              totalCount={total}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={changePage}
-            />
+            {loading && <HeartRateLoader />}
+
+            {!loading && (
+              <DataTable
+                table={data}
+                totalCount={total}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChange={changePage}
+              />
+            )}
           </Card>
         </SoftBox>
         <Footer />

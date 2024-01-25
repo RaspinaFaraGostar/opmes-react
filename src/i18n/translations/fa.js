@@ -27,6 +27,7 @@ const faJSON = {
   // Form validation rules
   "The field is required": "ورود {{field}} اجباری است",
   "The field must be number": "مقدار {{field}} باید عددی باشد",
+  "The field format is invalid": "مقدار {{field}} نامعتبر است.",
 
   // Login page 
   "Welcome": "خوش آمدید",
@@ -74,6 +75,10 @@ const faJSON = {
   "Role Title": "نقش",
   "Unit Name": "سازمان",
 
+  "Assign new role": "تخصیص نقش جدید",
+  "Unit": "سازمان",
+  "Role": "نقش",
+
   "User login sessions": "گزارشات ورود کاربر",
   "IP": "آدرس آی پی",
   "Date and time": "تاریخ و زمان",
@@ -83,6 +88,12 @@ const faJSON = {
   "Privacy": "حریم خصوصی",
   "FAQs": "پرسش های متداول",
   "Terms of Services": "قوانین و مقررات",
+
+
+  // Sidenav card
+  "Need help?": "به کمک نیاز دارید؟",
+  "Contact out support team 24/7": "با کارشناسان راسپینا ارتباط بگیرید.",
+  "Contact support": "ارتباط با پشتیبانی",
 };
 
 export default faJSON;

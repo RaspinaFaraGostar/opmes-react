@@ -1,8 +1,14 @@
+// React components
+import { useState } from "react";
+
 // PropTypes
 import PropTypes from "prop-types";
 
 // MUI components
-import { Box, Dialog, DialogContent, DialogTitle, useTheme } from "@mui/material";
+import { Box, Dialog, DialogContent, DialogTitle, Stack, useTheme } from "@mui/material";
+
+// SoftUI components
+import SoftButton from "components/SoftButton";
 
 // I18n
 import { useTranslation } from "react-i18next";
@@ -25,6 +31,7 @@ import { useSnackbar } from "notistack";
 
 // uidotdev helper hooks
 import { useDebounce } from "@uidotdev/usehooks";
+import UserAssignRoleFormDialog from "./components/UserAssignRoleFormDialog";
 
 
 
@@ -41,7 +48,10 @@ function UserRolesDialog({ open, onClose, user, ...props }) {
 
     // debounced userId
     // pass debounced data base on open state (dialog transition on close) for better and smooth UX
-    const userId = useDebounce(user?.UserId, open ? 0 : theme.transitions.duration.leavingScreen)
+    const userId = useDebounce(user?.UserId, open ? 0 : theme.transitions.duration.leavingScreen);
+
+    // Form dialog props and handlers
+    const [formDialogProps, setFormDialogProps] = useState({ open: false });
 
     // Form initial values
     const { data, total, currentPage, pageSize, refetch, changePage } = useTableData({
@@ -103,6 +113,17 @@ function UserRolesDialog({ open, onClose, user, ...props }) {
             <DialogTitle>{t("User roles")}</DialogTitle>
             <DialogCloseButton onClick={onClose} />
             <DialogContent>
+                <Stack spacing={1} direction="row">
+                    <SoftButton
+                        variant="gradient"
+                        color="info"
+                        size="small"
+                        onClick={() => setFormDialogProps({ open: true, initialValues: { UserId: userId } })}
+                    >
+                        + {t("Assign role")}
+                    </SoftButton>
+                </Stack>
+
                 {data.rows.length < 1 && <Box textAlign="center" py={5}>{t("No result")}</Box>}
 
                 {data.rows.length > 0 && (
@@ -115,6 +136,16 @@ function UserRolesDialog({ open, onClose, user, ...props }) {
                     />
                 )}
             </DialogContent>
+
+            <UserAssignRoleFormDialog
+                {...formDialogProps}
+                onClose={() => setFormDialogProps({ open: false })}
+                onSubmitSuccess={response => {
+                    enqueueSnackbar(response, { variant: 'soft', icon: 'check', color: 'success' });
+                    setFormDialogProps({ open: false })
+                    refetch();
+                }}
+            />
         </Dialog>
     )
 }

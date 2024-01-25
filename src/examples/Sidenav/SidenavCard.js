@@ -30,7 +30,13 @@ import { card, cardContent, cardIconBox, cardIcon } from "examples/Sidenav/style
 // Soft UI Dashboard PRO React context
 import { useSoftUIController } from "contexts/soft-ui";
 
+// I18n
+import { useTranslation } from "react-i18next";
+
 function SidenavCard() {
+
+  const { t } = useTranslation();
+
   const [controller] = useSoftUIController();
   const { miniSidenav, sidenavColor } = controller;
 
@@ -47,28 +53,28 @@ function SidenavCard() {
           sx={cardIconBox}
         >
           <Icon fontSize="medium" sx={(theme) => cardIcon(theme, { sidenavColor })}>
-            star
+            support_agent
           </Icon>
         </SoftBox>
         <SoftBox lineHeight={1}>
           <SoftTypography variant="h6" color="white">
-            Need help?
+            {t("Need help?")}
           </SoftTypography>
           <SoftBox mb={1.825} mt={-1}>
             <SoftTypography variant="caption" color="white" fontWeight="medium">
-              Please check our docs
+              {t("Contact out support team 24/7")}
             </SoftTypography>
           </SoftBox>
           <SoftButton
             component={Link}
-            href="https://www.creative-tim.com/learning-lab/react/quick-start/soft-ui-dashboard/"
+            href="#"
             target="_blank"
             rel="noreferrer"
             size="small"
             color="white"
             fullWidth
           >
-            documentation
+            {t("Contact support")}
           </SoftButton>
         </SoftBox>
       </CardContent>

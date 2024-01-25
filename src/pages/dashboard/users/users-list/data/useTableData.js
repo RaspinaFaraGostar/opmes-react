@@ -51,12 +51,13 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}) }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParamsIncludeNeededKeys = every(['Page', 'PageSize', 'Filter', 'Sort'], key => includes(keys(Object.fromEntries(searchParams)), key));
 
+  const [loading, setLoading] = useState(true);
   const fetchDataAsync = async () => {
-    // const response = await axios('api/UserPanel/List?Page=1&PageSize=25&Filter=&Sort=');
     const response = await axios('api/UserPanel/List?'.concat(
       queryString.stringify(Object.fromEntries(searchParams))
     ))
     setData(response.data);
+    if (loading) setLoading(false);
   }
 
   useMemo(() => {
@@ -86,6 +87,7 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}) }) => {
 
   return {
     refetch: fetchDataAsync,
+    loading,
     data: ({
       columns: [
         { Header: t("First Name"), accessor: "PersonalName" },

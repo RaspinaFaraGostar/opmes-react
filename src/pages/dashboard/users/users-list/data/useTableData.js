@@ -40,6 +40,7 @@ import { useTranslation } from "react-i18next";
 
 // Querystring 
 import queryString from "query-string";
+import useTableFilter from "./useTableFilter";
 
 
 const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount = 10 }) => {
@@ -110,21 +111,30 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
       accessor: "Lock",
       Cell: ({ value }) => typeof value == "boolean" ? (value ? success : failed) : value,
     },
-    { Header: t("Action"), accessor: "action" },
+    { Header: t("Action"), accessor: "action", noFilter: true },
   ];
 
   // Get loader
   const loader = useDataTableLoader(columns, { rowsCount: loaderRowsCount });
+
+  // Table filter
+  const filterRow = useTableFilter(columns);
 
   return {
     refetch: fetchDataAsync,
     fetching,
     data: ({
       columns,
-      rows: fetching ? loader : map(data.Data, row => ({
-        ...row,
-        action: <ActionCell {...getRowActionCellProps(row)} />
-      }))
+      rows: [
+        filterRow,
+
+        ...(fetching ? loader : []),
+
+        ...(!fetching ? map(data.Data, row => ({
+          ...row,
+          action: <ActionCell {...getRowActionCellProps(row)} />
+        })) : [])
+      ]
     }),
     total: Number(data.Total),
     currentPage: Number(searchParams.get('Page')),

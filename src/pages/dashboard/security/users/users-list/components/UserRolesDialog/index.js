@@ -1,12 +1,8 @@
-// React components
-
-// React Router DOM components
-
 // PropTypes
 import PropTypes from "prop-types";
 
 // MUI components
-import { Box, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Box, Dialog, DialogContent, DialogTitle, useTheme } from "@mui/material";
 
 // I18n
 import { useTranslation } from "react-i18next";
@@ -27,6 +23,9 @@ import useTableData from "./data/useTableData";
 // Snackbar
 import { useSnackbar } from "notistack";
 
+// uidotdev helper hooks
+import { useDebounce } from "@uidotdev/usehooks";
+
 
 
 function UserRolesDialog({ open, onClose, user, ...props }) {
@@ -34,12 +33,19 @@ function UserRolesDialog({ open, onClose, user, ...props }) {
     // I18n
     const { t } = useTranslation();
 
+    // MUI theme
+    const theme = useTheme();
+
     // Snackbar handlers
     const { enqueueSnackbar } = useSnackbar();
 
+    // debounced userId
+    // pass debounced data base on open state (dialog transition on close) for better and smooth UX
+    const userId = useDebounce(user?.UserId, open ? 0 : theme.transitions.duration.leavingScreen)
+
     // Form initial values
     const { data, total, currentPage, pageSize, refetch, changePage } = useTableData({
-        userId: user?.UserId,
+        userId,
         getRowActionCellProps: row => ({
             onClick: async (event, action) => {
                 switch (action) {

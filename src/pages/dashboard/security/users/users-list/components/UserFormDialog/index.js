@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
 // MUI components
-import { Checkbox, Collapse, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, Typography } from "@mui/material";
+import { Checkbox, Collapse, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, Typography, useTheme } from "@mui/material";
 
 // SoftUI components
 import SoftAlert from "components/SoftAlert";
@@ -35,6 +35,9 @@ function UserFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
     // I18n
     const { t } = useTranslation();
 
+    // MUI theme
+    const theme = useTheme();
+
     // Form initial values
     const getInitialData = () => ({
         PersonalName: '',
@@ -53,7 +56,7 @@ function UserFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
 
     // Set data each time opened base on initial values
     // Set timeout to 195 (theme transition leaving duration) on close for better and smooth UX 
-    useMemo(() => setTimeout(() => setData(getInitialData()), open ? 0 : 195), [open])
+    useMemo(() => setTimeout(() => setData(getInitialData()), open ? 0 : theme.transitions.duration.leavingScreen), [open])
 
     // Validation schema
     const validationSchema = useValidationSchema();

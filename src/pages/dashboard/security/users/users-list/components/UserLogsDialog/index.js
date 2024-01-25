@@ -2,7 +2,7 @@
 import PropTypes from "prop-types";
 
 // MUI components
-import { Box, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Box, Dialog, DialogContent, DialogTitle, useTheme } from "@mui/material";
 
 // I18n
 import { useTranslation } from "react-i18next";
@@ -14,16 +14,24 @@ import DialogCloseButton from "components/DialogCloseButton";
 // Component dependencies
 import useTableData from "./data/useTableData";
 
+// uidotdev helper hooks
+import { useDebounce } from "@uidotdev/usehooks";
+
 
 function UserLogsDialog({ open, onClose, user, ...props }) {
 
     // I18n
     const { t } = useTranslation();
 
+    // MUI theme
+    const theme = useTheme();
+
+    // debounced userId
+    // pass debounced data base on open state (dialog transition on close) for better and smooth UX
+    const userId = useDebounce(user?.UserId, open ? 0 : theme.transitions.duration.leavingScreen)
+
     // Form initial values
-    const { data, total, pageSize, currentPage, changePage } = useTableData({
-        userId: user?.UserId
-    });
+    const { data, total, pageSize, currentPage, changePage } = useTableData({ userId });
 
     return (
         <Dialog

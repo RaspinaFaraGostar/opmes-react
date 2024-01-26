@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 // react-router-dom components
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
@@ -103,8 +103,13 @@ function Login() {
   }
 
   useEffect(() => {
-    fetchCaptchaAsync();
+    const captchaInterval = setInterval(() => fetchCaptchaAsync(), 60000);
+    return () => clearInterval(captchaInterval);
   }, [])
+
+  useMemo(() => {
+    fetchCaptchaAsync();
+  }, [error])
 
 
   // Login status, tranformations & handlers

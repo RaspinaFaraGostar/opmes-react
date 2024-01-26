@@ -221,7 +221,7 @@ function Login() {
                   </Grid>
                 </Grid>
               </SoftBox>
-              <SoftBox display="flex" alignItems="center">
+              {/* <SoftBox display="flex" alignItems="center">
                 <Switch
                   name="rememberMe"
                   checked={formData.rememberMe}
@@ -235,7 +235,7 @@ function Login() {
                 >
                   {t("Remember me")}
                 </SoftTypography>
-              </SoftBox>
+              </SoftBox> */}
               <SoftBox mt={4} mb={1}>
                 <SoftButton
                   disabled={isLoggingIn}

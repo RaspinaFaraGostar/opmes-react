@@ -11,12 +11,21 @@ import AuthContext from "./context";
 import { useSessionStorage } from "@uidotdev/usehooks";
 
 // Axios 
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 // Lodash methods
+import every from "lodash/every";
 import map from "lodash/map";
 
 
+// Initial state
+const initialState = {
+    access_token: '',
+    refresh_token: '',
+    expires_in: 0
+}
+
+// Reducer
 function reducer(state, action) {
     switch (action.type) {
         case "REVOKE_TOKEN": {
@@ -24,6 +33,9 @@ function reducer(state, action) {
         }
         case "USER_DETAILS": {
             return { ...state, user: action.value };
+        }
+        case "LOGOUT": {
+            return initialState;
         }
         default: {
             throw new Error(`Unhandled action type: ${action.type}`);
@@ -33,22 +45,14 @@ function reducer(state, action) {
 
 const AuthProvider = ({ children }) => {
 
-    const [user, setUser] = useState(null);
-    const initialState = {
-        access_token: '',
-        refresh_token: '',
-        expires_in: 0
-    }
-
+    // Browser storage state
     const [storageState, setStorageState] = useSessionStorage("AUTH", initialState);
 
+    // Defined auth reducer and dispatcher
     const [controller, dispatch] = useReducer(reducer, storageState);
 
-    const resetRole = () => setUser({ ...user, RoleCode: null });
-    const logout = () => setUser(null);
-
-    const value = useMemo(() => [{ ...controller, user }, dispatch, { logout, resetRole }], [user, controller, dispatch]);
-
+    // Authenticated user
+    const [user, setUser] = useState(null);
 
     // Fetch auth info
     const fetchUserDetailsAsync = async () => {
@@ -59,10 +63,16 @@ const AuthProvider = ({ children }) => {
         setUser(Object.assign({}, ...map(responses, response => response ? response.data : {})));
     }
 
+    const resetRole = () => setUser({ ...user, RoleCode: null });
+    const logout = () => dispatch({ type: "LOGOUT" });
+
+    // Get provider value
+    const value = useMemo(() => [{ ...controller, user }, dispatch, { logout, resetRole }], [user, controller, dispatch]);
+
     useEffect(() => {
 
         // Update local storage on state change
-        setStorageState(controller);
+        setStorageState(every(Object.keys(controller), key => !Boolean(controller[key])) ? undefined : controller);
 
         if (controller.access_token) {
             axios.defaults.headers.common['Authorization'] = 'bearer '.concat(controller.access_token);
@@ -75,6 +85,9 @@ const AuthProvider = ({ children }) => {
                 throw error;
             });
             fetchUserDetailsAsync();
+        } else {
+            axios.defaults.headers.common['Authorization'] = undefined;
+            setUser(null);
         }
     }, [controller, dispatch])
 

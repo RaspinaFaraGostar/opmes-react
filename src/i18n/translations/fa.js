@@ -161,6 +161,13 @@ const faJSON = {
   "Terms of Services": "قوانین و مقررات",
 
 
+  // Navbar
+
+  "Profile": "مشخصات کاربری",
+  "Change Password": "تغییر رمز عبور",
+  "Change Role": "تغییر نقش",
+  "Logout": "خروج از حساب",
+
   // Sidenav card
   "Need help?": "به کمک نیاز دارید؟",
   "Contact out support team 24/7": "با کارشناسان راسپینا ارتباط بگیرید.",

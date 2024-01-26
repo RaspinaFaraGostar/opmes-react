@@ -6,10 +6,12 @@ import SubUnitsList from "pages/dashboard/subunits/subunits-list";
 
 const dynamicRoutes = [
     {
+        protected: true,
         route: "/panel/security/user",
         component: <UsersList />
     },
     {
+        protected: true,
         route: "/panel/security/role",
         component: <RolesList />
     },
@@ -18,42 +20,51 @@ const dynamicRoutes = [
 
     // Enums routes
     {
+        protected: true,
         route: "/panel/baseInfo/enum/City",
         component: <EnumsList type="City" />
     },
     {
+        protected: true,
         route: "/panel/baseInfo/enum/Hospital",
         component: <EnumsList type="Hospital" />
     },
     {
+        protected: true,
         route: "/panel/baseInfo/enum/Education",
         component: <EnumsList type="Education" />
     },
     {
+        protected: true,
         route: "/panel/baseInfo/enum/Speciality",
         component: <EnumsList type="Speciality" />
     },
     {
+        protected: true,
         route: "/panel/baseInfo/enum/MedicineTitle",
         component: <EnumsList type="MedicineTitle" />
     },
 
 
     {
+        protected: true,
         route: "/panel/baseInfo/enum/UnitType",
         component: <EnumsList type="UnitType" />
     },
     {
+        protected: true,
         route: "/panel/baseInfo/enum/Post",
         component: <EnumsList type="Post" />
     },
 
 
     {
+        protected: true,
         route: "/panel/baseInfo/unit",
         component: <UnitsList />
     },
     {
+        protected: true,
         route: "/panel/baseInfo/subunit",
         component: <SubUnitsList />
     },

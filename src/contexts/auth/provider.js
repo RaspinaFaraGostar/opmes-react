@@ -25,9 +25,6 @@ function reducer(state, action) {
         case "USER_DETAILS": {
             return { ...state, user: action.value };
         }
-        case "LOGOUT": {
-            return { ...state, user: null };
-        }
         default: {
             throw new Error(`Unhandled action type: ${action.type}`);
         }
@@ -47,7 +44,10 @@ const AuthProvider = ({ children }) => {
 
     const [controller, dispatch] = useReducer(reducer, storageState);
 
-    const value = useMemo(() => [{ ...controller, user }, dispatch], [user, controller, dispatch]);
+    const resetRole = () => setUser({ ...user, RoleCode: null });
+    const logout = () => setUser(null);
+
+    const value = useMemo(() => [{ ...controller, user }, dispatch, { logout, resetRole }], [user, controller, dispatch]);
 
 
     // Fetch auth info

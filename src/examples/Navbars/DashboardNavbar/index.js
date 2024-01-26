@@ -56,10 +56,22 @@ import {
 } from "contexts/soft-ui";
 
 // Images
-import team2 from "assets/images/team-2.jpg";
-import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
+import { ListItemIcon, ListItemText, MenuItem } from "@mui/material";
+
+// I18n
+import { useTranslation } from "react-i18next";
+import SoftButton from "components/SoftButton";
+import { useAuth } from "contexts/auth";
 
 function DashboardNavbar({ absolute, light, isMini }) {
+
+  // I18n
+  const { t } = useTranslation();
+
+  // Auth
+  const [auth, dispatchAuth, { logout, resetRole }] = useAuth();
+
+  // Navbar methods
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
@@ -93,9 +105,33 @@ function DashboardNavbar({ absolute, light, isMini }) {
   }, [dispatch, fixedNavbar]);
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
+  // const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
+
+  // Menu Items
+  const menuItems = [
+    {
+      icon: 'person',
+      label: t("Profile"),
+      onClick: () => { }
+    },
+    {
+      icon: 'lock',
+      label: t("Change Password"),
+      onClick: () => { }
+    },
+    {
+      icon: 'supervisor',
+      label: t("Change Role"),
+      onClick: () => resetRole()
+    },
+    {
+      icon: 'logout',
+      label: t("Logout"),
+      onClick: () => logout()
+    }
+  ];
 
   // Render the notifications menu
   const renderMenu = () => (
@@ -109,30 +145,18 @@ function DashboardNavbar({ absolute, light, isMini }) {
       open={Boolean(openMenu)}
       onClose={handleCloseMenu}
       sx={{ mt: 2 }}
+      PaperProps={{
+        sx: { minWidth: 200 }
+      }}
     >
-      <NotificationItem
-        image={<img src={team2} alt="person" />}
-        title={["New message", "from Laur"]}
-        date="13 minutes ago"
-        onClick={handleCloseMenu}
-      />
-      <NotificationItem
-        image={<img src={logoSpotify} alt="person" />}
-        title={["New album", "by Travis Scott"]}
-        date="1 day"
-        onClick={handleCloseMenu}
-      />
-      <NotificationItem
-        color="secondary"
-        image={
-          <Icon fontSize="small" sx={{ color: ({ palette: { white } }) => white.main }}>
-            payment
-          </Icon>
-        }
-        title={["", "Payment successfully completed"]}
-        date="2 days"
-        onClick={handleCloseMenu}
-      />
+      {menuItems.map((item, index) => (
+        <MenuItem key={index} onClick={item.onClick}>
+          <ListItemIcon>
+            <Icon>{item.icon}</Icon>
+          </ListItemIcon>
+          <ListItemText primaryTypographyProps={{ fontSize: "inherit" }}>{item.label}</ListItemText>
+        </MenuItem>
+      ))}
     </Menu>
   );
 
@@ -151,31 +175,32 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </SoftBox>
         {isMini ? null : (
           <SoftBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <SoftBox pr={1}>
+            {/* <SoftBox pr={1}>
               <SoftInput
                 placeholder="Type here..."
                 icon={{ component: "search", direction: "left" }}
               />
-            </SoftBox>
-            <SoftBox color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in/basic">
-                <IconButton sx={navbarIconButton} size="small">
-                  <Icon
-                    sx={({ palette: { dark, white } }) => ({
-                      color: light ? white.main : dark.main,
-                    })}
-                  >
+            </SoftBox> */}
+            <SoftBox>
+              <SoftButton
+                variant="gradient"
+                color="dark"
+                sx={{ ...navbarIconButton, py: 1, px: 2 }}
+                onClick={handleOpenMenu}
+                startIcon={(
+                  <Icon>
                     account_circle
                   </Icon>
-                  <SoftTypography
-                    variant="button"
-                    fontWeight="medium"
-                    color={light ? "white" : "dark"}
-                  >
-                    Sign in
-                  </SoftTypography>
-                </IconButton>
-              </Link>
+                )}
+              >
+                <SoftTypography
+                  variant="button"
+                  fontWeight="medium"
+                  color="inherit"
+                >
+                  {auth.user.FullName}
+                </SoftTypography>
+              </SoftButton>
               <IconButton
                 size="small"
                 color="inherit"
@@ -186,15 +211,15 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   {miniSidenav ? "menu_open" : "menu"}
                 </Icon>
               </IconButton>
-              <IconButton
+              {/* <IconButton
                 size="small"
                 color="inherit"
                 sx={navbarIconButton}
                 onClick={handleConfiguratorOpen}
               >
                 <Icon>settings</Icon>
-              </IconButton>
-              <IconButton
+              </IconButton> */}
+              {/* <IconButton
                 size="small"
                 color="inherit"
                 sx={navbarIconButton}
@@ -204,7 +229,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 onClick={handleOpenMenu}
               >
                 <Icon className={light ? "text-white" : "text-dark"}>notifications</Icon>
-              </IconButton>
+              </IconButton> */}
               {renderMenu()}
             </SoftBox>
           </SoftBox>

@@ -78,7 +78,7 @@ const AuthProvider = ({ children }) => {
             axios.defaults.headers.common['Authorization'] = 'bearer '.concat(controller.access_token);
             axios.interceptors.response.use(response => response, error => {
                 if (error.response.status === 401) {
-                    setStorageState(initialState);
+                    logout();
                     return;
                 }
 

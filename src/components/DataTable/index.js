@@ -41,6 +41,8 @@ import DataTableBodyCell from "./DataTableBodyCell";
 import { useSearchParams } from "react-router-dom";
 import queryString from "query-string";
 import { useTranslation } from "react-i18next";
+import { InputAdornment, TextField } from "@mui/material";
+import { useDebounce } from "@uidotdev/usehooks";
 
 function DataTable({
   table,
@@ -108,15 +110,18 @@ function DataTable({
     </SoftPagination>
   ));
 
-  // // Handler for the input to set the pagination index
-  // const handleInputPagination = ({ target: { value } }) =>
-  //   value > pageOptions.length || value < 0 ? gotoPage(0) : gotoPage(Number(value));
+  // Handler for the input to set the pagination index
 
-  // // Customized page options starting from 1
-  // const customizedPageOptions = pageOptions.map((option) => option + 1);
+  // Customized page options starting from 1
+  const customizedPageOptions = pageOptions.map((option) => option - 1);
 
-  // // Setting value for the pagination input
-  // const handleInputPaginationValue = ({ target: value }) => gotoPage(Number(value.value - 1));
+  // Setting value for the pagination input
+  const [inputPaginationvalue, setInputPaginationValue] = useState('');
+  const handleInputPaginationValue = ({ target: value }) => setInputPaginationValue(Number(value.value));
+  const inputPaginationValueDebounced = useDebounce(inputPaginationvalue, 1000);
+  const handleInputPagination = () =>
+    inputPaginationValueDebounced > pageOptions.length || inputPaginationValueDebounced < 0 ? onPageChange(1) : onPageChange(inputPaginationValueDebounced);
+  useMemo(handleInputPagination, [inputPaginationValueDebounced]);
 
   // // Search input value state
   // const [search, setSearch] = useState(globalFilter);
@@ -223,18 +228,31 @@ function DataTable({
                 <Icon sx={{ fontWeight: "bold" }}>chevron_right</Icon>
               </SoftPagination>
             )}
-            {renderPagination}
-            {/* {renderPagination.length > 6 ? (
-              <SoftBox width="5rem" mx={1}>
-                <SoftInput
+            {/* {renderPagination} */}
+            {renderPagination.length > 6 ? (
+              <SoftBox mx={1}>
+                <TextField
+                  margin="none"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      padding: 0
+                    }
+                  }}
                   inputProps={{ type: "number", min: 1, max: customizedPageOptions.length }}
                   value={customizedPageOptions[currentPage]}
-                  onChange={(handleInputPagination, handleInputPaginationValue)}
+                  onChange={handleInputPaginationValue}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        {pageOptions[pageOptions.length - 1]}
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </SoftBox>
             ) : (
               renderPagination
-            )} */}
+            )}
             {canNextPage && (
               <SoftPagination item onClick={() => onPageChange(currentPage + 1)}>
                 <Icon sx={{ fontWeight: "bold" }}>chevron_left</Icon>

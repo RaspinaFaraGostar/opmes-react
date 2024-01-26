@@ -1,6 +1,7 @@
 import UsersList from "pages/dashboard/users/users-list";
 import RolesList from "pages/dashboard/roles/roles-list";
 import EnumsList from "pages/dashboard/enums/enums-list";
+import UnitsList from "pages/dashboard/units/units-list";
 
 const dynamicRoutes = [
     {
@@ -44,6 +45,12 @@ const dynamicRoutes = [
     {
         route: "/panel/baseInfo/enum/Post",
         component: <EnumsList type="Post" />
+    },
+
+
+    {
+        route: "/panel/baseInfo/unit",
+        component: <UnitsList />
     },
 ]
 export default dynamicRoutes;

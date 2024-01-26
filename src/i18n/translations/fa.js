@@ -74,7 +74,6 @@ const faJSON = {
 
   "User roles": "مدیریت نقش کاربر",
   "Role Title": "نقش",
-  "Unit Name": "سازمان",
 
   "Assign new role": "تخصیص نقش جدید",
   "Unit": "سازمان",
@@ -101,6 +100,21 @@ const faJSON = {
   "Enum event sessions": "گزارش رخدادهای {{enum}}",
   "Enum logs": "گزارش رخدادها",
   "Delete enum": "حدف {{enum}}",
+
+
+  // Units Management
+  "Units management": "مدیریت سازمان‌ها",
+  "List of all units": "لیست همه سازمان ها",
+
+  "Add unit": "افزودن سازمان",
+  "Edit unit": "ویرایش سازمان",
+  "Delete unit": "حذف سازمان",
+
+  "Unit Name": "نام سازمان",
+  "Unit Parent": "سازمان مافوق",
+  "Unit Type": "نوع سازمان",
+  "Telephone": "شماره تلفن",
+  "Address": "آدرس",
 
   // Form fields
   "Enum Name": "نام {{enum}}",

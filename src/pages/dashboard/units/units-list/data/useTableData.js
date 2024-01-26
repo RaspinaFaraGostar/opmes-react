@@ -60,7 +60,7 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
 
   const [fetching, setFetching] = useState(false);
   const fetchDataAsync = async () => {
-    const response = await axios('api/UserPanel/List?'.concat(
+    const response = await axios('api/UnitPanel/List?'.concat(
       queryString.stringify(Object.fromEntries(searchParams))
     ))
     setData(response.data);
@@ -87,6 +87,7 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
       })
   }, [location])
 
+
   // Badges
   const failed = (
     <SoftBadge variant="contained" color="error" size="xs" badgeContent={t("Inactive")} container />
@@ -97,19 +98,14 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
 
   const columns = [
     { Header: '#', accessor: "row", width: 10, noFilter: true },
-    { Header: t("First Name"), accessor: "PersonalName", width: 'auto' },
-    { Header: t("Last Name"), accessor: "PersonalLastName", width: 'auto' },
-    { Header: t("Username"), accessor: "UserName", width: 'auto' },
-    { Header: t("Medical Number"), accessor: "MedicalNo", width: 'auto' },
-    {
-      Header: t("Status"),
-      accessor: "IsActive",
-      width: 'auto',
-      Cell: ({ value }) => typeof value == "boolean" ? (value ? success : failed) : value,
-    },
-    {
-      Header: t("Lock Status"),
-      accessor: "Lock",
+    { Header: t("Unit Name"), accessor: "UnitName", width: 'auto' },
+    { Header: t("Unit Parent"), accessor: "ParentTitle", width: 'auto' },
+    { Header: t("Unit Type"), accessor: "UnitTypeTitle", width: 'auto' },
+    { Header: t("Telephone"), accessor: "Phone", width: 'auto' },
+    { Header: t("Address"), accessor: "Address", width: 'auto' },
+    { 
+      Header: t("Status"), 
+      accessor: "IsActive", 
       width: 'auto',
       Cell: ({ value }) => typeof value == "boolean" ? (value ? success : failed) : value,
     },

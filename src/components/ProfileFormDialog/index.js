@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 
 // App components
 import DialogCloseButton from "components/DialogCloseButton";
+import InputHelperText from "components/InputHelperText";
 
 // Axios
 import axios, { AxiosError } from "axios";
@@ -25,11 +26,10 @@ import axios, { AxiosError } from "axios";
 import { Formik } from 'formik';
 
 // Component dependencies
-import InputHelperText from "components/InputHelperText";
 import useValidationSchema from "./validation/useValidationSchema";
 
 
-function UserPasswordFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...props }) {
+function ProfileFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...props }) {
 
     // I18n
     const { t } = useTranslation();
@@ -39,10 +39,8 @@ function UserPasswordFormDialog({ open, onClose, onSubmitSuccess, initialValues,
 
     // Form initial values
     const getInitialData = () => ({
-        BackPassword: '',
-        Password: '',
-        RePassword: '',
-        UserId: '',
+        PersonalName: '',
+        PersonalLastName: '',
         ...initialValues
     });
     const [data, setData] = useState(getInitialData());
@@ -53,6 +51,11 @@ function UserPasswordFormDialog({ open, onClose, onSubmitSuccess, initialValues,
 
     // Validation schema
     const validationSchema = useValidationSchema(data);
+
+    // Transform data to post data
+    const transform = data => ({
+        ...data
+    })
 
     return (
         <Formik
@@ -66,8 +69,8 @@ function UserPasswordFormDialog({ open, onClose, onSubmitSuccess, initialValues,
                     try {
                         const response = await axios({
                             method: 'PUT',
-                            url: '/api/UserPanel/ChengeUserPassword',
-                            data: values
+                            url: '/api/UserPanel/EditUserProfile',
+                            data: transform(values)
                         })
 
                         setStatus({ success: true });
@@ -105,7 +108,7 @@ function UserPasswordFormDialog({ open, onClose, onSubmitSuccess, initialValues,
                         onSubmit: handleSubmit,
                     }}
                 >
-                    <DialogTitle>{t("Change password")}</DialogTitle>
+                    <DialogTitle>{t("Assign new role")}</DialogTitle>
                     <DialogCloseButton onClick={onClose} />
                     <DialogContent>
                         <Collapse in={Boolean(errors.submit)}>
@@ -114,43 +117,27 @@ function UserPasswordFormDialog({ open, onClose, onSubmitSuccess, initialValues,
                             </SoftAlert>
                         </Collapse>
                         <Grid container spacing={2}>
-                            {!values.UserId && (
-                                <>
-                                    <Grid item xs={12} md={6}>
-                                        <SoftInput
-                                            name="BackPassword"
-                                            type="password"
-                                            placeholder={t("Old Password")}
-                                            value={values.BackPassword ?? ''}
-                                            onChange={handleChange}
-                                            error={Boolean(errors.BackPassword)}
-                                        />
-                                        {errors.BackPassword && <InputHelperText color="error">{errors.BackPassword}</InputHelperText>}
-                                    </Grid>
-                                    <Grid item xs={12} md={6} />
-                                </>
-                            )}
                             <Grid item xs={12} md={6}>
                                 <SoftInput
-                                    name="Password"
-                                    type="password"
-                                    placeholder={t("Password")}
-                                    value={values.Password ?? ''}
+                                    name="PersonalName"
+                                    type="text"
+                                    placeholder={t("First Name")}
+                                    value={values.PersonalName ?? ''}
                                     onChange={handleChange}
-                                    error={Boolean(errors.Password)}
+                                    error={Boolean(errors.PersonalName)}
                                 />
-                                {errors.Password && <InputHelperText color="error">{errors.Password}</InputHelperText>}
+                                {errors.PersonalName && <InputHelperText color="error">{errors.PersonalName}</InputHelperText>}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <SoftInput
-                                    name="RePassword"
-                                    type="password"
-                                    placeholder={t("Repeat Password")}
-                                    value={values.RePassword ?? ''}
+                                    name="PersonalLastName"
+                                    type="text"
+                                    placeholder={t("Last Name")}
+                                    value={values.PersonalLastName ?? ''}
                                     onChange={handleChange}
-                                    error={Boolean(errors.RePassword)}
+                                    error={Boolean(errors.PersonalLastName)}
                                 />
-                                {errors.RePassword && <InputHelperText color="error">{errors.RePassword}</InputHelperText>}
+                                {errors.PersonalLastName && <InputHelperText color="error">{errors.PersonalLastName}</InputHelperText>}
                             </Grid>
                         </Grid>
                     </DialogContent>
@@ -165,11 +152,11 @@ function UserPasswordFormDialog({ open, onClose, onSubmitSuccess, initialValues,
 }
 
 // Typechecking props
-UserPasswordFormDialog.propTypes = {
+ProfileFormDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func,
     onSubmitSuccess: PropTypes.func,
     initialValues: PropTypes.object,
 };
 
-export default UserPasswordFormDialog;
+export default ProfileFormDialog;

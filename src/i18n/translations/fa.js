@@ -48,7 +48,9 @@ const faJSON = {
 
   // Change password form
   "Change password": "تغییر رمز عبور",
-  "Old Password": "رمز عبور قبلی",
+  "Old Password": "رمز عبور فعلی",
+  "New Password": "رمز عبور جدید",
+  "Repeat New Password": "تکرار رمز عبور جدید",
 
 
   // dashboard/security/users/users-list

@@ -13,46 +13,49 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // react-router components
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
 
 // @mui core components
 import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
+import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
-import Icon from "@mui/material/Icon";
+import Toolbar from "@mui/material/Toolbar";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";
+import SoftButton from "components/SoftButton";
 import SoftTypography from "components/SoftTypography";
-import SoftInput from "components/SoftInput";
 
 // Soft UI Dashboard PRO React example components
 import Breadcrumbs from "examples/Breadcrumbs";
-import NotificationItem from "examples/Items/NotificationItem";
+
+// App components
+import ProfileFormDialog from "components/ProfileFormDialog";
+import UserPasswordFormDialog from "components/UserPasswordFormDialog";
+import { useAuth } from "contexts/auth";
 
 // Custom styles for DashboardNavbar
 import {
   navbar,
   navbarContainer,
-  navbarRow,
-  navbarIconButton,
   navbarDesktopMenu,
+  navbarIconButton,
   navbarMobileMenu,
+  navbarRow,
 } from "examples/Navbars/DashboardNavbar/styles";
 
 // Soft UI Dashboard PRO React context
 import {
-  useSoftUIController,
-  setTransparentNavbar,
   setMiniSidenav,
-  setOpenConfigurator,
+  setTransparentNavbar,
+  useSoftUIController
 } from "contexts/soft-ui";
 
 // Images
@@ -60,13 +63,17 @@ import { ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 
 // I18n
 import { useTranslation } from "react-i18next";
-import SoftButton from "components/SoftButton";
-import { useAuth } from "contexts/auth";
+
+// Notistack
+import { useSnackbar } from "notistack";
 
 function DashboardNavbar({ absolute, light, isMini }) {
 
   // I18n
   const { t } = useTranslation();
+
+  // Snackbar handlers
+  const { enqueueSnackbar } = useSnackbar();
 
   // Auth
   const [auth, dispatchAuth, { logout, resetRole }] = useAuth();
@@ -74,7 +81,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   // Navbar methods
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
-  const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
+  const { miniSidenav, transparentNavbar, fixedNavbar } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
 
@@ -109,20 +116,37 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
 
+  // Profile dialog props and handlers
+  const [profileDialogProps, setProfileDialogProps] = useState({ open: false });
+
+  // Password dialog props and handlers
+  const [passwordDialogProps, setPasswordDialogProps] = useState({ open: false });
+
   // Menu Items
   const menuItems = [
     {
       icon: 'person',
       label: t("Profile"),
-      onClick: () => { }
+      onClick: async () => {
+        try {
+          handleCloseMenu();
+          const response = await axios('/api/UserPanel/GetUserProfile');
+          setProfileDialogProps({ open: true, initialValues: response.data });
+        } catch (error) {
+          enqueueSnackbar(t("An error occurred"), { variant: 'soft', color: 'error' })
+        }
+      }
     },
     {
       icon: 'lock',
       label: t("Change Password"),
-      onClick: () => { }
+      onClick: () => {
+        handleCloseMenu();
+        setPasswordDialogProps({ open: true })
+      }
     },
     {
-      icon: 'supervisor',
+      icon: 'supervised_user_circle',
       label: t("Change Role"),
       onClick: () => resetRole()
     },
@@ -161,81 +185,78 @@ function DashboardNavbar({ absolute, light, isMini }) {
   );
 
   return (
-    <AppBar
-      position={absolute ? "absolute" : navbarType}
-      color="inherit"
-      sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
-    >
-      <Toolbar sx={(theme) => navbarContainer(theme)}>
-        <SoftBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
-          <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} />
-          <Icon fontSize="medium" sx={navbarDesktopMenu} onClick={handleMiniSidenav}>
-            {miniSidenav ? "menu_open" : "menu"}
-          </Icon>
-        </SoftBox>
-        {isMini ? null : (
-          <SoftBox sx={(theme) => navbarRow(theme, { isMini })}>
-            {/* <SoftBox pr={1}>
-              <SoftInput
-                placeholder="Type here..."
-                icon={{ component: "search", direction: "left" }}
-              />
-            </SoftBox> */}
-            <SoftBox>
-              <SoftButton
-                variant="gradient"
-                color="dark"
-                sx={{ ...navbarIconButton, py: 1, px: 2 }}
-                onClick={handleOpenMenu}
-                startIcon={(
-                  <Icon>
-                    account_circle
-                  </Icon>
-                )}
-              >
-                <SoftTypography
-                  variant="button"
-                  fontWeight="medium"
-                  color="inherit"
-                >
-                  {auth.user.FullName}
-                </SoftTypography>
-              </SoftButton>
-              <IconButton
-                size="small"
-                color="inherit"
-                sx={navbarMobileMenu}
-                onClick={handleMiniSidenav}
-              >
-                <Icon className={light ? "text-white" : "text-dark"}>
-                  {miniSidenav ? "menu_open" : "menu"}
-                </Icon>
-              </IconButton>
-              {/* <IconButton
-                size="small"
-                color="inherit"
-                sx={navbarIconButton}
-                onClick={handleConfiguratorOpen}
-              >
-                <Icon>settings</Icon>
-              </IconButton> */}
-              {/* <IconButton
-                size="small"
-                color="inherit"
-                sx={navbarIconButton}
-                aria-controls="notification-menu"
-                aria-haspopup="true"
-                variant="contained"
-                onClick={handleOpenMenu}
-              >
-                <Icon className={light ? "text-white" : "text-dark"}>notifications</Icon>
-              </IconButton> */}
-              {renderMenu()}
-            </SoftBox>
+    <>
+      <AppBar
+        position={absolute ? "absolute" : navbarType}
+        color="inherit"
+        sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
+      >
+        <Toolbar sx={(theme) => navbarContainer(theme)}>
+          <SoftBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
+            <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} />
+            <Icon fontSize="medium" sx={navbarDesktopMenu} onClick={handleMiniSidenav}>
+              {miniSidenav ? "menu_open" : "menu"}
+            </Icon>
           </SoftBox>
-        )}
-      </Toolbar>
-    </AppBar>
+          {isMini ? null : (
+            <SoftBox sx={(theme) => navbarRow(theme, { isMini })}>
+              <SoftBox>
+                <SoftButton
+                  variant="gradient"
+                  color="dark"
+                  sx={{ ...navbarIconButton, py: 1, px: 2 }}
+                  onClick={handleOpenMenu}
+                  startIcon={(
+                    <Icon>
+                      account_circle
+                    </Icon>
+                  )}
+                >
+                  <SoftTypography
+                    variant="button"
+                    fontWeight="medium"
+                    color="inherit"
+                  >
+                    {auth.user.FullName}
+                  </SoftTypography>
+                </SoftButton>
+                <IconButton
+                  size="small"
+                  color="inherit"
+                  sx={navbarMobileMenu}
+                  onClick={handleMiniSidenav}
+                >
+                  <Icon className={light ? "text-white" : "text-dark"}>
+                    {miniSidenav ? "menu_open" : "menu"}
+                  </Icon>
+                </IconButton>
+                {renderMenu()}
+              </SoftBox>
+            </SoftBox>
+          )}
+        </Toolbar>
+      </AppBar>
+
+      <ProfileFormDialog
+        {...profileDialogProps}
+        onClose={() => setProfileDialogProps({ open: false })}
+        onSubmitSuccess={response => {
+          enqueueSnackbar(response, { variant: 'soft', icon: 'check', color: 'success' });
+          setProfileDialogProps({ open: false })
+          dispatchAuth({ type: "REVOKE_TOKEN" });
+        }}
+      />
+
+      <UserPasswordFormDialog
+        {...passwordDialogProps}
+        onClose={() => setPasswordDialogProps({ open: false })}
+        onSubmitSuccess={response => {
+          enqueueSnackbar(response, { variant: 'soft', icon: 'check', color: 'success' });
+          setPasswordDialogProps({ open: false })
+        }}
+      />
+
+    </>
   );
 }
 

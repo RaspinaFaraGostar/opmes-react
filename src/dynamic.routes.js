@@ -2,6 +2,7 @@ import UsersList from "pages/dashboard/users/users-list";
 import RolesList from "pages/dashboard/roles/roles-list";
 import EnumsList from "pages/dashboard/enums/enums-list";
 import UnitsList from "pages/dashboard/units/units-list";
+import SubUnitsList from "pages/dashboard/subunits/subunits-list";
 
 const dynamicRoutes = [
     {
@@ -51,6 +52,10 @@ const dynamicRoutes = [
     {
         route: "/panel/baseInfo/unit",
         component: <UnitsList />
+    },
+    {
+        route: "/panel/baseInfo/subunit",
+        component: <SubUnitsList />
     },
 ]
 export default dynamicRoutes;

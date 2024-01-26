@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
 // MUI components
-import { Checkbox, Collapse, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, Typography, useTheme } from "@mui/material";
+import { Collapse, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography, useTheme } from "@mui/material";
 
 // SoftUI components
 import SoftAlert from "components/SoftAlert";
@@ -26,12 +26,11 @@ import { Formik } from 'formik';
 
 // Component dependencies
 import InputHelperText from "components/InputHelperText";
+import SubUnitSelect from "./components/SubUnitSelect";
 import useValidationSchema from "./validation/useValidationSchema";
-import UnitTypeSelect from "./components/UnitTypeSelect";
-import UnitSelect from "./components/UnitSelect";
 
 
-function UnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...props }) {
+function SubUnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...props }) {
 
     // I18n
     const { t } = useTranslation();
@@ -41,13 +40,10 @@ function UnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
 
     // Form initial values
     const getInitialData = () => ({
-        UnitId: '',
-        UnitName: '',
-        UnitTypeId: null,
+        SubUnitId: '',
+        Code: '',
+        Title: '',
         ParentId: null,
-        Address: '',
-        Phone: '',
-        IsActive: true,
         ...initialValues
     });
     const [data, setData] = useState(getInitialData());
@@ -63,7 +59,6 @@ function UnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
     const transform = data => ({
         ...data,
         ParentId: data.ParentId?.UnitId,
-        UnitTypeId: data.UnitTypeId?.EnumId,
     })
 
     return (
@@ -78,8 +73,8 @@ function UnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
                     console.log(values);
                     try {
                         const response = await axios({
-                            method: values.UnitId ? 'PUT' : 'POST',
-                            url: values.UnitId ? '/api/UnitPanel/Edit' : '/api/UnitPanel/Create',
+                            method: values.SubUnitId ? 'PUT' : 'POST',
+                            url: values.SubUnitId ? '/api/SubUnitPanel/Edit' : '/api/SubUnitPanel/Create',
                             data: transform(values)
                         })
 
@@ -118,7 +113,7 @@ function UnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
                         onSubmit: handleSubmit,
                     }}
                 >
-                    <DialogTitle>{t(values.UnitId ? "Edit unit" : "Add unit")}</DialogTitle>
+                    <DialogTitle>{t(values.SubUnitId ? "Edit subunit" : "Add subunit")}</DialogTitle>
                     <DialogCloseButton onClick={onClose} />
                     <DialogContent>
                         <Collapse in={Boolean(errors.submit)}>
@@ -129,25 +124,28 @@ function UnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
                         <Grid container spacing={2} alignItems="center">
                             <Grid item xs={12} md={6}>
                                 <SoftInput
-                                    name="UnitName"
+                                    name="Title"
                                     type="text"
-                                    placeholder={t("Unit Name")}
-                                    value={values.UnitName ?? ''}
+                                    placeholder={t("Subunit Name")}
+                                    value={values.Title ?? ''}
                                     onChange={handleChange}
-                                    error={Boolean(errors.UnitName)}
+                                    error={Boolean(errors.Title)}
                                 />
-                                {errors.UnitName && <InputHelperText color="error">{errors.UnitName}</InputHelperText>}
+                                {errors.Title && <InputHelperText color="error">{errors.Title}</InputHelperText>}
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <UnitTypeSelect
-                                    value={values.UnitTypeId ?? null}
-                                    onChange={(event, value) => setFieldValue("UnitTypeId", value)}
-                                    textFieldProps={{ placeholder: t("Unit Type") }}
+                                <SoftInput
+                                    name="Code"
+                                    type="text"
+                                    placeholder={t("Subunit Code")}
+                                    value={values.Code ?? ''}
+                                    onChange={handleChange}
+                                    error={Boolean(errors.Code)}
                                 />
-                                {errors.UnitTypeId && <InputHelperText color="error">{errors.UnitTypeId}</InputHelperText>}
+                                {errors.Code && <InputHelperText color="error">{errors.Code}</InputHelperText>}
                             </Grid>
-                            <Grid item xs={12} md={6}>
-                                <UnitSelect
+                            <Grid item xs={12}>
+                                <SubUnitSelect
                                     name="ParentId"
                                     value={values.ParentId ?? null}
                                     onChange={(event, value) => setFieldValue("ParentId", value)}
@@ -157,42 +155,6 @@ function UnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
                                     }}
                                 />
                                 {errors.ParentId && <InputHelperText color="error">{errors.ParentId}</InputHelperText>}
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <SoftInput
-                                    name="Phone"
-                                    type="text"
-                                    placeholder={t("Telephone")}
-                                    value={values.Phone ?? ''}
-                                    onChange={handleChange}
-                                    error={Boolean(errors.Phone)}
-                                />
-                                {errors.Phone && <InputHelperText color="error">{errors.Phone}</InputHelperText>}
-                            </Grid>
-                            <Grid item xs={2} alignItems="center">
-                                <FormControlLabel
-                                    sx={{ m: 0 }}
-                                    label={t("Active")}
-                                    control={
-                                        <Checkbox
-                                            name="IsActive"
-                                            checked={values.IsActive}
-                                            onChange={handleChange}
-                                        />
-                                    }
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <SoftInput
-                                    name="Address"
-                                    multiline
-                                    minRows={3}
-                                    placeholder={t("Address")}
-                                    value={values.Address ?? ''}
-                                    onChange={handleChange}
-                                    error={Boolean(errors.Address)}
-                                />
-                                {errors.Address && <InputHelperText color="error">{errors.Address}</InputHelperText>}
                             </Grid>
                         </Grid>
                     </DialogContent>
@@ -207,11 +169,11 @@ function UnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
 }
 
 // Typechecking props
-UnitFormDialog.propTypes = {
+SubUnitFormDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func,
     onSubmitSuccess: PropTypes.func,
     initialValues: PropTypes.object,
 };
 
-export default UnitFormDialog;
+export default SubUnitFormDialog;

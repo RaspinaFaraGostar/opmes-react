@@ -116,6 +116,20 @@ const faJSON = {
   "Telephone": "شماره تلفن",
   "Address": "آدرس",
 
+
+  // Subunits Management
+  "Subunits management": "مدیریت شرکت‌ها",
+  "List of all subunits": "لیست همه شرکت‌ها",
+
+  "Add subunit": "افزودن شرکت",
+  "Edit subunit": "ویرایش شرکت",
+  "Delete subunit": "حذف شرکت",
+
+  "Subunit Name": "نام شرکت",
+  "Subunit Code": "شناسه شرکت",
+  "Subunit Parent": "واحد مافوق",
+
+
   // Form fields
   "Enum Name": "نام {{enum}}",
   "Enum Is Tab Page": "به صورت تب",

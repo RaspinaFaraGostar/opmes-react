@@ -22,6 +22,10 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 
+// Mui-x Datepicker
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFnsJalali } from '@mui/x-date-pickers/AdapterDateFnsJalali'
+
 // React components
 import ProtectedRoute from "components/ProtectedRoute";
 
@@ -173,25 +177,27 @@ export default function App() {
 
   const content = (
     <ThemeProvider theme={direction == "rtl" ? themeRTL : theme}>
-      <CssBaseline />
-      <SnackbarProvider>
-        {layout === "dashboard" && (
-          <>
-            <Sidenav
-              color={sidenavColor}
-              brand={brand}
-              brandName={t("Raspina Faragostar")}
-              routes={allRoutes}
-              onMouseEnter={handleOnMouseEnter}
-              onMouseLeave={handleOnMouseLeave}
-            />
-          </>
-        )}
-        <Routes>
-          {getRoutes(allRoutes)}
-          <Route path="*" element={<Navigate to="/-" />} />
-        </Routes>
-      </SnackbarProvider>
+      <LocalizationProvider dateAdapter={AdapterDateFnsJalali}>
+        <SnackbarProvider>
+          <CssBaseline />
+          {layout === "dashboard" && (
+            <>
+              <Sidenav
+                color={sidenavColor}
+                brand={brand}
+                brandName={t("Raspina Faragostar")}
+                routes={allRoutes}
+                onMouseEnter={handleOnMouseEnter}
+                onMouseLeave={handleOnMouseLeave}
+              />
+            </>
+          )}
+          <Routes>
+            {getRoutes(allRoutes)}
+            <Route path="*" element={<Navigate to="/-" />} />
+          </Routes>
+        </SnackbarProvider>
+      </LocalizationProvider>
     </ThemeProvider>
   );
 

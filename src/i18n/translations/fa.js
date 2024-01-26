@@ -129,6 +129,19 @@ const faJSON = {
   "Subunit Code": "شناسه شرکت",
   "Subunit Parent": "واحد مافوق",
 
+  // Periods Management
+  "Periods management": "مدیریت دوره معاینات",
+  "List of all medical periods": "لیست همه دوره های معاینات",
+
+  "Add period": "افزودن دوره",
+  "Edit period": "ویرایش دوره",
+  "Delete period": "حذف دوره",
+
+  "Period Number": "شماره دوره",
+  "Period Name": "عنوان دوره",
+  "Period Date": "تاریخ انجام معاینات",
+  "Period Subunit": "واحد محل خدمت",
+
 
   // Form fields
   "Enum Name": "نام {{enum}}",

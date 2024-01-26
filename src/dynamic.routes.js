@@ -3,6 +3,7 @@ import RolesList from "pages/dashboard/roles/roles-list";
 import EnumsList from "pages/dashboard/enums/enums-list";
 import UnitsList from "pages/dashboard/units/units-list";
 import SubUnitsList from "pages/dashboard/subunits/subunits-list";
+import PeriodsList from "pages/dashboard/periods/periods-list";
 
 const dynamicRoutes = [
     {
@@ -67,6 +68,11 @@ const dynamicRoutes = [
         protected: true,
         route: "/panel/baseInfo/subunit",
         component: <SubUnitsList />
+    },
+    {
+        protected: true,
+        route: "/panel/baseInfo/duration",
+        component: <PeriodsList />
     },
 ]
 export default dynamicRoutes;

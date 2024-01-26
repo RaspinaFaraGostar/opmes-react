@@ -185,19 +185,14 @@ function DataTable({
             prepareRow(row);
             return (
               <TableRow key={key} {...row.getRowProps()}>
-                {row.cells.map((cell, key) => {
-                  console.log(cell.column);
-                  return (
-                    <DataTableBodyCell
-                      key={key}
-                      // noBorder={noEndBorder && rows.length - 1 === key}
-                      // align={cell.column.align ? cell.column.align : "left"}
-                      {...cell.getCellProps()}
-                    >
-                      {cell.render("Cell")}
-                    </DataTableBodyCell>
-                  )
-                })}
+                {row.cells.map((cell, key) => (
+                  <DataTableBodyCell
+                    key={key}
+                    {...cell.getCellProps()}
+                  >
+                    {cell.render("Cell")}
+                  </DataTableBodyCell>
+                ))}
               </TableRow>
             );
           })}

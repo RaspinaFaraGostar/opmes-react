@@ -19,6 +19,7 @@ const faJSON = {
   "Loading...": "در حال بارگذاری...",
   "Success": "موفق",
   "Unsuccess": "ناموفق",
+  "Select/Deselect all": "انتخاب/عدم انتخاب همه",
 
   // General delete confirm message
   "Are you sure?": "آیا مطمئن هستید؟",
@@ -80,12 +81,26 @@ const faJSON = {
   "Role": "نقش",
 
 
+  // Roles management
+  "Roles management": "مدیریت نقش ها",
+  "List of all system roles": "لیست همه نقش های تعریف شده در سامانه",
+  
+  "Role Name": "عنوان",
+  "Role Code": "عنوان لاتین",
+  "Role Permissions": "دسترسی ها",
+  "Add role": "افزودن نقش",
+  "Edit role": "ویرایش نقش",
+  "Delete role": "حذف نقش",
+
+
   // Enums Management
   "Enum management": "مدیریت {{enum}}",
   "List of all system enums": "لیست همه {{enum}} در سامانه",
   "Add enum": "افزودن {{enum}}",
   "Edit enum": "ویرایش {{enum}}",
   "Enum event sessions": "گزارش رخدادهای {{enum}}",
+  "Enum logs": "گزارش رخدادها",
+  "Delete enum": "حدف {{enum}}",
 
   // Form fields
   "Enum Name": "نام {{enum}}",

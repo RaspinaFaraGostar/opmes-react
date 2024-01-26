@@ -1,4 +1,5 @@
 import UsersList from "pages/dashboard/users/users-list";
+import RolesList from "pages/dashboard/roles/roles-list";
 import EnumsList from "pages/dashboard/enums/enums-list";
 
 const dynamicRoutes = [
@@ -6,6 +7,11 @@ const dynamicRoutes = [
         route: "/panel/security/user",
         component: <UsersList />
     },
+    {
+        route: "/panel/security/role",
+        component: <RolesList />
+    },
+
 
 
     // Enums routes

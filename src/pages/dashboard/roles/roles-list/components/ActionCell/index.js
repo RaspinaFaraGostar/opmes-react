@@ -27,7 +27,7 @@ import PropTypes from "prop-types";
 // I18n
 import { useTranslation } from "react-i18next";
 
-function ActionCell({ type, onClick = () => { } }) {
+function ActionCell({ onClick = () => { } }) {
 
   const { t } = useTranslation();
 
@@ -39,18 +39,8 @@ function ActionCell({ type, onClick = () => { } }) {
         sx={{ cursor: "pointer", lineHeight: 0 }}
         onClick={(event) => onClick(event, 'edit')}
       >
-        <Tooltip title={t("Edit enum", { enum: t(type) })}>
+        <Tooltip title={t("Edit role")}>
           <Icon>edit</Icon>
-        </Tooltip>
-      </SoftTypography>
-      <SoftTypography
-        variant="body1"
-        color="secondary"
-        sx={{ cursor: "pointer", lineHeight: 0 }}
-        onClick={(event) => onClick(event, 'log')}
-      >
-        <Tooltip title={t("Enum logs", { enum: t(type) })}>
-          <Icon>history</Icon>
         </Tooltip>
       </SoftTypography>
       <SoftTypography
@@ -59,7 +49,7 @@ function ActionCell({ type, onClick = () => { } }) {
         sx={{ cursor: "pointer", lineHeight: 0 }}
         onClick={(event) => onClick(event, 'delete')}
       >
-        <Tooltip title={t("Delete enum", { enum: t(type) })}>
+        <Tooltip title={t("Delete role")}>
           <Icon>delete</Icon>
         </Tooltip>
       </SoftTypography>
@@ -69,7 +59,6 @@ function ActionCell({ type, onClick = () => { } }) {
 
 // Typechecking props
 ActionCell.propTypes = {
-  type: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 }
 

@@ -40,7 +40,7 @@ import queryString from "query-string";
 import useTableFilter from "./useTableFilter";
 
 
-const useTableData = ({ type, getRowActionCellProps = (row) => ({}), loaderRowsCount = 10 }) => {
+const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount = 10 }) => {
 
   // I18n
   const { t } = useTranslation();
@@ -57,11 +57,8 @@ const useTableData = ({ type, getRowActionCellProps = (row) => ({}), loaderRowsC
 
   const [fetching, setFetching] = useState(false);
   const fetchDataAsync = async () => {
-    const response = await axios('api/EnumPanel?'.concat(
-      queryString.stringify({
-        EnumTypeCode: type,
-        ...Object.fromEntries(searchParams)
-      })
+    const response = await axios('api/RolePanel/List?'.concat(
+      queryString.stringify(Object.fromEntries(searchParams))
     ))
     setData(response.data);
     setFetching(false);
@@ -89,7 +86,8 @@ const useTableData = ({ type, getRowActionCellProps = (row) => ({}), loaderRowsC
 
   const columns = [
     { Header: '#', accessor: "row", width: 10, noFilter: true },
-    { Header: t(type), accessor: "EnumName", width: 'auto' },
+    { Header: t("Role Name"), accessor: "RoleName", width: 'auto' },
+    { Header: t("Role Code"), accessor: "RoleCode", width: 'auto' },
     { Header: t("Action"), accessor: "action", width: 'auto', noFilter: true },
   ];
 
@@ -112,7 +110,7 @@ const useTableData = ({ type, getRowActionCellProps = (row) => ({}), loaderRowsC
         ...(!fetching ? map(data.Data, (row, index) => ({
           row: ((Number(searchParams.get('Page')) - 1) * Number(searchParams.get('PageSize'))) + (index + 1),
           ...row,
-          action: <ActionCell type={type} {...getRowActionCellProps(row)} />
+          action: <ActionCell {...getRowActionCellProps(row)} />
         })) : [])
       ]
     }),

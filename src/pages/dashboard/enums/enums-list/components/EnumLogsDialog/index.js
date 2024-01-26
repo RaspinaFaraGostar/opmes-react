@@ -40,7 +40,7 @@ function EnumLogsDialog({ open, onClose, enumEntity, enumType, ...props }) {
             fullWidth
             maxWidth="sm"
         >
-            <DialogTitle>{t("User login sessions")}</DialogTitle>
+            <DialogTitle>{t("Enum event sessions", { enum: t(enumType) })}</DialogTitle>
             <DialogCloseButton onClick={onClose} />
             <DialogContent>
                 {data.rows.length < 1 && <Box textAlign="center" py={5}>{t("No result")}</Box>}

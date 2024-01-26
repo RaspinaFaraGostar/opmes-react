@@ -138,7 +138,7 @@ function EnumsList({ type }) {
 
   return (
     <>
-      <Helmet title={t("Enums management")} />
+      <Helmet title={t("Enum management", { enum: t(type, { count: 2 }) })} />
 
       <DashboardLayout>
         <DashboardNavbar />
@@ -147,10 +147,10 @@ function EnumsList({ type }) {
             <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
               <SoftBox lineHeight={1}>
                 <SoftTypography variant="h5" fontWeight="medium">
-                  {t("Enums management")}
+                  {t("Enum management", { enum: t(type, { count: 2 }) })}
                 </SoftTypography>
                 <SoftTypography variant="button" fontWeight="regular" color="text">
-                  {t("List of all system enums")}
+                  {t("List of all system enums", { enum: t(type, { count: 2 }) })}
                 </SoftTypography>
               </SoftBox>
               <Stack spacing={1} direction="row">
@@ -160,7 +160,7 @@ function EnumsList({ type }) {
                   size="small"
                   onClick={() => setFormDialogProps({ open: true, initialValues: { EnumTypeCode: type } })}
                 >
-                  + {t("Add enum")}
+                  + {t("Add enum", { enum: t(type) })}
                 </SoftButton>
               </Stack>
             </SoftBox>

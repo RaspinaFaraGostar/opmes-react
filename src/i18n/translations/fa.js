@@ -79,6 +79,34 @@ const faJSON = {
   "Unit": "سازمان",
   "Role": "نقش",
 
+
+  // Enums Management
+  "Enum management": "مدیریت {{enum}}",
+  "List of all system enums": "لیست همه {{enum}} در سامانه",
+  "Add enum": "افزودن {{enum}}",
+  "Edit enum": "ویرایش {{enum}}",
+  "Enum event sessions": "گزارش رخدادهای {{enum}}",
+
+  // Form fields
+  "Enum Name": "نام {{enum}}",
+  "Enum Is Tab Page": "به صورت تب",
+
+  // Enum names
+  "City": "شهر",
+  "City_other": "شهرها",
+  "Hospital": "بیمارستان",
+  "Hospital_other": "بیمارستان ها",
+  "Education": "تحصیلات",
+  "Education_other": "تحصیلات",
+  "Speciality": "تخصص",
+  "Speciality_other": "تخصص ها",
+  "MedicineTitle": "دارو",
+  "MedicineTitle_other": "داروها",
+  "UnitType": "سازمان",
+  "UnitType_other": "سازمان ها",
+  "Post": "سمت",
+  "Post_other": "سمت ها",
+
   "User login sessions": "گزارشات ورود کاربر",
   "IP": "آدرس آی پی",
   "Date and time": "تاریخ و زمان",

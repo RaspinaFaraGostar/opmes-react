@@ -113,7 +113,7 @@ function EnumFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
                         onSubmit: handleSubmit,
                     }}
                 >
-                    <DialogTitle>{t("Add enum")}</DialogTitle>
+                    <DialogTitle>{t(values.EnumId ? "Edit enum" : "Add enum", { enum: t(values.EnumTypeCode) })}</DialogTitle>
                     <DialogCloseButton onClick={onClose} />
                     <DialogContent>
                         <Collapse in={Boolean(errors.submit)}>
@@ -122,18 +122,18 @@ function EnumFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
                             </SoftAlert>
                         </Collapse>
                         <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={8}>
                                 <SoftInput
                                     name="EnumName"
                                     type="text"
-                                    placeholder={t("Enum Name")}
+                                    placeholder={t("Enum Name", { enum: t(values.EnumTypeCode) })}
                                     value={values.EnumName ?? ''}
                                     onChange={handleChange}
                                     error={Boolean(errors.EnumName)}
                                 />
                                 {errors.EnumName && <InputHelperText color="error">{errors.EnumName}</InputHelperText>}
                             </Grid>
-                            <Grid item xs={6} alignItems="center">
+                            <Grid item xs={4} alignItems="center">
                                 <FormControlLabel
                                     sx={{ m: 0 }}
                                     label={t("Enum Is Tab Page")}

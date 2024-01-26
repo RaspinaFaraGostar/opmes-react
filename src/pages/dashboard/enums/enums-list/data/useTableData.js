@@ -89,7 +89,7 @@ const useTableData = ({ type, getRowActionCellProps = (row) => ({}), loaderRowsC
 
   const columns = [
     { Header: '#', accessor: "row", width: 10, noFilter: true },
-    { Header: t("Enum Name"), accessor: "EnumName", width: 'auto' },
+    { Header: t(type), accessor: "EnumName", width: 'auto' },
     { Header: t("Action"), accessor: "action", width: 'auto', noFilter: true },
   ];
 

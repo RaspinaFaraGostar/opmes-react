@@ -15,6 +15,8 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
+    // compatibilityJSON: 'v3',
+    // pluralSeparator: '-',
     keySeparator: false,
     lng: 'fa',
     fallbackLng: 'en',

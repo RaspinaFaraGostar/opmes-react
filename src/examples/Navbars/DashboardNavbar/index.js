@@ -37,7 +37,7 @@ import SoftTypography from "components/SoftTypography";
 import Breadcrumbs from "examples/Breadcrumbs";
 
 // App components
-import ProfileFormDialog from "components/ProfileFormDialog";
+import UserProfileFormDialog from "components/UserProfileFormDialog";
 import UserPasswordFormDialog from "components/UserPasswordFormDialog";
 import { useAuth } from "contexts/auth";
 
@@ -237,7 +237,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </Toolbar>
       </AppBar>
 
-      <ProfileFormDialog
+      <UserProfileFormDialog
         {...profileDialogProps}
         onClose={() => setProfileDialogProps({ open: false })}
         onSubmitSuccess={response => {

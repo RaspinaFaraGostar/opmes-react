@@ -52,6 +52,11 @@ const faJSON = {
   "New Password": "رمز عبور جدید",
   "Repeat New Password": "تکرار رمز عبور جدید",
 
+  // Profile form
+  "Change profile": "ویرایش مشخصات کاربری",
+  "First Name": "نام",
+  "Last Name": "نام خانوادگی",
+
 
   // dashboard/security/users/users-list
   "Users management": "مدیریت کاربران",

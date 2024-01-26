@@ -29,7 +29,7 @@ import { Formik } from 'formik';
 import useValidationSchema from "./validation/useValidationSchema";
 
 
-function ProfileFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...props }) {
+function UserProfileFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...props }) {
 
     // I18n
     const { t } = useTranslation();
@@ -108,7 +108,7 @@ function ProfileFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...p
                         onSubmit: handleSubmit,
                     }}
                 >
-                    <DialogTitle>{t("Assign new role")}</DialogTitle>
+                    <DialogTitle>{t("Change profile")}</DialogTitle>
                     <DialogCloseButton onClick={onClose} />
                     <DialogContent>
                         <Collapse in={Boolean(errors.submit)}>
@@ -152,11 +152,11 @@ function ProfileFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...p
 }
 
 // Typechecking props
-ProfileFormDialog.propTypes = {
+UserProfileFormDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func,
     onSubmitSuccess: PropTypes.func,
     initialValues: PropTypes.object,
 };
 
-export default ProfileFormDialog;
+export default UserProfileFormDialog;

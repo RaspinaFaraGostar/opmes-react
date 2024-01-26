@@ -81,7 +81,7 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
       setSearchParams({
         ...Object.fromEntries(searchParams),
         Page: 1,
-        PageSize: 25,
+        PageSize: 15,
         Filter: '',
         Sort: ''
       })

@@ -152,6 +152,7 @@ const faJSON = {
 
   // Form fields
   "Enum Name": "نام {{enum}}",
+  "Enum Parent Name": "{{enum}} بالاتر",
   "Enum Is Tab Page": "به صورت تب",
 
   // Enum names
@@ -169,6 +170,8 @@ const faJSON = {
   "UnitType_other": "سازمان ها",
   "Post": "سمت",
   "Post_other": "سمت ها",
+  "Category": "گروه سوالات",
+  "QuestionType": "نوع سوالات",
 
   "User login sessions": "گزارشات ورود کاربر",
   "IP": "آدرس آی پی",

@@ -93,7 +93,7 @@ const useTableData = ({ type, getRowActionCellProps = (row) => ({}), loaderRowsC
     { Header: t(type), accessor: "EnumName", width: 'auto' },
 
     ...(some(data.Data, item => item.ParentName != null) ? [{
-      Header: t("Enum Parent Name"), accessor: "ParentName", width: 'auto'
+      Header: t("Enum Parent Name", { enum: t(type) }), accessor: "ParentName", width: 'auto'
     }] : []),
 
     { Header: t("Action"), accessor: "action", width: 'auto', noFilter: true },

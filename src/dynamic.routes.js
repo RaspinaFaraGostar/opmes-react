@@ -46,6 +46,18 @@ const dynamicRoutes = [
         component: <EnumsList type="MedicineTitle" />
     },
 
+    {
+        protected: true,
+        route: "/panel/baseInfo/enum/Category",
+        component: <EnumsList type="Category" />
+    },
+
+    {
+        protected: true,
+        route: "/panel/baseInfo/enum/QuestionType",
+        component: <EnumsList type="QuestionType" />
+    },
+
 
     {
         protected: true,

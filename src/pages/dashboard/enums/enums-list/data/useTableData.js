@@ -31,6 +31,7 @@ import every from "lodash/every";
 import includes from "lodash/includes";
 import keys from "lodash/keys";
 import map from "lodash/map";
+import some from "lodash/some";
 
 // I18n
 import { useTranslation } from "react-i18next";
@@ -90,6 +91,11 @@ const useTableData = ({ type, getRowActionCellProps = (row) => ({}), loaderRowsC
   const columns = [
     { Header: '#', accessor: "row", width: 10, noFilter: true },
     { Header: t(type), accessor: "EnumName", width: 'auto' },
+
+    ...(some(data.Data, item => item.ParentName != null) ? [{
+      Header: t("Enum Parent Name"), accessor: "ParentName", width: 'auto'
+    }] : []),
+
     { Header: t("Action"), accessor: "action", width: 'auto', noFilter: true },
   ];
 

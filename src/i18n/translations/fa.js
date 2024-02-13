@@ -170,8 +170,10 @@ const faJSON = {
   "UnitType_other": "سازمان ها",
   "Post": "سمت",
   "Post_other": "سمت ها",
-  "Category": "گروه سوالات",
-  "QuestionType": "نوع سوالات",
+  "Category": "گروه سوال",
+  "Category_other": "گروه سوالات",
+  "QuestionType": "نوع سوال",
+  "QuestionType_other": "انواع سوالات",
 
   "User login sessions": "گزارشات ورود کاربر",
   "IP": "آدرس آی پی",

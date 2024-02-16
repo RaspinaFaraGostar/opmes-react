@@ -16,6 +16,9 @@ Coded by www.creative-tim.com
 // React componenets and hooks
 import { useState } from "react";
 
+// React router components
+import { useNavigate } from "react-router-dom";
+
 // @mui material components
 import Card from "@mui/material/Card";
 
@@ -55,6 +58,9 @@ function QuestionGroupsList() {
   // Snackbar handlers
   const { enqueueSnackbar } = useSnackbar();
 
+  // React router navigate
+  const navigate = useNavigate();
+
   // Access list dialog
   const [accessDialogProps, setAccessDialogProps] = useState({ open: false });
 
@@ -64,7 +70,8 @@ function QuestionGroupsList() {
       onClick: async (event, action) => {
         switch (action) {
           case 'access':
-            setAccessDialogProps({ open: true, questionGroup: row })
+            setAccessDialogProps({ open: true, questionGroup: row });
+            return;
         }
       }
     })

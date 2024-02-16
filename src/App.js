@@ -69,6 +69,8 @@ import axios from "axios";
 
 // Auth
 import { useAuth } from "contexts/auth";
+
+// Snackbar context
 import SnackbarProvider from "contexts/snackbar";
 
 

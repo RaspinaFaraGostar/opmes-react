@@ -13,9 +13,6 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-// React router components
-import { Link } from "react-router-dom";
-
 // @mui material components
 import Icon from "@mui/material/Icon";
 import Tooltip from "@mui/material/Tooltip";
@@ -30,7 +27,7 @@ import PropTypes from "prop-types";
 // I18n
 import { useTranslation } from "react-i18next";
 
-function ActionCell({ row, onClick = () => { } }) {
+function ActionCell({ onClick = () => { } }) {
 
   const { t } = useTranslation();
 
@@ -40,22 +37,20 @@ function ActionCell({ row, onClick = () => { } }) {
         variant="body1"
         color="secondary"
         sx={{ cursor: "pointer", lineHeight: 0 }}
-        component={Link}
-        to={`/panel/enginQuestion/create-question/${row.GroupQuestionId}/${row.CategoryName}`}
-      // onClick={(event) => onClick(event, 'questions')}
+        onClick={(event) => onClick(event, 'edit')}
       >
-        <Tooltip title={t("Define subquestions")}>
-          <Icon>quiz</Icon>
+        <Tooltip title={t("Edit question")}>
+          <Icon>edit</Icon>
         </Tooltip>
       </SoftTypography>
       <SoftTypography
         variant="body1"
         color="secondary"
         sx={{ cursor: "pointer", lineHeight: 0 }}
-        onClick={(event) => onClick(event, 'access')}
+        onClick={(event) => onClick(event, 'delete')}
       >
-        <Tooltip title={t("Set users access")}>
-          <Icon>key</Icon>
+        <Tooltip title={t("Delete question")}>
+          <Icon>delete</Icon>
         </Tooltip>
       </SoftTypography>
     </SoftBox>
@@ -64,7 +59,6 @@ function ActionCell({ row, onClick = () => { } }) {
 
 // Typechecking props
 ActionCell.propTypes = {
-  row: PropTypes.object.isRequired,
   onClick: PropTypes.func,
 }
 

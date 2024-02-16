@@ -149,9 +149,10 @@ const faJSON = {
   "Period Date": "تاریخ انجام معاینات",
   "Period Subunit": "واحد محل خدمت",
 
-  // Questions
+  // Question Groups
   "Question Groups": "گروه سوالات",
   "List of all question groups": "لیست همه گروه های سوالات",
+  "Back to question groups": "بازگشت به گروه سوالات",
 
   "Add period": "افزودن دوره",
   "Edit period": "ویرایش دوره",
@@ -164,6 +165,19 @@ const faJSON = {
   "Define subquestions": "لیست سوالات",
   "Set users access": "تعیین دسترسی‌ها",
   "Question group access list": "دسترسی‌های کاربری گروه سوالات {{questionGroup}}",
+
+  // Questions
+  "Questions": "سوالات",
+  "Questions of": "سوالات گروه {{questionGroup}}",
+  "List of questions of question group": "لیست همه سوالات گروه {{questionGroup}}",
+
+  "Add question": "افزودن سوال",
+  "Edit question": "ویرایش سوال",
+  "Delete question": "حذف سوال",
+
+  "Question Title": "متن سوال",
+  "Question Type": "نوع سوال",
+  "Question Sort": "ترتیب نمایش",
 
 
   // Form fields

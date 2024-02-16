@@ -18,7 +18,7 @@ Coded by www.creative-tim.com
 import { useEffect, useMemo, useState } from "react";
 
 // React Router DOM componenets
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 
 // Page components
 import ActionCell from "../components/ActionCell";
@@ -39,7 +39,6 @@ import { useTranslation } from "react-i18next";
 import queryString from "query-string";
 import useTableFilter from "./useTableFilter";
 
-
 const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount = 10 }) => {
 
   // I18n
@@ -52,13 +51,17 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
   const [data, setData] = useState({ Data: [], Total: 0 });
 
   // Async methods and handlers
+  const { questionGroupId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParamsIncludeNeededKeys = every(['Page', 'PageSize', 'Filter', 'Sort'], key => includes(keys(Object.fromEntries(searchParams)), key));
 
   const [fetching, setFetching] = useState(false);
   const fetchDataAsync = async () => {
-    const response = await axios('/api/QuestionPanel/GroupQuestion?'.concat(
-      queryString.stringify(Object.fromEntries(searchParams))
+    const response = await axios('/api/QuestionPanel/List?'.concat(
+      queryString.stringify({
+        CategoryId: questionGroupId,
+        ...Object.fromEntries(searchParams),
+      })
     ))
     setData(response.data);
     setFetching(false);
@@ -87,13 +90,9 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
 
   const columns = [
     { Header: '#', accessor: "row", width: 10, noFilter: true },
-    { Header: t("Question Group Code"), accessor: "CategoryCode", width: 'auto' },
-    { Header: t("Question Group Name"), accessor: "CategoryName", width: 'auto' },
-    {
-      Header: t("Question Group Question Count"),
-      accessor: "CountQuestion",
-      width: 'auto'
-    },
+    { Header: t("Question Title"), accessor: "QuestionTitle", width: 'auto' },
+    { Header: t("Question Type"), accessor: "QuestionTypeName", width: 'auto' },
+    { Header: t("Question Sort"), accessor: "SortNumber", width: 'auto', noFilter: true },
     { Header: t("Action"), accessor: "action", width: 'auto', noFilter: true },
   ];
 
@@ -116,7 +115,7 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
         ...(!fetching ? map(data.Data, (row, index) => ({
           row: ((Number(searchParams.get('Page')) - 1) * Number(searchParams.get('PageSize'))) + (index + 1),
           ...row,
-          action: <ActionCell row={row} {...getRowActionCellProps(row)} />
+          action: <ActionCell {...getRowActionCellProps(row)} />
         })) : [])
       ]
     }),

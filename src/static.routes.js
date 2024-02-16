@@ -45,6 +45,9 @@ import Error404 from "pages/error/404";
 import Login from "pages/auth/login";
 import SelectRole from "pages/auth/select-role";
 
+// Panel routes
+import dynamicRoutes from "./dynamic.routes";
+
 const routes = [
   {
     name: "Dashboard",
@@ -65,6 +68,9 @@ const routes = [
     route: "/login",
     component: <Login />,
   },
+
+  ...dynamicRoutes,
+
   {
     name: "404",
     key: "404",

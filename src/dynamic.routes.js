@@ -6,6 +6,7 @@ import SubUnitsList from "pages/dashboard/subunits/subunits-list";
 import PeriodsList from "pages/dashboard/periods/periods-list";
 import QuestionGroupsList from "pages/dashboard/question-groups/question-groups-list";
 import QuestionsList from "pages/dashboard/questions/questions-list";
+import AnswerTemplatesList from "pages/dashboard/answer-templates/answer-templates-list";
 
 const dynamicRoutes = [
     {
@@ -99,6 +100,11 @@ const dynamicRoutes = [
         protected: true,
         route: "/panel/enginQuestion/create-question/:questionGroupId/:questionGroupName",
         component: <QuestionsList />
+    },
+    {
+        protected: true,
+        route: "/panel/baseInfo/templateAnswer",
+        component: <AnswerTemplatesList />
     },
 ]
 export default dynamicRoutes;

@@ -149,14 +149,21 @@ const faJSON = {
   "Period Date": "تاریخ انجام معاینات",
   "Period Subunit": "واحد محل خدمت",
 
+  // Answer Templates
+  "Answer Templates": "قالب‌های جواب",
+  "List of all answer templates": "لیست همه قالب‌های جواب",
+
+  "Add template": "افزودن قالب جواب",
+  "Edit template": "ویرایش قالب جواب",
+  "Delete template": "حذف قالب جواب",
+
+  "Template Title": "عنوان قالب",
+  "Template Question Group Name": "گروه سوالات",
+
   // Question Groups
   "Question Groups": "گروه سوالات",
   "List of all question groups": "لیست همه گروه های سوالات",
   "Back to question groups": "بازگشت به گروه سوالات",
-
-  "Add period": "افزودن دوره",
-  "Edit period": "ویرایش دوره",
-  "Delete period": "حذف دوره",
 
   "Question Group Code": "شناسه",
   "Question Group Name": "عنوان",

@@ -19,11 +19,6 @@ import { useState } from "react";
 // @mui material components
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
-import Icon from "@mui/material/Icon";
-import Tooltip from "@mui/material/Tooltip";
-
-// React router
-import { Link, useParams } from "react-router-dom";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";
@@ -39,7 +34,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "components/DataTable";
 
 // Component dependencies
-import QuestionFormDialog from "./components/QuestionFormDialog";
+import AnswerTemplateFormDialog from "./components/AnswerTemplateFormDialog";
 import useTableData from "./data/useTableData";
 
 // I18n 
@@ -58,13 +53,10 @@ import { useSnackbar } from "notistack";
 import Swal from "sweetalert2";
 
 
-function QuestionsList() {
+function AnswerTemplatesList() {
 
   // I18n
   const { t } = useTranslation();
-
-  // React router query params
-  const { questionGroupName } = useParams();
 
   // Snackbar handlers
   const { enqueueSnackbar } = useSnackbar();
@@ -79,7 +71,7 @@ function QuestionsList() {
         switch (action) {
           case 'edit':
             try {
-              const response = await axios('/api/QuestionPanel/'.concat(row.QuestionId));
+              const response = await axios('/api/DurationPanel/'.concat(row.DurationId));
               setFormDialogProps({ open: true, initialValues: response.data });
             } catch (error) {
               enqueueSnackbar(t("An error occurred"), { variant: 'soft', color: 'error' })
@@ -107,7 +99,7 @@ function QuestionsList() {
               try {
                 const response = await axios({
                   method: 'DELETE',
-                  url: '/api/QuestionPanel/'.concat(row.QuestionId),
+                  url: '/api/DurationPanel/'.concat(row.DurationId),
                   data: row
                 })
 
@@ -131,34 +123,20 @@ function QuestionsList() {
 
   return (
     <>
-      <Helmet title={t("Questions of", { questionGroup: questionGroupName })} />
+      <Helmet title={t("Answer Templates")} />
 
       <DashboardLayout>
         <DashboardNavbar />
         <SoftBox my={3}>
           <Card>
             <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
-              <SoftBox display="flex" gap={2}>
-                <Tooltip placement="top" title={t("Back to question groups")}>
-                  <SoftButton
-                    variant="outlined"
-                    color="dark"
-                    circular
-                    iconOnly
-                    component={Link}
-                    to="/panel/enginQuestion/question"
-                  >
-                    <Icon>arrow_forward</Icon>
-                  </SoftButton>
-                </Tooltip>
-                <SoftBox lineHeight={1}>
-                  <SoftTypography variant="h5" fontWeight="medium">
-                    {t("Questions of", { questionGroup: questionGroupName })}
-                  </SoftTypography>
-                  <SoftTypography variant="button" fontWeight="regular" color="text">
-                    {t("List of questions of question group", { questionGroup: questionGroupName })}
-                  </SoftTypography>
-                </SoftBox>
+              <SoftBox lineHeight={1}>
+                <SoftTypography variant="h5" fontWeight="medium">
+                  {t("Answer Templates")}
+                </SoftTypography>
+                <SoftTypography variant="button" fontWeight="regular" color="text">
+                  {t("List of all answer templates")}
+                </SoftTypography>
               </SoftBox>
               <Stack spacing={1} direction="row">
                 <SoftButton
@@ -167,7 +145,7 @@ function QuestionsList() {
                   size="small"
                   onClick={() => setFormDialogProps({ open: true })}
                 >
-                  + {t("Add question")}
+                  + {t("Add template")}
                 </SoftButton>
               </Stack>
             </SoftBox>
@@ -184,7 +162,7 @@ function QuestionsList() {
         <Footer />
       </DashboardLayout>
 
-      {/* <QuestionFormDialog
+      <AnswerTemplateFormDialog
         {...formDialogProps}
         onClose={() => setFormDialogProps({ open: false })}
         onSubmitSuccess={response => {
@@ -192,9 +170,9 @@ function QuestionsList() {
           setFormDialogProps({ open: false })
           refetch();
         }}
-      /> */}
+      />
     </>
   );
 }
 
-export default QuestionsList;
+export default AnswerTemplatesList;

@@ -31,7 +31,7 @@ import SubUnitSelect from "./components/SubUnitSelect";
 import useValidationSchema from "./validation/useValidationSchema";
 
 
-function PeriodFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...props }) {
+function AnswerTemplateFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...props }) {
 
     // I18n
     const { t } = useTranslation();
@@ -188,11 +188,11 @@ function PeriodFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...pr
 }
 
 // Typechecking props
-PeriodFormDialog.propTypes = {
+AnswerTemplateFormDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func,
     onSubmitSuccess: PropTypes.func,
     initialValues: PropTypes.object,
 };
 
-export default PeriodFormDialog;
+export default AnswerTemplateFormDialog;

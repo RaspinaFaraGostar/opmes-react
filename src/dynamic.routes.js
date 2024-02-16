@@ -4,7 +4,7 @@ import EnumsList from "pages/dashboard/enums/enums-list";
 import UnitsList from "pages/dashboard/units/units-list";
 import SubUnitsList from "pages/dashboard/subunits/subunits-list";
 import PeriodsList from "pages/dashboard/periods/periods-list";
-import QuestionsList from "pages/dashboard/questions/questions-list";
+import QuestionGroupsList from "pages/dashboard/question-groups/question-groups-list";
 
 const dynamicRoutes = [
     {
@@ -92,7 +92,7 @@ const dynamicRoutes = [
     {
         protected: true,
         route: "/panel/enginQuestion/question",
-        component: <QuestionsList />
+        component: <QuestionGroupsList />
     },
 ]
 export default dynamicRoutes;

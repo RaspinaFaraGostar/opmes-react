@@ -37,9 +37,9 @@ function ActionCell({ onClick = () => { } }) {
         variant="body1"
         color="secondary"
         sx={{ cursor: "pointer", lineHeight: 0 }}
-        onClick={(event) => onClick(event, 'edit')}
+        onClick={(event) => onClick(event, 'questions')}
       >
-        <Tooltip title={t("Define Subquestions")}>
+        <Tooltip title={t("Define subquestions")}>
           <Icon>quiz</Icon>
         </Tooltip>
       </SoftTypography>
@@ -47,7 +47,7 @@ function ActionCell({ onClick = () => { } }) {
         variant="body1"
         color="secondary"
         sx={{ cursor: "pointer", lineHeight: 0 }}
-        onClick={(event) => onClick(event, 'delete')}
+        onClick={(event) => onClick(event, 'access')}
       >
         <Tooltip title={t("Set users access")}>
           <Icon>key</Icon>

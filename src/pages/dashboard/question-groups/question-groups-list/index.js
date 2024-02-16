@@ -14,6 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // React componenets and hooks
+import { useState } from "react";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -39,18 +40,25 @@ import { useTranslation } from "react-i18next";
 // React helmet
 import { Helmet } from "react-helmet";
 
+// Component dependencies
+import QuestionGroupAccessDialog from "./components/QuestionGroupAccessDialog";
 
-function QuestionsList() {
+
+function QuestionGroupsList() {
 
   // I18n
   const { t } = useTranslation();
 
+  // Access list dialog
+  const [accessDialogProps, setAccessDialogProps] = useState({ open: false });
+
   // DataTable
   const { data, total, currentPage, pageSize, changePage } = useTableData({
-    getRowActionCellProps: () => ({
+    getRowActionCellProps: (row) => ({
       onClick: async (event, action) => {
         switch (action) {
-          
+          case 'access':
+            setAccessDialogProps({ open: true, questionGroup: row })
         }
       }
     })
@@ -58,7 +66,7 @@ function QuestionsList() {
 
   return (
     <>
-      <Helmet title={t("Questions")} />
+      <Helmet title={t("Question Groups")} />
 
       <DashboardLayout>
         <DashboardNavbar />
@@ -67,10 +75,10 @@ function QuestionsList() {
             <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
               <SoftBox lineHeight={1}>
                 <SoftTypography variant="h5" fontWeight="medium">
-                  {t("Questions")}
+                  {t("Question Groups")}
                 </SoftTypography>
                 <SoftTypography variant="button" fontWeight="regular" color="text">
-                  {t("List of all questions")}
+                  {t("List of all question groups")}
                 </SoftTypography>
               </SoftBox>
             </SoftBox>
@@ -87,8 +95,13 @@ function QuestionsList() {
         <Footer />
       </DashboardLayout>
 
+
+      <QuestionGroupAccessDialog
+        {...accessDialogProps}
+        onClose={() => setAccessDialogProps({ open: false })}
+      />
     </>
   );
 }
 
-export default QuestionsList;
+export default QuestionGroupsList;

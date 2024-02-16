@@ -39,9 +39,6 @@ import { useTranslation } from "react-i18next";
 import queryString from "query-string";
 import useTableFilter from "./useTableFilter";
 
-// Date-fns methods
-import format from "date-fns-jalali/format";
-
 
 const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount = 10 }) => {
 
@@ -90,10 +87,10 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
 
   const columns = [
     { Header: '#', accessor: "row", width: 10, noFilter: true },
-    { Header: t("Category Code"), accessor: "CategoryCode", width: 'auto' },
-    { Header: t("Category Name"), accessor: "CategoryName", width: 'auto' },
+    { Header: t("Question Group Code"), accessor: "CategoryCode", width: 'auto' },
+    { Header: t("Question Group Name"), accessor: "CategoryName", width: 'auto' },
     {
-      Header: t("Category Question Count"),
+      Header: t("Question Group Question Count"),
       accessor: "CountQuestion",
       width: 'auto'
     },

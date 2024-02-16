@@ -30,7 +30,7 @@ import includes from "lodash/includes";
 
 
 
-function QuestionGroupAccessDialog({ open, onClose, questionGroup, ...props }) {
+function QuestionGroupAccessDialog({ open, onClose, questionGroup, onSubmitSuccess, ...props }) {
 
     // I18n
     const { t } = useTranslation();
@@ -43,10 +43,34 @@ function QuestionGroupAccessDialog({ open, onClose, questionGroup, ...props }) {
     const questionGroupId = useDebounce(questionGroup?.GroupQuestionId, open ? 0 : theme.transitions.duration.leavingScreen)
 
     // FormData
+    const [submitting, setSubmitting] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
     const handleToggleAccess = id => setSelectedIds(
         includes(selectedIds, id) ? filter(selectedIds, itm => itm != id) : [...selectedIds, id]
     );
+
+    const submitAsync = async () => {
+        try {
+            const response = await axios({
+                method: 'POST',
+                url: '/api/QuestionGroupPostPanel/Create',
+                data: {
+                    E_QuestionGroupId: questionGroupId,
+                    E_PostIds: selectedIds
+                }
+            })
+
+            onSubmitSuccess && onSubmitSuccess(response.data);
+        } catch (error) {
+            throw error;
+        } finally {
+            setSubmitting(false);
+        }
+    }
+
+    useMemo(() => {
+        submitting && submitAsync();
+    }, [submitting])
 
     // Data
     const [data, setData] = useState([]);
@@ -91,6 +115,13 @@ function QuestionGroupAccessDialog({ open, onClose, questionGroup, ...props }) {
             onClose={onClose}
             fullWidth
             maxWidth="sm"
+            PaperProps={{
+                component: 'form',
+                onSubmit: e => {
+                    e.preventDefault();
+                    setSubmitting(true);
+                }
+            }}
         >
             <DialogTitle>{t("Question group access list", { questionGroup: questionGroup?.CategoryName })}</DialogTitle>
             <DialogCloseButton onClick={onClose} />
@@ -123,7 +154,7 @@ function QuestionGroupAccessDialog({ open, onClose, questionGroup, ...props }) {
             </DialogContent>
             <DialogActions>
                 <SoftButton type="button" variant="text" color="dark" onClick={onClose}>{t("Cancel")}</SoftButton>
-                <SoftButton type="submit" variant="gradient" color="info">{t("Save")}</SoftButton>
+                <SoftButton type="submit" variant="gradient" color="info" disabled={submitting}>{t("Save")}</SoftButton>
             </DialogActions>
         </Dialog>
     )
@@ -134,6 +165,7 @@ QuestionGroupAccessDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func,
     questionGroup: PropTypes.object,
+    onSubmitSuccess: PropTypes.func
 };
 
 export default QuestionGroupAccessDialog;

@@ -43,11 +43,17 @@ import { Helmet } from "react-helmet";
 // Component dependencies
 import QuestionGroupAccessDialog from "./components/QuestionGroupAccessDialog";
 
+// Notistack
+import { useSnackbar } from "notistack";
+
 
 function QuestionGroupsList() {
 
   // I18n
   const { t } = useTranslation();
+
+  // Snackbar handlers
+  const { enqueueSnackbar } = useSnackbar();
 
   // Access list dialog
   const [accessDialogProps, setAccessDialogProps] = useState({ open: false });
@@ -99,6 +105,10 @@ function QuestionGroupsList() {
       <QuestionGroupAccessDialog
         {...accessDialogProps}
         onClose={() => setAccessDialogProps({ open: false })}
+        onSubmitSuccess={response => {
+          enqueueSnackbar(response, { variant: 'soft', icon: 'check', color: 'success' });
+          setAccessDialogProps({ open: false });
+        }}
       />
     </>
   );

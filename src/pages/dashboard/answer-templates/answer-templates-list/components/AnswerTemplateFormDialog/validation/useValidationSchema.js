@@ -10,15 +10,10 @@ const useValidationSchema = () => {
 
     return Yup.object().shape({
 
-        // Period Title
+        // Template Title
         Title: Yup
-            .string(t('The field format is invalid', { field: t("Period Name") }))
-            .required(t('The field is required', { field: t("Period Name") })),
-
-        // Period Code
-        Durationumber: Yup
-            .number(t('The field format is invalid', { field: t("Period Number") }))
-            .required(t('The field is required', { field: t("Period Number") })),
+            .string(t('The field format is invalid', { field: t("Template Title") }))
+            .required(t('The field is required', { field: t("Template Title") })),
 
     });
 }

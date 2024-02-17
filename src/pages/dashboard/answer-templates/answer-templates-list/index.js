@@ -71,7 +71,7 @@ function AnswerTemplatesList() {
         switch (action) {
           case 'edit':
             try {
-              const response = await axios('/api/DurationPanel/'.concat(row.DurationId));
+              const response = await axios('/api/TemplateAnswerPanel/'.concat(row.TemplateAnswerId));
               setFormDialogProps({ open: true, initialValues: response.data });
             } catch (error) {
               enqueueSnackbar(t("An error occurred"), { variant: 'soft', color: 'error' })
@@ -99,7 +99,7 @@ function AnswerTemplatesList() {
               try {
                 const response = await axios({
                   method: 'DELETE',
-                  url: '/api/DurationPanel/'.concat(row.DurationId),
+                  url: '/api/TemplateAnswerPanel/'.concat(row.TemplateAnswerId),
                   data: row
                 })
 

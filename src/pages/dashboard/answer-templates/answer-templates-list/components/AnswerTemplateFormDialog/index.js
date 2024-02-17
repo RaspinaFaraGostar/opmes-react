@@ -25,9 +25,8 @@ import axios, { AxiosError } from "axios";
 import { Formik } from 'formik';
 
 // Component dependencies
-import { DatePicker } from "@mui/x-date-pickers";
 import InputHelperText from "components/InputHelperText";
-import SubUnitSelect from "./components/SubUnitSelect";
+import QuestionGroupSelect from "./components/QuestionGroupSelect";
 import useValidationSchema from "./validation/useValidationSchema";
 
 
@@ -41,15 +40,10 @@ function AnswerTemplateFormDialog({ open, onClose, onSubmitSuccess, initialValue
 
     // Form initial values
     const getInitialData = () => ({
-        DurationId: '',
-        Durationumber: '',
+        TemplateAnswerId: null,
+        E_CategoryId: null,
         Title: '',
-        SubUnitId: null,
-        FullDate: null,
-        ...(initialValues && {
-            ...initialValues,
-            FullDate: new Date(initialValues.FullDate)
-        })
+        ...initialValues,
     });
     const [data, setData] = useState(getInitialData());
 
@@ -63,7 +57,7 @@ function AnswerTemplateFormDialog({ open, onClose, onSubmitSuccess, initialValue
     // Transform data to post data
     const transform = data => ({
         ...data,
-        SubUnitId: data.SubUnitId?.UnitId,
+        E_CategoryId: data.E_CategoryId?.EnumId,
     })
 
     return (
@@ -77,8 +71,8 @@ function AnswerTemplateFormDialog({ open, onClose, onSubmitSuccess, initialValue
                 async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         const response = await axios({
-                            method: values.DurationId ? 'PUT' : 'POST',
-                            url: values.DurationId ? '/api/DurationPanel/Edit' : '/api/DurationPanel/Create',
+                            method: values.TemplateAnswerId ? 'PUT' : 'POST',
+                            url: values.TemplateAnswerId ? '/api/TemplateAnswerPanel/Edit' : '/api/TemplateAnswerPanel/Create',
                             data: transform(values)
                         })
 
@@ -117,7 +111,7 @@ function AnswerTemplateFormDialog({ open, onClose, onSubmitSuccess, initialValue
                         onSubmit: handleSubmit,
                     }}
                 >
-                    <DialogTitle>{t(values.DurationId ? "Edit period" : "Add period")}</DialogTitle>
+                    <DialogTitle>{t(values.TemplateAnswerId ? "Edit template" : "Add template")}</DialogTitle>
                     <DialogCloseButton onClick={onClose} />
                     <DialogContent>
                         <Collapse in={Boolean(errors.submit)}>
@@ -127,53 +121,27 @@ function AnswerTemplateFormDialog({ open, onClose, onSubmitSuccess, initialValue
                         </Collapse>
                         <Grid container spacing={2} alignItems="center">
                             <Grid item xs={12} md={6}>
-                                <SoftInput
-                                    name="Durationumber"
-                                    type="text"
-                                    placeholder={t("Period Number")}
-                                    value={values.Durationumber ?? ''}
-                                    onChange={handleChange}
-                                    error={Boolean(errors.Durationumber)}
+                                <QuestionGroupSelect
+                                    name="E_CategoryId"
+                                    value={values.E_CategoryId ?? null}
+                                    onChange={(event, value) => setFieldValue("E_CategoryId", value)}
+                                    textFieldProps={{
+                                        placeholder: t("Template Question Group Name"),
+                                        error: Boolean(errors.E_CategoryId)
+                                    }}
                                 />
-                                {errors.Durationumber && <InputHelperText color="error">{errors.Durationumber}</InputHelperText>}
+                                {errors.E_CategoryId && <InputHelperText color="error">{errors.E_CategoryId}</InputHelperText>}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <SoftInput
                                     name="Title"
                                     type="text"
-                                    placeholder={t("Period Name")}
+                                    placeholder={t("Template Title")}
                                     value={values.Title ?? ''}
                                     onChange={handleChange}
                                     error={Boolean(errors.Title)}
                                 />
                                 {errors.Title && <InputHelperText color="error">{errors.Title}</InputHelperText>}
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <SubUnitSelect
-                                    name="SubUnitId"
-                                    value={values.SubUnitId ?? null}
-                                    onChange={(event, value) => setFieldValue("SubUnitId", value)}
-                                    textFieldProps={{
-                                        placeholder: t("Period Subunit"),
-                                        error: Boolean(errors.SubUnitId)
-                                    }}
-                                />
-                                {errors.SubUnitId && <InputHelperText color="error">{errors.SubUnitId}</InputHelperText>}
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <DatePicker
-                                    name="FullDate"
-                                    value={values.FullDate ?? null}
-                                    onChange={value => setFieldValue("FullDate", value)}
-                                    slotProps={{
-                                        textField: {
-                                            fullWidth: true,
-                                            placeholder: t("Period Date"),
-                                            error: Boolean(errors.FullDate)
-                                        }
-                                    }}
-                                />
-                                {errors.FullDate && <InputHelperText color="error">{errors.FullDate}</InputHelperText>}
                             </Grid>
                         </Grid>
                     </DialogContent>

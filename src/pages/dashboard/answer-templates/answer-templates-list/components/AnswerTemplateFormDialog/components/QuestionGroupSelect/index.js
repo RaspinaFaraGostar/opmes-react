@@ -7,18 +7,18 @@ import TextField from '@mui/material/TextField';
 // Application components
 import AsyncSelect from "components/AsyncSelect";
 
-function UnitSelect({ textFieldProps = {}, ...props }) {
+function QuestionGroupSelect({ textFieldProps = {}, ...props }) {
     return (
         <AsyncSelect
-            url="/api/SubUnitPanel/SubUnitAll"
-            getOptionLabel={(option) => option.UnitName ?? ''}
+            url="/api/EnumPanel/getByEnumType?EnumType=Category"
+            getOptionLabel={(option) => option.EnumName ?? ''}
             isOptionEqualToValue={(option, value) => {
                 if (!value) return false;
 
                 if (typeof value === "string")
-                    return option.UnitId == value;
+                    return option.EnumId == value;
 
-                return option.UnitId == value.UnitId;
+                return option.EnumId == value.EnumId;
             }}
             renderInput={(params) => (
                 <TextField
@@ -31,8 +31,8 @@ function UnitSelect({ textFieldProps = {}, ...props }) {
     );
 }
 
-UnitSelect.propTypes = {
+QuestionGroupSelect.propTypes = {
     textFieldProps: PropTypes.object,
 }
 
-export default UnitSelect;
+export default QuestionGroupSelect;

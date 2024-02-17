@@ -7,6 +7,7 @@ import PeriodsList from "pages/dashboard/periods/periods-list";
 import QuestionGroupsList from "pages/dashboard/question-groups/question-groups-list";
 import QuestionsList from "pages/dashboard/questions/questions-list";
 import AnswerTemplatesList from "pages/dashboard/answer-templates/answer-templates-list";
+import PatientsList from "pages/dashboard/patients/patients-list";
 
 const dynamicRoutes = [
     {
@@ -105,6 +106,13 @@ const dynamicRoutes = [
         protected: true,
         route: "/panel/baseInfo/templateAnswer",
         component: <AnswerTemplatesList />
+    },
+
+
+    {
+        protected: true,
+        route: "/panel/HealthMedicine/patient",
+        component: <PatientsList />
     },
 ]
 export default dynamicRoutes;

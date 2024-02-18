@@ -140,12 +140,17 @@ export default function App() {
       ...(children.length > 0 && {
         type: "collapse",
         collapse: map(children, subRoute => mapResponseRouteRecursively(subRoute, allRoutes))
-      })
+      }),
+      ...(children.length < 1 && route.Url && {
+        type: "collapse",
+        noCollapse: true,
+      }),
     });
   };
 
   const mapResponseRoutes = (routes) => {
-    return map(filter(routes, r => !r.ParentId), subRoute => mapResponseRouteRecursively(subRoute, routes));
+    console.log(routes);
+    return map(routes.length > 1 ? filter(routes, r => !r.ParentId) : routes, subRoute => mapResponseRouteRecursively(subRoute, routes));
   }
   const fetchDynamicRoutesAsync = async () => {
     const response = await axios('api/Permissions/AccessMenu');

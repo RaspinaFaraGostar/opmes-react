@@ -8,6 +8,8 @@ import QuestionGroupsList from "pages/dashboard/question-groups/question-groups-
 import QuestionsList from "pages/dashboard/questions/questions-list";
 import AnswerTemplatesList from "pages/dashboard/answer-templates/answer-templates-list";
 import PatientsList from "pages/dashboard/patients/patients-list";
+import PatientReportsList from "pages/dashboard/patient-reports/patient-reports-list";
+import DoctorAppointmentsList from "pages/dashboard/doctor-appointments/doctor-appointments-list";
 
 const dynamicRoutes = [
     {
@@ -113,6 +115,18 @@ const dynamicRoutes = [
         protected: true,
         route: "/panel/HealthMedicine/patient",
         component: <PatientsList />
+    },
+
+    {
+        protected: true,
+        route: "/panel/report/patient-rep",
+        component: <PatientReportsList />
+    },
+
+    {
+        protected: true,
+        route: "/panel/HealthMedicine/doctorVisit",
+        component: <DoctorAppointmentsList />
     },
 ]
 export default dynamicRoutes;

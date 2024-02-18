@@ -186,6 +186,26 @@ const faJSON = {
   "Question Type": "نوع سوال",
   "Question Sort": "ترتیب نمایش",
 
+  // Appointments
+  "Doctor Appointments": "ویزیت بیماران",
+  "List of all doctor appointments": "لیست همه بیماران ویزیت شده",
+
+  "Appointment examinations": "مشاهده معاینات",
+  "Appointment status": "{{status}}",
+
+  "Appointment Date": "تاریخ نوبت",
+  "Appointment is done": "تایید شده",
+
+  "Visit Patient Name": "بیمار",
+  "Visit Date": "تاریخ ویزیت",
+  "Visit Patient Father Name": "نام پدر بیمار",
+  "Visit Patient National ID": "شماره ملی بیمار",
+  "Visit Patient Born Date": "تاریخ تولد بیمار",
+  "Visit SubUnit": "شرکت",
+  "Visit Period": "دوره معاینه",
+  "Visit Patient Gender": "جنسیت بیمار",
+  "Visit Status": "وضعیت",
+
 
   // Form fields
   "Enum Name": "نام {{enum}}",

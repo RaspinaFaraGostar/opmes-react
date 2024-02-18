@@ -20,6 +20,9 @@ import { useMemo, useState } from "react";
 // React Router DOM componenets
 import { useLocation, useSearchParams } from "react-router-dom";
 
+// Soft UI Dashboard PRO React components
+import SoftBadge from "components/SoftBadge";
+
 // App components
 import useDataTableLoader from "components/DataTable/useDataTableLoader";
 
@@ -84,6 +87,12 @@ const useTableData = ({ loaderRowsCount = 10 }) => {
   //     })
   // }, [location])
 
+  const failed = (
+    <SoftBadge variant="contained" color="error" size="xs" badgeContent={t("Inactive")} container />
+  );
+  const success = (
+    <SoftBadge variant="contained" color="success" size="xs" badgeContent={t("Active")} container />
+  );
 
   const columns = [
     { Header: '#', accessor: "row", width: 10, noFilter: true },
@@ -99,7 +108,12 @@ const useTableData = ({ loaderRowsCount = 10 }) => {
     { Header: t("Patient Gender"), accessor: "GenderName", width: 'auto' },
     { Header: t("Patient Marital Status"), accessor: "MarriedName", width: 'auto' },
     { Header: t("Patient Children Count"), accessor: "Children", width: 'auto' },
-    { Header: t("Patient Category Name"), accessor: "CategoryName", width: 'auto' },
+    { 
+      Header: t("Patient Category Name"), 
+      accessor: "CategoryName", 
+      width: 'auto',
+      Cell: ({ value }) => typeof value == "boolean" ? (value ? success : failed) : value,
+    },
   ];
 
   // Get loader

@@ -206,6 +206,19 @@ const faJSON = {
   "Visit Patient Gender": "جنسیت بیمار",
   "Visit Status": "وضعیت",
 
+  // Patient Reports
+  "Patient Reports": "گزارشات معاینات",
+  "List of all patients reports": "لیست گزارشات بیماران",
+
+  "Patient Personel ID": "شماره پرسنلی",
+  "Patient FullName": "نام و نام خانوادگی",
+  "Patient National ID": "شماره ملی",
+  "Patient Birthday": "تاریخ تولد",
+  "Patient Gender": "جنسیت",
+  "Patient Marital Status": "وضعیت تاهل",
+  "Patient Children Count": "تعداد فرزاندان",
+  "Patient Category Name": "وضعیت آزمایش",
+
 
   // Form fields
   "Enum Name": "نام {{enum}}",

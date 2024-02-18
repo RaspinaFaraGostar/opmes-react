@@ -51,37 +51,31 @@ function PatientReportsList() {
 
   return (
     <>
-      <Helmet title={t("Patient FollowUps")} />
+      <Helmet title={t("Patient Reports")} />
 
       <DashboardLayout>
         <DashboardNavbar />
+
         <SoftBox my={3}>
-          <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
-            <SoftBox lineHeight={1}>
-              <SoftTypography variant="h5" fontWeight="medium">
-                {t("Patient FollowUps")}
-              </SoftTypography>
-              <SoftTypography variant="button" fontWeight="regular" color="text">
-                {t("List of all patients follow ups")}
-              </SoftTypography>
-            </SoftBox>
-          </SoftBox>
-
           <Card>
-            <Grid container>
-              <Grid item xs={12} md={3}>
+            <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
+              <SoftBox lineHeight={1}>
+                <SoftTypography variant="h5" fontWeight="medium">
+                  {t("Patient Reports")}
+                </SoftTypography>
+                <SoftTypography variant="button" fontWeight="regular" color="text">
+                  {t("List of all patients reports")}
+                </SoftTypography>
+              </SoftBox>
+            </SoftBox>
 
-              </Grid>
-              <Grid item xs={12} md={9}>
-                <DataTable
-                  table={data}
-                  totalCount={total}
-                  pageSize={pageSize}
-                  currentPage={currentPage}
-                  onPageChange={changePage}
-                />
-              </Grid>
-            </Grid>
+            <DataTable
+              table={data}
+              totalCount={total}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={changePage}
+            />
           </Card>
         </SoftBox>
         <Footer />

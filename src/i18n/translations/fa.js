@@ -90,7 +90,7 @@ const faJSON = {
   // Roles management
   "Roles management": "مدیریت نقش ها",
   "List of all system roles": "لیست همه نقش های تعریف شده در سامانه",
-  
+
   "Role Name": "عنوان",
   "Role Code": "عنوان لاتین",
   "Role Permissions": "دسترسی ها",
@@ -271,6 +271,22 @@ const faJSON = {
   "Need help?": "به کمک نیاز دارید؟",
   "Contact out support team 24/7": "با کارشناسان راسپینا ارتباط بگیرید.",
   "Contact support": "ارتباط با پشتیبانی",
+
+
+  // Examinations
+  "Expand patient details": "مشخصات بیمار",
+
+  // Patien info labels
+  "Patient Name": "نام",
+  "Patient Last Name": "نام خانوادگی",
+  "Patient Father Name": "نام پدر",
+  "Patient Born Location": "شهر محل تولد",
+  "Patient Education": "تحصیلات",
+  "Patient City": "شهر محل اقامت",
+  "Patient Address": "آدرس محل اقامت",
+  "Patient Tel": "تلفن",
+  "Patient SubUnit": "سازمان",
+  "Patient Mobile": "موبایل",
 };
 
 export default faJSON;

@@ -13,6 +13,9 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
+// React router components
+import { Link } from "react-router-dom";
+
 // @mui material components
 import Icon from "@mui/material/Icon";
 import Tooltip from "@mui/material/Tooltip";
@@ -42,7 +45,8 @@ function ActionCell({ row, onClick = () => { } }) {
         variant="body1"
         color="secondary"
         sx={{ cursor: "pointer", lineHeight: 0 }}
-        onClick={(event) => onClick(event, 'examinations')}
+        component={Link}
+        to={`/panel/HealthMedicine/HealthMedicinePage/:patientId/:periodId/:doctorAppointmentDtlId/1402-06-27/false`}
       >
         <Tooltip title={t("Appointment examinations")}>
           <span>

@@ -10,6 +10,7 @@ import AnswerTemplatesList from "pages/dashboard/answer-templates/answer-templat
 import PatientsList from "pages/dashboard/patients/patients-list";
 import PatientReportsList from "pages/dashboard/patient-reports/patient-reports-list";
 import DoctorAppointmentsList from "pages/dashboard/doctor-appointments/doctor-appointments-list";
+import Examinations from "pages/dashboard/examinations";
 
 const dynamicRoutes = [
     {
@@ -127,6 +128,12 @@ const dynamicRoutes = [
         protected: true,
         route: "/panel/HealthMedicine/doctorVisit",
         component: <DoctorAppointmentsList />
+    },
+
+    {
+        protected: true,
+        route: "/panel/HealthMedicine/HealthMedicinePage/:patientId/:periodId/:doctorAppointmentDtlId/1402-06-27/false",
+        component: <Examinations />
     },
 ]
 export default dynamicRoutes;

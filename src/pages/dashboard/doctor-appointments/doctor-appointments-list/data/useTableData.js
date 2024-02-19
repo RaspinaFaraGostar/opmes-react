@@ -93,10 +93,10 @@ const useTableData = ({ getRowActionCellProps = (row) => ({}), loaderRowsCount =
   }, [location])
 
   const failed = (
-    <SoftBadge variant="contained" color="error" size="xs" badgeContent={t("Inactive")} container />
+    <SoftBadge variant="contained" color="error" size="xs" badgeContent={t("Appointment Unchecked")} container />
   );
   const success = (
-    <SoftBadge variant="contained" color="success" size="xs" badgeContent={t("Active")} container />
+    <SoftBadge variant="contained" color="success" size="xs" badgeContent={t("Appointment Checked")} container />
   );
 
   const columns = [

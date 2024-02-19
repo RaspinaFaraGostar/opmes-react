@@ -46,7 +46,6 @@ import { Helmet } from "react-helmet";
 import { useSnackbar } from "notistack";
 
 // Sweetalert2 components
-import Swal from "sweetalert2";
 import SearchForm from "./components/SearchForm";
 
 
@@ -59,46 +58,25 @@ function DoctorAppointmentsList() {
   const { enqueueSnackbar } = useSnackbar();
 
   // DataTable
-  const { fetching, data, total, currentPage, pageSize, refetch, changePage } = useTableData({
+  const { data, total, currentPage, pageSize, refetch, changePage } = useTableData({
     getRowActionCellProps: row => ({
       onClick: async (event, action) => {
         switch (action) {
           case 'status':
-            const newSwal = Swal.mixin({
-              customClass: {
-                confirmButton: "button button-error",
-                cancelButton: "button button-text",
-              },
-              buttonsStyling: false,
-            });
+            try {
+              const response = await axios({
+                method: 'PUT',
+                url: '/api/DoctorAppointmentDtlPanel/SetVisit/'.concat(row.DoctorAppointmentDtlId)
+              })
 
-            const result = await newSwal.fire({
-              title: t("Are you sure?"),
-              text: t("You won't be able to revert this!"),
-              showCancelButton: true,
-              confirmButtonText: t("Confirm delete"),
-              cancelButtonText: t("Cancel"),
-              reverseButtons: true,
-            });
-
-            if (result.value) {
-              try {
-                const response = await axios({
-                  method: 'DELETE',
-                  url: '/api/DoctorAppointmentDtlPanel/SetVisit/'.concat(row.DurationId),
-                  data: row
-                })
-
-                enqueueSnackbar(response.data, { variant: 'soft', icon: 'check', color: 'success' });
-                refetch();
-              } catch (error) {
-                if (error instanceof AxiosError) {
-                  if (error.response.status == 409) {
-                    enqueueSnackbar(error.response.data.Message, { variant: 'soft', icon: 'close', color: 'error' });
-                  }
+              enqueueSnackbar(response.data, { variant: 'soft', icon: 'check', color: 'success' });
+              refetch();
+            } catch (error) {
+              if (error instanceof AxiosError) {
+                if (error.response.status == 409) {
+                  enqueueSnackbar(error.response.data.Message, { variant: 'soft', icon: 'close', color: 'error' });
                 }
               }
-
             }
 
             return;

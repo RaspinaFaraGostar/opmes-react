@@ -16,6 +16,9 @@ Coded by www.creative-tim.com
 // React componenets and hooks
 import { useState } from "react";
 
+// React router components
+import { useParams } from "react-router-dom";
+
 // PropTypes
 import PropTypes from "prop-types";
 
@@ -56,13 +59,18 @@ import { useSnackbar } from "notistack";
 
 // Sweetalert2 components
 import Swal from "sweetalert2";
+
+// Query string comopnents
 import queryString from "query-string";
 
 
-function EnumsList({ type }) {
+function EnumsList() {
 
   // I18n
   const { t } = useTranslation();
+
+  // Query params
+  const { type } = useParams();
 
   // Snackbar handlers
   const { enqueueSnackbar } = useSnackbar();

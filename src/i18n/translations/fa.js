@@ -194,7 +194,7 @@ const faJSON = {
   "Appointment status": "{{status}}",
 
   "Appointment Date": "تاریخ نوبت",
-  "Appointment is done": "تایید شده",
+  "Appointment is done": "ویزیت شده",
 
   "Visit Patient Name": "بیمار",
   "Visit Date": "تاریخ ویزیت",
@@ -204,7 +204,11 @@ const faJSON = {
   "Visit SubUnit": "شرکت",
   "Visit Period": "دوره معاینه",
   "Visit Patient Gender": "جنسیت بیمار",
-  "Visit Status": "وضعیت",
+  "Visit Status": "وضعیت ویزیت",
+  "Appointment Checked": "ویزیت شده",
+  "Appointment Unchecked": "ویزیت نشده",
+  "Uncheck Appointment": "بازگردانی ویزیت",
+  "Check Appointment": "تایید ویزیت",
 
   // Patient Reports
   "Patient Reports": "گزارشات معاینات",

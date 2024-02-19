@@ -17,54 +17,35 @@ import { useState } from "react";
 
 // @mui material components
 import Card from "@mui/material/Card";
-import Grid from "@mui/material/Grid";
-import Switch from "@mui/material/Switch";
-import Stack from "@mui/material/Stack";
-import Icon from "@mui/material/Icon";
-import Divider from "@mui/material/Divider";
 import Collapse from "@mui/material/Collapse";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import Icon from "@mui/material/Icon";
 
 // Soft UI Dashboard PRO React components
+import SoftAvatar from "components/SoftAvatar";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
-import SoftAvatar from "components/SoftAvatar";
 
 // I18n
 import { useTranslation } from "react-i18next";
 
 // Date-fns
 import format from "date-fns-jalali/format";
-import SoftButton from "components/SoftButton";
+import { useExaminationsLayoutConfig } from "../../context";
 
 function Header() {
 
+  // I18n
   const { t } = useTranslation();
 
-  const [visible, setVisible] = useState(true);
+  // Layout config
+  const [{ patient }] = useExaminationsLayoutConfig();
+
+  const [visible, setVisible] = useState(false);
   const handleSetVisible = () => setVisible(!visible);
 
-  const DEMO = {
-    "PatientId": "60a5fe45-821b-40d8-8b8d-1236d900bc3d",
-    "Name": "ناصر",
-    "Family": "الهی",
-    "FatherName": "حمداله",
-    "GenderName": "مذکر",
-    "NationalId": "2992565466",
-    "PersonelId": "823671",
-    "Birthday": "1974-07-20T00:00:00",
-    "CityName": "کرمان",
-    "EducationName": "لیسانس",
-    "MarriedName": "کرمان",
-    "Children": 3,
-    "LifeCityName": "متاهل",
-    "Address": "",
-    "Tel": "",
-    "Mobile": "09134417251",
-    "SubUnitName": "شرکت ملی صنایع مس ایران",
-    "DurationName": "دوره اول",
-    "Created": "0001-01-01T00:00:00"
-  };
-
+  // Patient attributes defs
   const defs = [
     {
       label: t("Patient Name"),
@@ -143,16 +124,16 @@ function Header() {
               variant="rounded"
               size="xl"
               bgColor="light"
-            // shadow="sm"
+              shadow="sm"
             />
           </Grid>
           <Grid item>
             <SoftBox height="100%" mt={0.5} lineHeight={1}>
               <SoftTypography variant="h5" fontWeight="medium">
-                {DEMO["Name"] + ' ' + DEMO['Family']}
+                {patient["Name"] + ' ' + patient['Family']}
               </SoftTypography>
               <SoftTypography variant="button" color="text" fontWeight="medium">
-                {DEMO['NationalId'] || DEMO['PersonelId']}
+                {patient['NationalId'] || patient['PersonelId']}
               </SoftTypography>
             </SoftBox>
           </Grid>
@@ -184,7 +165,7 @@ function Header() {
                       {def.label}: &nbsp;
                     </SoftTypography>
                     <SoftTypography variant="button" fontWeight="regular" color="text">
-                      &nbsp;{typeof def.formatValue == "function" ? def.formatValue(DEMO[def.accessor]) : DEMO[def.accessor]}
+                      &nbsp;{typeof def.formatValue == "function" ? def.formatValue(patient[def.accessor]) : patient[def.accessor]}
                     </SoftTypography>
                   </SoftBox>
                 </Grid>

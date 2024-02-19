@@ -132,7 +132,7 @@ const dynamicRoutes = [
 
     {
         protected: true,
-        route: "/panel/HealthMedicine/HealthMedicinePage/:patientId/:periodId/:doctorAppointmentDtlId/1402-06-27/false",
+        route: "/panel/HealthMedicine/HealthMedicinePage/:patientId/:periodId/:doctorAppointmentDtlId/:trunDate/:isCheck",
         component: <Examinations />
     },
 ]

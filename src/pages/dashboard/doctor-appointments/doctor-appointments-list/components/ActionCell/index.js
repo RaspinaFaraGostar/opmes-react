@@ -17,7 +17,6 @@ Coded by www.creative-tim.com
 import { Link } from "react-router-dom";
 
 // @mui material components
-import Icon from "@mui/material/Icon";
 import Tooltip from "@mui/material/Tooltip";
 
 // Soft UI Dashboard PRO React components
@@ -32,8 +31,11 @@ import { useTranslation } from "react-i18next";
 
 // Icons
 import IconFlowSheet from "./components/icons/FlowSheet";
-import IconSourceNotes from "./components/icons/SourceNotes";
 import Preliminary from "./components/icons/Preliminary";
+import IconSourceNotes from "./components/icons/SourceNotes";
+
+// Date-fns
+import format from "date-fns-jalali/format";
 
 function ActionCell({ row, onClick = () => { } }) {
 
@@ -46,7 +48,7 @@ function ActionCell({ row, onClick = () => { } }) {
         color="secondary"
         sx={{ cursor: "pointer", lineHeight: 0 }}
         component={Link}
-        to={`/panel/HealthMedicine/HealthMedicinePage/:patientId/:periodId/:doctorAppointmentDtlId/1402-06-27/false`}
+        to={`/panel/HealthMedicine/HealthMedicinePage/${row.PatientId}/${row.DurationId}/${row.DoctorAppointmentDtlId}/${format(new Date(row.TrunDate), 'yyyy-MM-dd')}/${row.IsCheck}`}
       >
         <Tooltip title={t("Appointment examinations")}>
           <span>

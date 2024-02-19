@@ -149,7 +149,6 @@ export default function App() {
   };
 
   const mapResponseRoutes = (routes) => {
-    console.log(routes);
     return map(routes.length > 1 ? filter(routes, r => !r.ParentId) : routes, subRoute => mapResponseRouteRecursively(subRoute, routes));
   }
   const fetchDynamicRoutesAsync = async () => {

@@ -34,6 +34,9 @@ import { useTranslation } from "react-i18next";
 // Component dependencies
 import Header from "./components/Header";
 
+// Layout context
+import { ExaminationsLayoutConfigProvider } from "./context";
+
 function Examinations() {
 
   const { t } = useTranslation();
@@ -45,24 +48,26 @@ function Examinations() {
       <DashboardLayout>
         <DashboardNavbar />
         <SoftBox my={3}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} lg={3}>
-              <Sidenav />
-            </Grid>
-            <Grid item xs={12} lg={9}>
-              <SoftBox mb={3}>
-
+          <ExaminationsLayoutConfigProvider>
+            <Grid container spacing={3}>
+              <Grid item xs={12} lg={3}>
+                <Sidenav />
+              </Grid>
+              <Grid item xs={12} lg={9}>
                 <SoftBox mb={3}>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                      <Header />
-                    </Grid>
-                  </Grid>
-                </SoftBox>
 
-              </SoftBox>
+                  <SoftBox mb={3}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <Header />
+                      </Grid>
+                    </Grid>
+                  </SoftBox>
+
+                </SoftBox>
+              </Grid>
             </Grid>
-          </Grid>
+          </ExaminationsLayoutConfigProvider>
         </SoftBox>
         <Footer />
       </DashboardLayout>

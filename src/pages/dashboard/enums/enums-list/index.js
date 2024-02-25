@@ -64,13 +64,13 @@ import Swal from "sweetalert2";
 import queryString from "query-string";
 
 
-function EnumsList() {
+function EnumsList({ type }) {
 
   // I18n
   const { t } = useTranslation();
 
   // Query params
-  const { type } = useParams();
+  // const { type } = useParams();
 
   // Snackbar handlers
   const { enqueueSnackbar } = useSnackbar();

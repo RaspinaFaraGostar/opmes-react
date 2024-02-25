@@ -13,6 +13,9 @@ import DoctorAppointmentsList from "pages/dashboard/doctor-appointments/doctor-a
 import Examinations from "pages/dashboard/examinations";
 import BMIForm from "pages/dashboard/examinations/bmi-form";
 
+// Lodash helper methods
+import map from "lodash/map";
+
 const dynamicRoutes = [
     {
         protected: true,
@@ -26,57 +29,39 @@ const dynamicRoutes = [
     },
 
 
-
-    // Enums routes
-    {
+    // Rregister all enum route keys
+    ...(map([
+        'City',
+        'Hospital',
+        'Education',
+        'Speciality',
+        'MedicineTitle',
+        'Category',
+        'QuestionType',
+        'UnitType',
+        'Post',
+        'ThoothSideChild',
+        'ThoothSideYoung',
+        'ToothState',
+        'Operation',
+        'Result',
+        'BreathingSystem',
+        'Married',
+        'ImagingStatuse',
+        'ImagingType',
+        'ECGResultType',
+        'VFResultNormal',
+        'ColorVResult',
+        'Gender',
+        'LBC_Type',
+        'LAC_Type',
+        'RBC_Type',
+        'RAC_Type',
+    ], (key) => ({
         protected: true,
-        route: "/panel/baseInfo/enum/City",
-        component: <EnumsList type="City" />
-    },
-    {
-        protected: true,
-        route: "/panel/baseInfo/enum/Hospital",
-        component: <EnumsList type="Hospital" />
-    },
-    {
-        protected: true,
-        route: "/panel/baseInfo/enum/Education",
-        component: <EnumsList type="Education" />
-    },
-    {
-        protected: true,
-        route: "/panel/baseInfo/enum/Speciality",
-        component: <EnumsList type="Speciality" />
-    },
-    {
-        protected: true,
-        route: "/panel/baseInfo/enum/MedicineTitle",
-        component: <EnumsList type="MedicineTitle" />
-    },
-
-    {
-        protected: true,
-        route: "/panel/baseInfo/enum/Category",
-        component: <EnumsList type="Category" />
-    },
-
-    {
-        protected: true,
-        route: "/panel/baseInfo/enum/QuestionType",
-        component: <EnumsList type="QuestionType" />
-    },
-
-
-    {
-        protected: true,
-        route: "/panel/baseInfo/enum/UnitType",
-        component: <EnumsList type="UnitType" />
-    },
-    {
-        protected: true,
-        route: "/panel/baseInfo/enum/Post",
-        component: <EnumsList type="Post" />
-    },
+        route: "/panel/baseInfo/enum/".concat(key),
+        component: <EnumsList type={key} />
+    }))),
 
 
     {

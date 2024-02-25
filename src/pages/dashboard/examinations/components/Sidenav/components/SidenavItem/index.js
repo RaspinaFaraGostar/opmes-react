@@ -20,30 +20,40 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 // @mui material components
-import Icon from "@mui/material/Icon";
 import Collapse from "@mui/material/Collapse";
+import Icon from "@mui/material/Icon";
 
 // Soft UI Dashboard PRO React components
+import SoftBadge from "components/SoftBadge";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
-import SoftBadge from "components/SoftBadge";
 
 // I18n
 import { useTranslation } from "react-i18next";
 
+// React router dom components
+import { Link, useParams } from "react-router-dom";
+
 
 function SidenavItem({ item, ...props }) {
 
+    // I18n
     const { t } = useTranslation();
 
+    // Current location
+    const params = useParams();
+
+    // Expanded state
     const [expanded, setExpanded] = useState(false);
+
+    // Render helper methods
     const hasChildren = item.children && item.children.length > 0;
+    const isActive = params.groupQuestionId && params.groupQuestionId == item.GroupQuestionId;
+    const basePath = `/panel/HealthMedicine/HealthMedicinePage/${params.patientId}/${params.periodId}/${params.doctorAppointmentDtlId}/${params.trunDate}/${params.isCheck}`;
 
     return (
         <SoftBox {...props}>
             <SoftTypography
-                // component="a"
-                // href={`#${href}`}
                 variant="button"
                 fontWeight="regular"
                 color="text"
@@ -69,8 +79,20 @@ function SidenavItem({ item, ...props }) {
                     "&:hover": {
                         backgroundColor: light.main,
                     },
+
+                    ...(isActive && {
+                        backgroundColor: light.main
+                    })
                 })}
-                onClick={() => hasChildren && setExpanded(!expanded)}
+
+                {...(hasChildren && {
+                    onClick: () => setExpanded(!expanded)
+                })}
+
+                {...(!hasChildren && {
+                    component: Link,
+                    to: [basePath, item.GroupQuestionId, item.CategoryCode].join('/')
+                })}
             >
                 {/* <SoftBox mr={1.5} lineHeight={1}>
           <Document />
@@ -102,7 +124,7 @@ function SidenavItem({ item, ...props }) {
                     </SoftBox>
                 </Collapse>
             )}
-        </SoftBox>
+        </SoftBox >
     );
 }
 

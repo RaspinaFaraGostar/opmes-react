@@ -70,7 +70,6 @@ function SubUnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...p
             validateOnChange={false}
             onSubmit={
                 async (values, { setErrors, setStatus, setSubmitting }) => {
-                    console.log(values);
                     try {
                         const response = await axios({
                             method: values.SubUnitId ? 'PUT' : 'POST',

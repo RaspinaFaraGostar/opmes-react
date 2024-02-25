@@ -24,7 +24,7 @@ import { ThemeProvider } from "@mui/material/styles";
 
 // Mui-x Datepicker
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFnsJalali } from '@mui/x-date-pickers/AdapterDateFnsJalali'
+import { AdapterDateFnsJalali } from '@mui/x-date-pickers/AdapterDateFnsJalali';
 
 // React components
 import ProtectedRoute from "components/ProtectedRoute";
@@ -164,11 +164,11 @@ export default function App() {
 
       if (route.route) {
         return <Route
-          exact
+          exact={!route.children}
           path={route.route}
           element={route.protected ? <ProtectedRoute>{route.component}</ProtectedRoute> : route.component}
           key={route.key}
-        />;
+        >{route.children && getRoutes(route.children)}</Route>;
       }
 
       return null;

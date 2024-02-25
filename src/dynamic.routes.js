@@ -11,6 +11,7 @@ import PatientsList from "pages/dashboard/patients/patients-list";
 import PatientReportsList from "pages/dashboard/patient-reports/patient-reports-list";
 import DoctorAppointmentsList from "pages/dashboard/doctor-appointments/doctor-appointments-list";
 import Examinations from "pages/dashboard/examinations";
+import BMIForm from "pages/dashboard/examinations/bmi-form";
 
 const dynamicRoutes = [
     {
@@ -132,8 +133,13 @@ const dynamicRoutes = [
 
     {
         protected: true,
-        route: "/panel/HealthMedicine/HealthMedicinePage/:patientId/:periodId/:doctorAppointmentDtlId/:trunDate/:isCheck",
-        component: <Examinations />
+        route: "/panel/HealthMedicine/HealthMedicinePage/:patientId/:periodId/:doctorAppointmentDtlId/:trunDate/:isCheck/:groupQuestionId?",
+        component: <Examinations />,
+        children: [{
+            protected: true,
+            route: 'PatientBMI',
+            component: <BMIForm />
+        }]
     },
 ]
 export default dynamicRoutes;

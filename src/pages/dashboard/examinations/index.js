@@ -36,6 +36,7 @@ import Header from "./components/Header";
 
 // Layout context
 import { ExaminationsLayoutConfigProvider } from "./context";
+import { Outlet } from "react-router-dom";
 
 function Examinations() {
 
@@ -60,6 +61,10 @@ function Examinations() {
                     <Grid container spacing={3}>
                       <Grid item xs={12}>
                         <Header />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <Outlet />
                       </Grid>
                     </Grid>
                   </SoftBox>

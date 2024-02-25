@@ -26,9 +26,9 @@ import { Formik } from 'formik';
 
 // Component dependencies
 import InputHelperText from "components/InputHelperText";
-import useValidationSchema from "./validation/useValidationSchema";
-import UnitTypeSelect from "./components/UnitTypeSelect";
 import UnitSelect from "./components/UnitSelect";
+import UnitTypeSelect from "./components/UnitTypeSelect";
+import useValidationSchema from "./validation/useValidationSchema";
 
 
 function UnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...props }) {
@@ -75,7 +75,6 @@ function UnitFormDialog({ open, onClose, onSubmitSuccess, initialValues, ...prop
             validateOnChange={false}
             onSubmit={
                 async (values, { setErrors, setStatus, setSubmitting }) => {
-                    console.log(values);
                     try {
                         const response = await axios({
                             method: values.UnitId ? 'PUT' : 'POST',

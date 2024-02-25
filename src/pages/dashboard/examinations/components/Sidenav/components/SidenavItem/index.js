@@ -77,7 +77,16 @@ function SidenavItem({ item, ...props }) {
         </SoftBox> */}
                 {item.CategoryName}
 
-                <SoftBadge variant="contained" color="success" size="xs" badgeContent={t("Committed")} container />
+                {!hasChildren && (
+                    <SoftBadge
+                        variant="contained"
+                        color={item.IsCommit ? "success" : "error"}
+                        size="xs"
+                        badgeContent={item.IsCommit ? t("Committed") : t("Uncommit")}
+                        container
+                        sx={{ ml: 'auto' }}
+                    />
+                )}
 
                 {hasChildren && (
                     <SoftBox ml='auto' lineHeight={1}>

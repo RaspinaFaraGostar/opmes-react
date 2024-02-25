@@ -276,6 +276,10 @@ const faJSON = {
   // Examinations
   "Expand patient details": "مشخصات بیمار",
 
+  // Sidenav
+  "Committed": "تکمیل شده",
+  "Uncommit": "تکمیل نشده",
+
   // Patien info labels
   "Patient Name": "نام",
   "Patient Last Name": "نام خانوادگی",

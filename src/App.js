@@ -157,7 +157,7 @@ export default function App() {
     setAllRoutes([...staticRoutes, ...mapResponseRoutes(response.data)]);
   }
   const getRoutes = (routes) => {
-    return routes.map((route) => {
+    return routes.map((route, index) => {
       if (route.collapse) {
         return getRoutes(route.collapse);
       }
@@ -167,7 +167,7 @@ export default function App() {
           exact={!route.children}
           path={route.route}
           element={route.protected ? <ProtectedRoute>{route.component}</ProtectedRoute> : route.component}
-          key={route.key}
+          key={route.key || index}
         >{route.children && getRoutes(route.children)}</Route>;
       }
 

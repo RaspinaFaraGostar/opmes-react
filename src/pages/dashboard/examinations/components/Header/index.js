@@ -13,8 +13,6 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
-
 // @mui material components
 import Card from "@mui/material/Card";
 import Collapse from "@mui/material/Collapse";
@@ -40,10 +38,7 @@ function Header() {
   const { t } = useTranslation();
 
   // Layout config
-  const [{ patient }] = useExaminationsLayoutConfig();
-
-  const [visible, setVisible] = useState(false);
-  const handleSetVisible = () => setVisible(!visible);
+  const [{ patient, details }, setValue] = useExaminationsLayoutConfig();
 
   // Patient attributes defs
   const defs = [
@@ -144,17 +139,17 @@ function Header() {
               alignItems="center"
               lineHeight={1}
               sx={{ cursor: 'pointer' }}
-              onClick={handleSetVisible}
+              onClick={() => setValue("details", !details)}
             >
               <SoftTypography variant="caption" fontWeight="medium">
                 {t("Expand patient details")}
               </SoftTypography>
-              <Icon sx={{ mx: 1 }}>{visible ? 'expand_less' : 'expand_more'}</Icon>
+              <Icon sx={{ mx: 1 }}>{details ? 'expand_less' : 'expand_more'}</Icon>
             </SoftBox>
           </Grid>
         </Grid>
 
-        <Collapse in={visible}>
+        <Collapse in={details}>
           <div>
             <Divider />
             <Grid container>

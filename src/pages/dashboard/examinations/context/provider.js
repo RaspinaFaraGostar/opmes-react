@@ -20,8 +20,10 @@ import axios from "axios";
 import HeartRateLoader from "components/HeartRateLoader";
 
 // Lodash helper methods
+import clone from "lodash/clone";
 import filter from "lodash/filter";
 import map from "lodash/map";
+import setWith from "lodash/setWith";
 import sortBy from "lodash/sortBy";
 
 
@@ -30,10 +32,11 @@ const ExaminationsLayoutConfigProvider = ({ children }) => {
     const [fetching, setFetching] = useState(true);
 
     // Get path params
-    const { patientId, periodId, doctorAppointmentDtlId } = useParams();
+    const { patientId, periodId, doctorAppointmentDtlId, groupQuestionId } = useParams();
 
     // Initial config values
     const initialValues = {
+        details: !Boolean(groupQuestionId),
         sidenav: [],
         patient: {}
     }
@@ -62,6 +65,7 @@ const ExaminationsLayoutConfigProvider = ({ children }) => {
         ]);
 
         setValue({
+            ...value,
             patient: transformPatientData(patientResponse.data),
             sidenav: transformItemsData(itemsResponse.data)
         });
@@ -82,7 +86,9 @@ const ExaminationsLayoutConfigProvider = ({ children }) => {
     }
 
     return (
-        <ExaminationsLayoutConfigContext.Provider value={[value]}>
+        <ExaminationsLayoutConfigContext.Provider
+            value={[value, (key, newValue) => setValue(setWith(clone(value), key, newValue, clone))]}
+        >
             {children}
         </ExaminationsLayoutConfigContext.Provider>
     )
